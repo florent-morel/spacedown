@@ -6,7 +6,10 @@
     <string name="hello_world">Hello world!</string>
     
     
-    <string name="card_team">Current team</string>
+    <string name="card_team">Current team:</string>
+    <string name="card_team_turn_score">Turn score:</string>
+    <string name="card_team_round_score">Round score:</string>
+    <string name="card_team_total_score">Total score:</string>
     <string name="card_found">Found</string>
     <string name="card_skip">Skip</string>
     <string name="card_end_turn">End turn</string>
@@ -15,6 +18,15 @@
     <string name="score_next_round">Next Round</string>
     <string name="score_title">Score per team</string>
     <string name="score_team">Team score</string>
+    
+    <string name="create_title">Set your game settings</string>
+    <string name="create_teams">Number of teams:</string>
+    <string name="text_create_team_name">Team name:</string>
+    <string name="button_create_team_name">Create team</string>
+    <string name="dialog_create_team_confirm">Team %1$s added to game.</string>
+    <string name="dialog_create_team_name_invalid">Invalid name.</string>
+    
+    
     
 
     <string name="menu_new">New game</string>
@@ -51,8 +63,6 @@
 
     <string name="add_player">Add player</string>
     <string name="add_player_no_score_text">Player will start with no score.</string>
-    <string name="add_player_confirm">Player %1$s added to game.</string>
-    <string name="add_player_name_invalid">Cannot pick this name.</string>
     <string name="add_player_score_invalid">Player score must be an even multiple of 50.</string>
 
     <string name="score_board">Round %1$d, total to reach: %2$d</string>

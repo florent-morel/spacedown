@@ -1,8 +1,7 @@
 package org.uptime;
 
 
-import org.uptime.activity.CardActivity;
-import org.uptime.activity.ScoreActivity;
+import org.uptime.activity.create.CreateGameActivity;
 import org.uptime.engine.Constants;
 
 import android.app.Activity;
@@ -38,7 +37,7 @@ import android.widget.Button;
  */
 public class UpTime extends Activity implements OnClickListener {
 
-	private GameManager mGameManager;
+//	private GameManager mGameManager;
 	private Button mButtonNewGame;
 
 	/** Called when the activity is first created. */
@@ -50,7 +49,7 @@ public class UpTime extends Activity implements OnClickListener {
 		mButtonNewGame = (Button) findViewById(R.id.buttonNewGame);
 		mButtonNewGame.setOnClickListener(this);
 
-		mGameManager = GameManager.getSingletonObject();
+//		mGameManager = GameManager.getSingletonObject();
 	}
 
 	private void buildMenu(Menu menu, boolean isOnCreate) {
@@ -130,8 +129,7 @@ public class UpTime extends Activity implements OnClickListener {
 	}
 
 	private void launchNewGame() {
-		mGameManager.startNewGame();
-		Intent intent = new Intent(this, ScoreActivity.class);
+		Intent intent = new Intent(this, CreateGameActivity.class);
 		startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 	}
 

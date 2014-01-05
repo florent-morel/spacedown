@@ -1,17 +1,14 @@
 package org.uptime.activity;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
 import org.uptime.GameManager;
 import org.uptime.R;
+import org.uptime.activity.create.CreateGameActivity;
 import org.uptime.engine.Constants;
-import org.uptime.engine.game.Card;
 import org.uptime.engine.game.Game;
-import org.uptime.engine.game.Round;
 import org.uptime.engine.game.Team;
 
 import android.app.Activity;
@@ -43,7 +40,6 @@ public class ScoreActivity extends Activity implements OnClickListener {
 		mGame = mGameManager.getGame();
 
 		this.refreshActivity();
-		this.initButtons();
 	}
 
 	@Override
@@ -56,41 +52,25 @@ public class ScoreActivity extends Activity implements OnClickListener {
 	private void initTexts() {
 		mScoreTeam = (TextView) findViewById(R.id.textScoreBoard);
 
-		Map<Team, Integer> teamScoreTotal = getTotalScoreMap();
+		Map<Team, Integer> teamScoreTotal = mGame.getTotalScoreMap();
 
 		Set<Entry<Team, Integer>> entrySet = teamScoreTotal.entrySet();
 		StringBuilder builder = new StringBuilder();
-		for (Entry<Team, Integer> entry : entrySet) {
-			builder.append(entry.getKey().getName());
-			builder.append(": ");
-			builder.append(entry.getValue());
-			builder.append("\n");
+		if (entrySet != null && !entrySet.isEmpty()) {
+			for (Entry<Team, Integer> entry : entrySet) {
+				builder.append(entry.getKey().getName());
+				builder.append(": ");
+				builder.append(entry.getValue());
+				builder.append("\n");
+			}
+			// } else {
+			// builder.append(entry.getKey().getName());
+			// builder.append(": ");
+			// builder.append("0");
+			// builder.append("\n");
 		}
 
 		mScoreTeam.setText(builder.toString());
-	}
-
-	private Map<Team, Integer> getTotalScoreMap() {
-		Map<Team, Integer> teamScoreTotal = new HashMap<Team, Integer>();
-		List<Round> roundList = mGame.getRoundList();
-
-		for (Round round : roundList) {
-			Map<Team, List<Card>> teamScorePerRound = round.getTeamScore();
-			Set<Entry<Team, List<Card>>> entrySet = teamScorePerRound
-					.entrySet();
-			for (Entry<Team, List<Card>> entry : entrySet) {
-				Team team = entry.getKey();
-				Integer score = entry.getValue().size();
-				Integer totalScore = teamScoreTotal.get(team);
-				if (totalScore == null) {
-					totalScore = score;
-				} else {
-					totalScore += score;
-				}
-				teamScoreTotal.put(team, totalScore);
-			}
-		}
-		return teamScoreTotal;
 	}
 
 	private void initButtons() {
@@ -114,9 +94,8 @@ public class ScoreActivity extends Activity implements OnClickListener {
 		if (v.getId() == mButtonNextRound.getId()) {
 			launchNextRound();
 		} else if (v.getId() == mButtonNewGame.getId()) {
-			mGameManager.startNewGame();
-			mGame = mGameManager.getGame();
-			this.refreshActivity();
+			Intent intent = new Intent(this, CreateGameActivity.class);
+			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 		}
 
 	}

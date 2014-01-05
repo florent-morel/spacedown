@@ -29,6 +29,16 @@ public class Card {
 	public String getNameToFind() {
 		return nameToFind;
 	}
+
+
+	public Integer getId() {
+		return id;
+	}
+
+
+	public String getCategory() {
+		return category;
+	}
 	
 	
 	

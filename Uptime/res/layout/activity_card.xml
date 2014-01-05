@@ -15,6 +15,55 @@
         android:text="@string/card_team" />
 
     <TextView
+        android:id="@+id/textCardTeamValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textCardTeam"
+        android:layout_toRightOf="@+id/textCardTeam" />
+
+    <TextView
+        android:id="@+id/textCardTurnScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textCardTeam"
+        android:text="@string/card_team_turn_score" />
+
+    <TextView
+        android:id="@+id/textCardTurnScoreValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textCardTurnScore"
+        android:layout_toRightOf="@+id/textCardTurnScore" />
+
+    <TextView
+        android:id="@+id/textCardRoundScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textCardTurnScore"
+        android:text="@string/card_team_round_score" />
+
+    <TextView
+        android:id="@+id/textCardRoundScoreValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textCardRoundScore"
+        android:layout_toRightOf="@+id/textCardRoundScore" />
+
+    <TextView
+        android:id="@+id/textCardTotalScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textCardRoundScore"
+        android:text="@string/card_team_total_score" />
+
+    <TextView
+        android:id="@+id/textCardTotalScoreValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textCardTotalScore"
+        android:layout_toRightOf="@+id/textCardTotalScore" />
+
+    <TextView
         android:id="@+id/textCardNameToFind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

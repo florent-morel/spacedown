@@ -1,13 +1,11 @@
 package org.uptime.engine.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.uptime.activity.CardActivity;
-import org.uptime.activity.ScoreActivity;
 import org.uptime.engine.Constants;
-
-import android.content.Intent;
 
 public class Game {
 
@@ -27,9 +25,9 @@ public class Game {
 
 	private boolean mIsGameOver = false;
 
-	public Game() {
+	public Game(Integer numberOfTeams) {
 		super();
-		initTeams();
+		initTeams(numberOfTeams);
 		initCards();
 		initRounds();
 	}
@@ -38,10 +36,10 @@ public class Game {
 		mCardList = new ArrayList<Card>();
 		Card card = new Card(1, "Michael Jordan", "Sport");
 		mCardList.add(card);
-//		card = new Card(2, "Albert Einstein", "Science");
-//		mCardList.add(card);
-//		card = new Card(3, "Homer Simpson", "Fiction");
-//		mCardList.add(card);
+		 card = new Card(2, "Albert Einstein", "Science");
+		 mCardList.add(card);
+		 card = new Card(3, "Homer Simpson", "Fiction");
+		 mCardList.add(card);
 		// card = new Card(4, "Forrest Gump", "Movie");
 		// mCardList.add(card);
 
@@ -58,23 +56,29 @@ public class Game {
 		mCardsInPlay.addAll(mCardList);
 	}
 
-	private void initTeams() {
+	private void initTeams(Integer numberOfTeams) {
 		mTeamList = new ArrayList<Team>();
-		Team team = new Team(1, "A");
-		mTeamList.add(team);
-		team = new Team(2, "B");
-		mTeamList.add(team);
-		team = new Team(3, "C");
-		mTeamList.add(team);
-		team = new Team(4, "D");
-		mTeamList.add(team);
-
+		if (numberOfTeams != null) {
+			for (int i = 0; i < numberOfTeams; i++) {
+				Team team = new Team(i + 1, Character.toString((char) (i + 65)));
+				mTeamList.add(team);
+			}
+		} else {
+			Team team = new Team(1, "AA");
+			mTeamList.add(team);
+			team = new Team(2, "BB");
+			mTeamList.add(team);
+			team = new Team(3, "CC");
+			mTeamList.add(team);
+			team = new Team(4, "DD");
+			mTeamList.add(team);
+		}
 	}
 
 	private void initRounds() {
 		mRoundList = new ArrayList<Round>();
-//		mCurrentRound = new Round(Constants.ROUND_FIRST);
-//		mRoundList.add(mCurrentRound);
+		// mCurrentRound = new Round(Constants.ROUND_FIRST);
+		// mRoundList.add(mCurrentRound);
 	}
 
 	public void startNextRound() {
@@ -93,18 +97,16 @@ public class Game {
 		}
 	}
 
-	public Card getNextCardToPlay(boolean skipCard, Integer index,
-			Card currentCard) {
+	public Card getNextCardToPlay(boolean skipCard, Integer index, Card currentCard) {
 		Card cardToPlay = null;
 
 		if (mCardsInPlay.isEmpty()) {
-			setRoundOver();
+			endRound();
 		} else if (Constants.ROUND_FIRST == mCurrentRound.getRoundNumber()
 				|| Constants.ROUND_SECOND == mCurrentRound.getRoundNumber()
 				|| Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
 			if (skipCard || currentCard == null || currentCard.isFound()) {
-				cardToPlay = this.computeNextCard(currentCard,
-						mCardList.indexOf(currentCard) + 1);
+				cardToPlay = this.computeNextCard(currentCard, mCardList.indexOf(currentCard) + 1);
 				//
 				// Start with current index
 				// int start = mCardList.indexOf(currentCard);
@@ -127,6 +129,7 @@ public class Game {
 			}
 			// } else if (Constants.ROUND_SECOND ==
 			// mCurrentRound.getRoundNumber()
+			// TODO: pick random card for rounds 2 and 3.
 			// || Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
 			// // Get random card
 		}
@@ -159,27 +162,37 @@ public class Game {
 		return nextCard;
 	}
 
-	public Team setNextTeamToPlay() {
-		for (int i = 0; i < mTeamList.size(); i++) {
-			// If end of list reached, start over
-			if (i == (mTeamList.size() - 1)) {
-				mCurrentTeam = mTeamList.get(0);
-				break;
-			} else if (mTeamList.get(i) == mCurrentTeam) {
-				mCurrentTeam = mTeamList.get(i + 1);
-				break;
-			}
+	public void setNextTeamToPlay() {
+		// for (int i = 0; i < mTeamList.size(); i++) {
+		// // If end of list reached, start over
+		// if (i == (mTeamList.size() - 1)) {
+		// mCurrentTeam = mTeamList.get(0);
+		// break;
+		// } else if (mTeamList.get(i) == mCurrentTeam) {
+		// mCurrentTeam = mTeamList.get(i + 1);
+		// break;
+		// }
+		// }
+
+		int nbTeams = this.getTeamList().size();
+		Team teams[] = new Team[nbTeams];
+		teams = this.getTeamList().toArray(teams);
+		Integer nextId = Constants.ZERO_VALUE;
+		if (mCurrentTeam != null) {
+			nextId = mCurrentTeam.getId();
 		}
 
-		return mCurrentTeam;
+		int modulo = nextId % nbTeams;
+		mCurrentTeam = teams[modulo];
 	}
 
-	public void setTurnOver() {
+	public void endTurn() {
+		mCurrentRound.createNewTurn();
 		setNextTeamToPlay();
 		getNextCardToPlay(false, 0, mCurrentCard);
 	}
 
-	private void setRoundOver() {
+	private void endRound() {
 		mCurrentCard = null;
 		mCurrentRound.setRoundActive(false);
 		if (Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
@@ -191,8 +204,7 @@ public class Game {
 		mCurrentCard.setFound(Boolean.TRUE);
 		// Remove the card from the list of cards yet to be found
 		mCardsInPlay.remove(mCurrentCard);
-		List<Card> listFoundByTeam = mCurrentRound.getTeamScore().get(
-				mCurrentTeam);
+		List<Card> listFoundByTeam = mCurrentRound.getCurrentTurn().getTeamTurnScore().get(mCurrentTeam);
 
 		if (listFoundByTeam == null || listFoundByTeam.isEmpty()) {
 			listFoundByTeam = new ArrayList<Card>();
@@ -200,7 +212,7 @@ public class Game {
 
 		listFoundByTeam.add(mCurrentCard);
 
-		mCurrentRound.getTeamScore().put(mCurrentTeam, listFoundByTeam);
+		mCurrentRound.getCurrentTurn().getTeamTurnScore().put(mCurrentTeam, listFoundByTeam);
 
 	}
 
@@ -246,6 +258,46 @@ public class Game {
 
 	public void cardSkip() {
 		this.getNextCardToPlay(true, 0, this.getCurrentCard());
+	}
+
+	public List<Team> getTeamList() {
+		return mTeamList;
+	}
+
+	public void addTeamToList(Team team) {
+		this.mTeamList.add(team);
+	}
+
+	public Map<Team, Integer> getTotalScoreMap() {
+		Map<Team, Integer> teamScoreTotal = new HashMap<Team, Integer>();
+		List<Round> roundList = this.getRoundList();
+
+		if (roundList == null || roundList.isEmpty()) {
+			for (Team team : this.getTeamList()) {
+				teamScoreTotal.put(team, Constants.ZERO_VALUE);
+			}
+		} else {
+			for (Team team : this.getTeamList()) {
+				Integer totalScore = Constants.ZERO_VALUE;
+				for (Round round : roundList) {
+					Integer teamRoundScore = round.getTeamRoundScore(team);
+					if (teamRoundScore != null) {
+						totalScore += teamRoundScore;
+					}
+				}
+				teamScoreTotal.put(team, totalScore);
+			}
+		}
+		return teamScoreTotal;
+	}
+
+	public Integer getTotalScore(Team currentTeam) {
+		Integer score = Constants.ZERO_VALUE;
+		Map<Team, Integer> totalScoreMap = this.getTotalScoreMap();
+		if (totalScoreMap.get(currentTeam) != null) {
+			score = totalScoreMap.get(currentTeam);
+		}
+		return score;
 	}
 
 }

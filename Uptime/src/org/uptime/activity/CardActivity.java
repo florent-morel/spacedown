@@ -20,7 +20,11 @@ public class CardActivity extends Activity implements OnClickListener {
 
 	private Game mGame;
 
-	private TextView mCurrentTeam;
+	private TextView mCurrentTeamValue;
+	private TextView mTeamTurnScoreValue;
+	private TextView mTeamRoundScoreValue;
+	private TextView mTeamTotalScoreValue;
+
 	private TextView mNameToFind;
 
 	private Button mButtonCardFound;
@@ -48,8 +52,21 @@ public class CardActivity extends Activity implements OnClickListener {
 	}
 
 	private void initTexts() {
-		mCurrentTeam = (TextView) findViewById(R.id.textCardTeam);
-		mCurrentTeam.setText(mGame.getCurrentTeam().getName());
+
+		mCurrentTeamValue = (TextView) findViewById(R.id.textCardTeamValue);
+		mCurrentTeamValue.setText(mGame.getCurrentTeam().getName());
+		
+		mTeamTurnScoreValue = (TextView) findViewById(R.id.textCardTurnScoreValue);
+		Integer turnScore = mGame.getCurrentRound().getCurrentTurn().getTeamTurnScore(mGame.getCurrentTeam());
+		mTeamTurnScoreValue.setText(turnScore.toString());
+		
+		mTeamRoundScoreValue = (TextView) findViewById(R.id.textCardRoundScoreValue);
+		Integer roundScore = mGame.getCurrentRound().getTeamRoundScore(mGame.getCurrentTeam());
+		mTeamRoundScoreValue.setText(roundScore.toString());
+		
+		mTeamTotalScoreValue = (TextView) findViewById(R.id.textCardTotalScoreValue);
+		Integer totalScore = mGame.getTotalScore(mGame.getCurrentTeam());
+		mTeamTotalScoreValue.setText(totalScore.toString());
 		
 		mNameToFind = (TextView) findViewById(R.id.textCardNameToFind);
 		mNameToFind.setText(mGame.getCurrentCard().getNameToFind());
@@ -79,7 +96,7 @@ public class CardActivity extends Activity implements OnClickListener {
 			mGame.cardSkip();
 		}
 		else if (v.getId() == mButtonEndTurn.getId()) {
-			mGame.setTurnOver();
+			mGame.endTurn();
 		}
 		
 		if (!mGame.isGameOver() && mGame.isRoundActive()) {
@@ -97,9 +114,18 @@ public class CardActivity extends Activity implements OnClickListener {
 	 * @param descending
 	 */
 	private void refreshActivity() {
-		mNameToFind.setText(mGame.getCurrentCard().getNameToFind());
+		mCurrentTeamValue.setText(mGame.getCurrentTeam().getName());
 		
-		mCurrentTeam.setText(mGame.getCurrentTeam().getName());
+		Integer turnScore = mGame.getCurrentRound().getCurrentTurn().getTeamTurnScore(mGame.getCurrentTeam());
+		mTeamTurnScoreValue.setText(turnScore.toString());
+		
+		Integer roundScore = mGame.getCurrentRound().getTeamRoundScore(mGame.getCurrentTeam());
+		mTeamRoundScoreValue.setText(roundScore.toString());
+
+		Integer totalScore = mGame.getTotalScore(mGame.getCurrentTeam());
+		mTeamTotalScoreValue.setText(totalScore.toString());
+		
+		mNameToFind.setText(mGame.getCurrentCard().getNameToFind());
 	}
 
 }
