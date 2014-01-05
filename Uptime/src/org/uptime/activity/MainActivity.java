@@ -22,7 +22,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		mButton = (Button) findViewById(R.id.button1);
+		mButton = (Button) findViewById(R.id.buttonNewGame);
 		
 		mButton.setOnClickListener(this);
 	}
