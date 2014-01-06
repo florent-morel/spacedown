@@ -16,7 +16,7 @@ public interface Constants {
 
 	static final Integer DEFAULT_WARM_UP_ROUNDS = 3;
 
-	static final String PLAYER_ID = "PLAYER_ID";
+	static final String TEAM_STATS = "TEAM";
 
 	static final String PLAYER_NAME = "PLAYER_NAME";
 

@@ -43,36 +43,53 @@
         android:layout_toRightOf="@+id/buttonNextRound"
         android:text="@string/create_game" />
 
-    <TableLayout
+    <Button
+        android:id="@+id/button100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textScoreBoard"
+        android:layout_below="@+id/buttonNextRound"
+        android:layout_marginTop="51dp"
+        android:layout_toRightOf="@+id/textScoreBoard"
+        android:text="Button" />
+
+    <TableLayout
+        android:id="@+id/tableScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonNextRound"
         android:layout_below="@+id/textScoreBoard"
-        android:layout_marginLeft="14dp"
-        android:layout_marginTop="25dp" >
+        android:layout_marginLeft="17dp"
+        android:layout_marginTop="28dp" >
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
-        </TableRow>
 
-        <TableRow
-            android:id="@+id/tableRow2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+		    <TextView
+		        android:id="@+id/textTableTeamName"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="#" />
+		    <TextView
+		        android:id="@+id/textTableRound1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="#" />
+		    <TextView
+		        android:id="@+id/textTableRound2"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="#" />
+		    <TextView
+		        android:id="@+id/textTableRound3"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="#" />
+		    <TextView
+		        android:id="@+id/textTableTotal"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="#" />
         </TableRow>
     </TableLayout>
 

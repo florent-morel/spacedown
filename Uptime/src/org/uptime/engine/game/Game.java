@@ -300,4 +300,15 @@ public class Game {
 		return score;
 	}
 
+	public Team getTeam(Integer teamId) {
+		Team teamToReturn = null;
+		for (Team team : getTeamList()) {
+			if (team.getId().equals(teamId)) {
+				teamToReturn = team;
+				break;
+			}
+		}
+		return teamToReturn;
+	}
+
 }
