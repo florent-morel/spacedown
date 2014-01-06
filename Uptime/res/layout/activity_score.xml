@@ -24,14 +24,6 @@
         android:layout_marginTop="133dp"
         android:text="@string/score_next_round" />
 
-    <Button
-        android:id="@+id/buttonNewGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="42dp"
-        android:text="@string/create_game" />
-
     <TextView
         android:id="@+id/textScoreBoard"
         android:layout_width="wrap_content"
@@ -40,5 +32,48 @@
         android:layout_below="@+id/textScoreTitle"
         android:layout_marginTop="20dp"
         android:text="@string/score_team" />
+
+    <Button
+        android:id="@+id/buttonNewGame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonNextRound"
+        android:layout_alignBottom="@+id/buttonNextRound"
+        android:layout_marginLeft="28dp"
+        android:layout_toRightOf="@+id/buttonNextRound"
+        android:text="@string/create_game" />
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textScoreBoard"
+        android:layout_below="@+id/textScoreBoard"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="25dp" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </TableRow>
+    </TableLayout>
 
 </RelativeLayout>

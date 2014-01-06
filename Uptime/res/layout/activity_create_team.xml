@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".activity/create/CreateGameActivity" >
+
+    <TextView
+        android:id="@+id/textCreateTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_title" />
+
+    <TextView
+        android:id="@+id/textCreateTeamName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textCreateTitle"
+        android:layout_below="@+id/textCreateTitle"
+        android:layout_marginTop="26dp"
+        android:text="@string/text_create_team_name" />
+
+    <EditText
+        android:id="@+id/editCreateTeamName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textCreateTeamName"
+        android:layout_below="@+id/textCreateTeamName"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textCreateTitle"
+        android:layout_below="@+id/textCreateTitle"
+        android:layout_marginTop="113dp"
+        android:text="Other options (number of cards, category, date...)" />
+
+    <Button
+        android:id="@+id/buttonCreateTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/chronometer1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="71dp"
+        android:text="@string/button_create_team_name" />
+
+</RelativeLayout>
