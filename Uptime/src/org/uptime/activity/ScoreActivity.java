@@ -62,7 +62,7 @@ public class ScoreActivity extends Activity implements OnClickListener {
 
 	private void initTexts() {
 		mScoreTeam = (TextView) findViewById(R.id.textScoreBoard);
-		scoreTable = (TableLayout) findViewById(R.id.tableScore);
+		// scoreTable = (TableLayout) findViewById(R.id.tableScore);
 
 		// Map<Team, Integer> teamScoreTotal = mGame.getTotalScoreMap();
 		//
@@ -82,61 +82,85 @@ public class ScoreActivity extends Activity implements OnClickListener {
 		// // builder.append("\n");
 		// }
 
-		// mScoreTeam.setText(builder.toString());
-
 		List<Team> teamList = mGame.getTeamList();
-		TableRow row;
-		TextView t1 = (TextView) findViewById(R.id.textTableTeamName);
+		StringBuilder builder = new StringBuilder();
 		for (Team team : teamList) {
-			row = new TableRow(this);
-			t1 = new TextView(this);
-			t1.setText(team.getName());
-			row.addView(t1);
-			
-
-			TextView tRound1 = (TextView) findViewById(R.id.textTableRound1);
-			Integer teamRoundScore1 = Constants.ZERO_VALUE;
-			if (!mGame.getRoundList().isEmpty() && mGame.getRoundList().get(0) != null) {
-				teamRoundScore1 = mGame.getRoundList().get(0).getTeamRoundScore(team);
+			builder.append(team.getName());
+			builder.append(": ");
+			List<Round> roundList = mGame.getRoundList();
+			for (Round round : roundList) {
+				Integer teamRoundScore = round.getTeamRoundScore(team);
+				builder.append(teamRoundScore);
+				builder.append("|");
 			}
-			tRound1.setText(teamRoundScore1);
-			row.addView(tRound1);
-			
-			TextView tRound2 = (TextView) findViewById(R.id.textTableRound2);
-			Integer teamRoundScore2 = Constants.ZERO_VALUE;
-			if (!mGame.getRoundList().isEmpty() && mGame.getRoundList().get(1) != null) {
-				teamRoundScore2 = mGame.getRoundList().get(1).getTeamRoundScore(team);
-			}
-			tRound1.setText(teamRoundScore2);
-			row.addView(tRound2);
-			TextView tRound3 = (TextView) findViewById(R.id.textTableRound3);
-			Integer teamRoundScore3 = Constants.ZERO_VALUE;
-			if (!mGame.getRoundList().isEmpty() && mGame.getRoundList().get(2) != null) {
-				teamRoundScore3 = mGame.getRoundList().get(2).getTeamRoundScore(team);
-			}
-			tRound1.setText(teamRoundScore3);
-			row.addView(tRound3);
-			
-			TextView tTotal = (TextView) findViewById(R.id.textTableTotal);
-			Integer teamTotalScore = mGame.getTotalScore(team);
-			tRound1.setText(teamTotalScore);
-			row.addView(tTotal);
-			
-//			List<Round> roundList = mGame.getRoundList();
-//			for (Round round : roundList) {
-//				Integer teamRoundScore = round.getTeamRoundScore(team);
-//				TextView textTeamScore = new TextView(this);
-//				textTeamScore.setText(teamRoundScore);
-//				row.addView(textTeamScore);
-//			}
-			// End of the Rounds: display total
-			
-//			TextView textTeamTotalScore = new TextView(this);
-//			textTeamTotalScore.setText(10);
-//			row.addView(textTeamTotalScore);
-			
-			scoreTable.addView(row, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			builder.append("--Total: ");
+			builder.append(mGame.getTotalScore(team));
+			builder.append("\n");
 		}
+
+		mScoreTeam.setText(builder.toString());
+
+		// List<Team> teamList = mGame.getTeamList();
+		// TableRow row;
+		// TextView t1 = (TextView) findViewById(R.id.textTableTeamName);
+		// for (Team team : teamList) {
+		// row = new TableRow(this);
+		// t1 = new TextView(this);
+		// t1.setText(team.getName());
+		// row.addView(t1);
+		//
+		//
+		// TextView tRound1 = (TextView) findViewById(R.id.textTableRound1);
+		// Integer teamRoundScore1 = Constants.ZERO_VALUE;
+		// if (!mGame.getRoundList().isEmpty() && mGame.getRoundList().get(0) !=
+		// null) {
+		// teamRoundScore1 =
+		// mGame.getRoundList().get(0).getTeamRoundScore(team);
+		// }
+		// tRound1.setText(teamRoundScore1);
+		// row.addView(tRound1);
+		//
+		// TextView tRound2 = (TextView) findViewById(R.id.textTableRound2);
+		// Integer teamRoundScore2 = Constants.ZERO_VALUE;
+		// if (!mGame.getRoundList().isEmpty() && mGame.getRoundList().get(1) !=
+		// null) {
+		// teamRoundScore2 =
+		// mGame.getRoundList().get(1).getTeamRoundScore(team);
+		// }
+		// tRound1.setText(teamRoundScore2);
+		// row.addView(tRound2);
+		// TextView tRound3 = (TextView) findViewById(R.id.textTableRound3);
+		// Integer teamRoundScore3 = Constants.ZERO_VALUE;
+		// if (!mGame.getRoundList().isEmpty() && mGame.getRoundList().get(2) !=
+		// null) {
+		// teamRoundScore3 =
+		// mGame.getRoundList().get(2).getTeamRoundScore(team);
+		// }
+		// tRound1.setText(teamRoundScore3);
+		// row.addView(tRound3);
+		//
+		// TextView tTotal = (TextView) findViewById(R.id.textTableTotal);
+		// Integer teamTotalScore = mGame.getTotalScore(team);
+		// tRound1.setText(teamTotalScore);
+		// row.addView(tTotal);
+
+		// List<Round> roundList = mGame.getRoundList();
+		// for (Round round : roundList) {
+		// Integer teamRoundScore = round.getTeamRoundScore(team);
+		// TextView textTeamScore = new TextView(this);
+		// textTeamScore.setText(teamRoundScore);
+		// row.addView(textTeamScore);
+		// }
+		// End of the Rounds: display total
+
+		// TextView textTeamTotalScore = new TextView(this);
+		// textTeamTotalScore.setText(10);
+		// row.addView(textTeamTotalScore);
+
+		// scoreTable.addView(row, new
+		// TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+		// LayoutParams.WRAP_CONTENT));
+		// }
 
 	}
 
