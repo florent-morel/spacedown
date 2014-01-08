@@ -73,4 +73,8 @@ public interface Constants {
 	static final String RIGHT = "right";
 
 	static final String LEFT = "left";
+
+	static enum RunMode {STANDARD, DEBUG};
+
+	static final int NUMBER_OF_CARDS = 40;
 }

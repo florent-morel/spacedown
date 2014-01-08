@@ -5,6 +5,9 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     
+    <string name="create_game">Create game</string>
+    <string name="create_game_debug_mode">Debug mode</string>
+    <string name="create_game_import_cards">Import cards</string>
     
     <string name="card_team">Current team:</string>
     <string name="card_team_turn_score">Turn score:</string>
@@ -42,7 +45,6 @@
     <string name="menu_turn_history">Turn history</string>
     <string name="menu_score_chart">Score chart</string>
 
-    <string name="create_game">Create game</string>
     <string name="number_player">Number of players</string>
     <string name="default_number_player">3</string>
 

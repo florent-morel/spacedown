@@ -39,6 +39,13 @@ public class Card {
 	public String getCategory() {
 		return category;
 	}
+
+
+	@Override
+	public String toString() {
+		return "Card [id=" + id + ", nameToFind=" + nameToFind + ", category=" + category + ", isFound=" + isFound
+				+ "]";
+	}
 	
 	
 	

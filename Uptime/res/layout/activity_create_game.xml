@@ -62,4 +62,12 @@
         android:layout_marginTop="37dp"
         android:text="@string/create_game" />
 
+    <CheckBox
+        android:id="@+id/checkBoxImportCards"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextView01"
+        android:layout_below="@+id/TextView01"
+        android:text="@string/create_game_import_cards" />
+
 </RelativeLayout>

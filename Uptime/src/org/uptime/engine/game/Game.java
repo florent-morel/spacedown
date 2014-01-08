@@ -1,10 +1,12 @@
 package org.uptime.engine.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.uptime.cards.build.CardBuilder;
 import org.uptime.engine.Constants;
 
 public class Game {
@@ -25,33 +27,26 @@ public class Game {
 
 	private boolean mIsGameOver = false;
 
-	public Game(Integer numberOfTeams) {
+	public Game(Integer numberOfTeams, List<Card> listCards) {
 		super();
 		initTeams(numberOfTeams);
-		initCards();
+		initCards(listCards);
 		initRounds();
 	}
 
-	private void initCards() {
-		mCardList = new ArrayList<Card>();
-		Card card = new Card(1, "Michael Jordan", "Sport");
-		mCardList.add(card);
-		 card = new Card(2, "Albert Einstein", "Science");
-		 mCardList.add(card);
-		 card = new Card(3, "Homer Simpson", "Fiction");
-		 mCardList.add(card);
-		// card = new Card(4, "Forrest Gump", "Movie");
-		// mCardList.add(card);
-
+	private void initCards(List<Card> listCards) {
+		if (listCards == null) {
+			mCardList = CardBuilder.buildCards(Constants.RunMode.DEBUG);
+		} else {
+			mCardList = listCards;
+		}
 		refreshCards();
 	}
 
 	private void refreshCards() {
-
 		for (Card card : mCardList) {
 			card.setFound(false);
 		}
-
 		mCardsInPlay = new ArrayList<Card>();
 		mCardsInPlay.addAll(mCardList);
 	}
@@ -77,8 +72,6 @@ public class Game {
 
 	private void initRounds() {
 		mRoundList = new ArrayList<Round>();
-		// mCurrentRound = new Round(Constants.ROUND_FIRST);
-		// mRoundList.add(mCurrentRound);
 	}
 
 	public void startNextRound() {
@@ -91,67 +84,52 @@ public class Game {
 			mRoundList.add(mCurrentRound);
 			this.setNextTeamToPlay();
 			this.refreshCards();
-			this.getNextCardToPlay(false, 0, null);
+			reshuffleCardsInPlay();
+			this.getNextCardToPlay(null, false);
 		} else {
 			// Display message
 		}
 	}
 
-	public Card getNextCardToPlay(boolean skipCard, Integer index, Card currentCard) {
-		Card cardToPlay = null;
-
+	public Card getNextCardToPlay(Card currentCard, boolean skipCard) {
 		if (mCardsInPlay.isEmpty()) {
 			endRound();
-		} else if (Constants.ROUND_FIRST == mCurrentRound.getRoundNumber()
-				|| Constants.ROUND_SECOND == mCurrentRound.getRoundNumber()
-				|| Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
+		} else {
 			if (skipCard || currentCard == null || currentCard.isFound()) {
-				cardToPlay = this.computeNextCard(currentCard, mCardList.indexOf(currentCard) + 1);
-				//
-				// Start with current index
-				// int start = mCardList.indexOf(currentCard);
-				// if (start == -1) {
-				// start = 0;
-				// }
-				// for (int i = start; i < mCardList.size(); i++) {
-				// // If end of list reached, start over
-				// if (i == (mCardList.size() - 1)) {
-				// index = 0;
-				// break;
-				// } else if (mCardList.get(i) == currentCard) {
-				// index = i + 1;
-				// break;
-				// }
-				// }
-				// cardToPlay = mCardList.get(index);
+				mCurrentCard = this.computeNextCard(mCardsInPlay, currentCard, mCardsInPlay.indexOf(currentCard) + 1);
 			} else {
-				cardToPlay = currentCard;
+				mCurrentCard = currentCard;
 			}
-			// } else if (Constants.ROUND_SECOND ==
-			// mCurrentRound.getRoundNumber()
-			// TODO: pick random card for rounds 2 and 3.
-			// || Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
-			// // Get random card
-		}
-
-		if (cardToPlay != null) {
-			// No more card to play, round is over
-			if (cardToPlay.isFound()) {
-				// If already found, get a new one.
-				cardToPlay = getNextCardToPlay(skipCard, index + 1, cardToPlay);
-			} else {
-				mCurrentCard = cardToPlay;
-			}
+//			if (Constants.ROUND_FIRST == mCurrentRound.getRoundNumber()) {
+//				if (currentCard == null || currentCard.isFound()) {
+//					mCurrentCard = this.computeNextCard(mCardList, currentCard, mCardList.indexOf(currentCard) + 1);
+//				} else {
+//					mCurrentCard = currentCard;
+//				}
+//			} else if (Constants.ROUND_SECOND == mCurrentRound.getRoundNumber()
+//					|| Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
+//				// Get random card
+//				mCurrentCard = computeNextRandomCard();
+//			}
 		}
 
 		return mCurrentCard;
 	}
 
-	private Card computeNextCard(Card currentCard, Integer nextId) {
+	/**
+	 * Get the next card by incrementing index.
+	 * 
+	 * @param cardList
+	 * @param currentCard
+	 * @param nextId
+	 * 
+	 * @return
+	 */
+	private Card computeNextCard(List<Card> cardList, Card currentCard, Integer nextId) {
 		Card nextCard;
-		int nbCards = this.getCardList().size();
+		int nbCards = cardList.size();
 		Card cards[] = new Card[nbCards];
-		cards = this.getCardList().toArray(cards);
+		cards = cardList.toArray(cards);
 		if (currentCard == null) {
 			nextId = Constants.ZERO_VALUE;
 		}
@@ -159,21 +137,50 @@ public class Game {
 		int modulo = nextId % nbCards;
 		nextCard = cards[modulo];
 
+		// Don't consider this card if it has already been found.
+		if (nextCard.isFound()) {
+			nextCard = computeNextCard(cardList, nextCard, nextId + 1);
+		}
 		return nextCard;
 	}
 
-	public void setNextTeamToPlay() {
-		// for (int i = 0; i < mTeamList.size(); i++) {
-		// // If end of list reached, start over
-		// if (i == (mTeamList.size() - 1)) {
-		// mCurrentTeam = mTeamList.get(0);
-		// break;
-		// } else if (mTeamList.get(i) == mCurrentTeam) {
-		// mCurrentTeam = mTeamList.get(i + 1);
-		// break;
-		// }
-		// }
+	/**
+	 * Get a random next card.
+	 * 
+	 * @param initialList
+	 * @return
+	 */
+//	private Card computeNextRandomCard() {
+//		Card nextCard = null;
+//		List<Card> listCardForCurrentTurn = mCurrentRound.getCurrentTurn().getListCardForCurrentTurn();
+//		if (mCardsInPlay != null && !mCardsInPlay.isEmpty()) {
+//			int size = mCardsInPlay.size();
+//
+//			Random randomGenerator = new Random();
+//
+//			for (int i = 0; i < size; i++) {
+//				int randomInt = randomGenerator.nextInt(size);
+//				// Get a random card from remaining list
+//				nextCard = mCardsInPlay.get(randomInt);
+//				if (!listCardForCurrentTurn.contains(nextCard)) {
+//					listCardForCurrentTurn.add(nextCard);
+//				} else {
+//					// If already proposed in current turn, get another one.
+//
+//				}
+//			}
+//
+//		} else {
+//			// If no more cards are available go back to first one in current turn
+//			nextCard = computeNextCard(listCardForCurrentTurn, mCurrentCard,
+//					listCardForCurrentTurn.indexOf(mCurrentCard) + 1);
+//		}
+//
+//		return nextCard;
+//
+//	}
 
+	public void setNextTeamToPlay() {
 		int nbTeams = this.getTeamList().size();
 		Team teams[] = new Team[nbTeams];
 		teams = this.getTeamList().toArray(teams);
@@ -189,7 +196,17 @@ public class Game {
 	public void endTurn() {
 		mCurrentRound.createNewTurn();
 		setNextTeamToPlay();
-		getNextCardToPlay(false, 0, mCurrentCard);
+		reshuffleCardsInPlay();
+		getNextCardToPlay(mCurrentCard, false);
+	}
+
+	private void reshuffleCardsInPlay() {
+		// For second and third round, shuffle remaining cards
+		if (Constants.ROUND_SECOND == mCurrentRound.getRoundNumber()
+				|| Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
+		    Collections.shuffle(mCardsInPlay);
+		    mCurrentCard = null;
+		}
 	}
 
 	private void endRound() {
@@ -213,7 +230,6 @@ public class Game {
 		listFoundByTeam.add(mCurrentCard);
 
 		mCurrentRound.getCurrentTurn().getTeamTurnScore().put(mCurrentTeam, listFoundByTeam);
-
 	}
 
 	public void setGameOver(boolean mIsGameOver) {
@@ -253,11 +269,11 @@ public class Game {
 
 	public void cardFound() {
 		this.addCardToTeamScore();
-		this.getNextCardToPlay(false, 0, this.getCurrentCard());
+		this.getNextCardToPlay(this.getCurrentCard(), false);
 	}
 
 	public void cardSkip() {
-		this.getNextCardToPlay(true, 0, this.getCurrentCard());
+		this.getNextCardToPlay(this.getCurrentCard(), true);
 	}
 
 	public List<Team> getTeamList() {
@@ -310,5 +326,4 @@ public class Game {
 		}
 		return teamToReturn;
 	}
-
 }
