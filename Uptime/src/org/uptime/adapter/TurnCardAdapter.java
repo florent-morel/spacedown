@@ -60,7 +60,7 @@ public class TurnCardAdapter extends ArrayAdapter<Card> {
 
 		Card card = mItems.get(position);
 
-		TextView cardNumber = (TextView) v.findViewById(R.id.turnId);
+		TextView cardNumber = (TextView) v.findViewById(R.id.teamName);
 		cardNumber.setText(String.format(mResources.getString(R.string.stats_card_number), position + 1));
 
 		buildFirstLine(v, card);
@@ -72,7 +72,7 @@ public class TurnCardAdapter extends ArrayAdapter<Card> {
 	}
 
 	private void buildFirstLine(View v, Card card) {
-		TextView firstLine = (TextView) v.findViewById(R.id.firstLine);
+		TextView firstLine = (TextView) v.findViewById(R.id.Round);
 		StringBuilder firstLineBuilder = new StringBuilder();
 		firstLineBuilder.append(card.getNameToFind());
 

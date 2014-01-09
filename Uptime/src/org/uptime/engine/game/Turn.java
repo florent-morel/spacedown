@@ -19,7 +19,7 @@ public class Turn {
 	public Turn(Integer mTurnNumber) {
 		super();
 		this.mTurnNumber = mTurnNumber;
-		List<Card> listCardForCurrentTurn = new ArrayList<Card>();
+		listCardForCurrentTurn = new ArrayList<Card>();
 		mTeamRunScore = new HashMap<Team, List<Card>>();
 	}
 	

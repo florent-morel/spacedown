@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/one_player"
+    android:id="@+id/oneTeamScore"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:padding="5dip" >
@@ -14,21 +14,38 @@
     </TextView>
 
     <TextView
-        android:id="@+id/Round"
+        android:id="@+id/Round1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dip"
         android:layout_toRightOf="@+id/teamName"
         android:textAppearance="?android:attr/textAppearanceLarge" >
     </TextView>
-
+    
     <TextView
-        android:id="@+id/secondLine"
+        android:id="@+id/Round2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Round"
         android:layout_marginLeft="2dip"
-        android:layout_toRightOf="@+id/teamName" >
+        android:layout_toRightOf="@+id/Round1"
+        android:textAppearance="?android:attr/textAppearanceLarge" >
+    </TextView>
+    <TextView
+        android:id="@+id/Round3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dip"
+        android:layout_toRightOf="@+id/Round2"
+        android:textAppearance="?android:attr/textAppearanceLarge" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/totalScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dip"
+        android:layout_toRightOf="@+id/Round3"
+        android:textAppearance="?android:attr/textAppearanceLarge" >
     </TextView>
 
 </RelativeLayout>

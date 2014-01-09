@@ -308,11 +308,16 @@ public class Game {
 	}
 
 	public Integer getTotalScore(Team currentTeam) {
-		Integer score = Constants.ZERO_VALUE;
+		Integer score = null;
 		Map<Team, Integer> totalScoreMap = this.getTotalScoreMap();
 		if (totalScoreMap.get(currentTeam) != null) {
 			score = totalScoreMap.get(currentTeam);
 		}
+		
+		if (score == null) {
+			score = Constants.ZERO_VALUE;
+		}
+		
 		return score;
 	}
 

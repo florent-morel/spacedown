@@ -9,9 +9,16 @@
     tools:context=".activity/CardActivity" >
 
     <TextView
+        android:id="@+id/textCardCurrentRound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/card_current_round" />
+    
+    <TextView
         android:id="@+id/textCardTeam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textCardCurrentRound"
         android:text="@string/card_team" />
 
     <TextView
@@ -67,10 +74,8 @@
         android:id="@+id/textCardNameToFind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_below="@+id/textView2"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="150dp"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 

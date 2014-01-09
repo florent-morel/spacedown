@@ -2,7 +2,6 @@ package org.uptime;
 
 import java.util.List;
 
-import org.uptime.engine.Constants;
 import org.uptime.engine.game.Card;
 import org.uptime.engine.game.Game;
 

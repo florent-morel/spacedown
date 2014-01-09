@@ -1,44 +1,46 @@
 package org.uptime.activity;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.uptime.GameManager;
 import org.uptime.R;
 import org.uptime.activity.create.CreateGameActivity;
+import org.uptime.adapter.ScoreTeamAdapter;
 import org.uptime.engine.Constants;
-import org.uptime.engine.game.Card;
 import org.uptime.engine.game.Game;
 import org.uptime.engine.game.Round;
 import org.uptime.engine.game.Team;
-import org.uptime.engine.game.Turn;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 public class ScoreActivity extends Activity implements OnClickListener {
 
 	private static GameManager mGameManager;
 
+	private Resources mResources;
+
 	private Game mGame;
 
 	private TextView mScoreTeam;
 
+	private ListView mScoreTeamList;
+
+	private ScoreTeamAdapter mScoreTeamAdapter;
+
 	private Button mButtonNextRound;
 	private Button mButtonNewGame;
-
-	private Button mButtonStats;
 
 	TableLayout scoreTable;
 
@@ -46,10 +48,25 @@ public class ScoreActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_score);
+		mResources = getResources();
 
 		mGameManager = GameManager.getSingletonObject();
 		mGame = mGameManager.getGame();
 
+		this.refreshActivity();
+
+		mScoreTeamList.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent intent = new Intent(parent.getContext(), StatisticsActivity.class);
+				intent.putExtra(Constants.TEAM_STATS, mGame.getTeamList().get(position).getId());
+				startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
+			}
+		});
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
 		this.refreshActivity();
 	}
 
@@ -62,105 +79,35 @@ public class ScoreActivity extends Activity implements OnClickListener {
 
 	private void initTexts() {
 		mScoreTeam = (TextView) findViewById(R.id.textScoreBoard);
-		// scoreTable = (TableLayout) findViewById(R.id.tableScore);
-
-		// Map<Team, Integer> teamScoreTotal = mGame.getTotalScoreMap();
-		//
-		// Set<Entry<Team, Integer>> entrySet = teamScoreTotal.entrySet();
-		// StringBuilder builder = new StringBuilder();
-		// if (entrySet != null && !entrySet.isEmpty()) {
-		// for (Entry<Team, Integer> entry : entrySet) {
-		// builder.append(entry.getKey().getName());
-		// builder.append(": ");
-		// builder.append(entry.getValue());
-		// builder.append("\n");
-		// }
-		// // } else {
-		// // builder.append(entry.getKey().getName());
-		// // builder.append(": ");
-		// // builder.append("0");
-		// // builder.append("\n");
-		// }
-
-		List<Team> teamList = mGame.getTeamList();
-		StringBuilder builder = new StringBuilder();
-		for (Team team : teamList) {
-			builder.append(team.getName());
-			builder.append(": ");
-			List<Round> roundList = mGame.getRoundList();
-			for (Round round : roundList) {
-				Integer teamRoundScore = round.getTeamRoundScore(team);
-				builder.append(teamRoundScore);
-				builder.append("|");
-			}
-			builder.append("--Total: ");
-			builder.append(mGame.getTotalScore(team));
-			builder.append("\n");
-		}
-
-		mScoreTeam.setText(builder.toString());
 
 		// List<Team> teamList = mGame.getTeamList();
-		// TableRow row;
-		// TextView t1 = (TextView) findViewById(R.id.textTableTeamName);
+		// StringBuilder builder = new StringBuilder();
 		// for (Team team : teamList) {
-		// row = new TableRow(this);
-		// t1 = new TextView(this);
-		// t1.setText(team.getName());
-		// row.addView(t1);
-		//
-		//
-		// TextView tRound1 = (TextView) findViewById(R.id.textTableRound1);
-		// Integer teamRoundScore1 = Constants.ZERO_VALUE;
-		// if (!mGame.getRoundList().isEmpty() && mGame.getRoundList().get(0) !=
-		// null) {
-		// teamRoundScore1 =
-		// mGame.getRoundList().get(0).getTeamRoundScore(team);
-		// }
-		// tRound1.setText(teamRoundScore1);
-		// row.addView(tRound1);
-		//
-		// TextView tRound2 = (TextView) findViewById(R.id.textTableRound2);
-		// Integer teamRoundScore2 = Constants.ZERO_VALUE;
-		// if (!mGame.getRoundList().isEmpty() && mGame.getRoundList().get(1) !=
-		// null) {
-		// teamRoundScore2 =
-		// mGame.getRoundList().get(1).getTeamRoundScore(team);
-		// }
-		// tRound1.setText(teamRoundScore2);
-		// row.addView(tRound2);
-		// TextView tRound3 = (TextView) findViewById(R.id.textTableRound3);
-		// Integer teamRoundScore3 = Constants.ZERO_VALUE;
-		// if (!mGame.getRoundList().isEmpty() && mGame.getRoundList().get(2) !=
-		// null) {
-		// teamRoundScore3 =
-		// mGame.getRoundList().get(2).getTeamRoundScore(team);
-		// }
-		// tRound1.setText(teamRoundScore3);
-		// row.addView(tRound3);
-		//
-		// TextView tTotal = (TextView) findViewById(R.id.textTableTotal);
-		// Integer teamTotalScore = mGame.getTotalScore(team);
-		// tRound1.setText(teamTotalScore);
-		// row.addView(tTotal);
-
+		// builder.append(team.getName());
+		// builder.append(": ");
 		// List<Round> roundList = mGame.getRoundList();
 		// for (Round round : roundList) {
 		// Integer teamRoundScore = round.getTeamRoundScore(team);
-		// TextView textTeamScore = new TextView(this);
-		// textTeamScore.setText(teamRoundScore);
-		// row.addView(textTeamScore);
+		// builder.append(teamRoundScore);
+		// builder.append("|");
 		// }
-		// End of the Rounds: display total
-
-		// TextView textTeamTotalScore = new TextView(this);
-		// textTeamTotalScore.setText(10);
-		// row.addView(textTeamTotalScore);
-
-		// scoreTable.addView(row, new
-		// TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-		// LayoutParams.WRAP_CONTENT));
+		// builder.append("--Total: ");
+		// builder.append(mGame.getTotalScore(team));
+		// builder.append("\n");
 		// }
+
+		Round currentRound = mGame.getCurrentRound();
+		if (currentRound == null) {
+			mScoreTeam.setText(String.format(mResources.getString(R.string.score_round_nothing)));
+		} else {
+			if (currentRound.isRoundActive()) {
+				mScoreTeam.setText(String.format(mResources.getString(R.string.score_round_active), currentRound
+						.getRoundNumber(), mGame.getCurrentTeam().getName()));
+			} else {
+				mScoreTeam.setText(String.format(mResources.getString(R.string.score_round_finished), currentRound
+						.getRoundNumber()));
+			}
+		}
 
 	}
 
@@ -170,8 +117,11 @@ public class ScoreActivity extends Activity implements OnClickListener {
 		mButtonNewGame = (Button) findViewById(R.id.buttonNewGame);
 		mButtonNewGame.setOnClickListener(this);
 
-		mButtonStats = (Button) findViewById(R.id.button100);
-		mButtonStats.setOnClickListener(this);
+		Round currentRound = mGame.getCurrentRound();
+
+		if (currentRound != null && currentRound.isRoundActive()) {
+			mButtonNextRound.setText(String.format(mResources.getString(R.string.score_continue_round)));
+		}
 
 		if (mGame.isGameOver()) {
 			mButtonNextRound.setVisibility(View.GONE);
@@ -190,21 +140,35 @@ public class ScoreActivity extends Activity implements OnClickListener {
 		} else if (v.getId() == mButtonNewGame.getId()) {
 			Intent intent = new Intent(this, CreateGameActivity.class);
 			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
-		} else if (v.getId() == mButtonStats.getId()) {
-			Intent intent = new Intent(this, StatisticsActivity.class);
-			intent.putExtra(Constants.TEAM_STATS, mGame.getTeamList().get(0).getId());
-			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 		}
 
 	}
 
 	private void refreshActivity() {
+		this.initListScore();
 		this.initTexts();
 		this.initButtons();
 	}
 
+	private void initListScore() {
+		mScoreTeamList = (ListView) findViewById(R.id.scoreTeamScoreList);
+		mScoreTeamAdapter = new ScoreTeamAdapter(this, R.layout.layout_team_score_row);
+		List<Team> teamList = mGame.getTeamList();
+		for (Team team : teamList) {
+			mScoreTeamAdapter.addItem(team);
+		}
+
+		mScoreTeamList.setAdapter(mScoreTeamAdapter);
+	}
+
 	private void launchNextRound() {
-		mGame.startNextRound();
+		Round currentRound = mGame.getCurrentRound();
+
+		if (currentRound == null || !currentRound.isRoundActive()) {
+			// Start a next round only if needed (to come back to current round
+			// if back button was pressed)
+			mGame.startNextRound();
+		}
 		Intent intent = new Intent(this, CardActivity.class);
 		startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 	}

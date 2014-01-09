@@ -74,7 +74,11 @@ public interface Constants {
 
 	static final String LEFT = "left";
 
-	static enum RunMode {STANDARD, DEBUG};
+	static enum RunMode {STANDARD, DEBUG, HARDCODE};
 
 	static final int NUMBER_OF_CARDS = 40;
+
+	static final String DASH = "--";
+
+	static final int TURN_STATS_DONE = 132456;
 }
