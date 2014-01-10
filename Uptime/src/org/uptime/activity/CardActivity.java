@@ -8,6 +8,7 @@ import org.uptime.engine.game.Game;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -102,14 +103,18 @@ public class CardActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 
 		if (v.getId() == mButtonCardFound.getId()) {
+			final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.ping);
+			mp1.start();
 			mGame.cardFound();
 		} else if (v.getId() == mButtonCardSkip.getId()) {
+			final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.button_27);
+			mp1.start();
 			mGame.cardSkip();
 		} else if (v.getId() == mButtonEndTurn.getId()) {
 			// Display stats for this turn
 			Intent intent = new Intent(this, StatisticsEndTurnActivity.class);
 			startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS);
-//			mGame.endTurn();
+			// mGame.endTurn();
 		}
 
 		if (!mGame.isGameOver() && mGame.isRoundActive()) {

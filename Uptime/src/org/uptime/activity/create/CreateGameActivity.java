@@ -95,13 +95,6 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 	}
 
 	private void startNewGame() {
-
-		// List<Player> playerList = null;
-		//
-		// if (mGameManager.getGame() != null) {
-		// playerList = mGameManager.getGame().getPlayerList();
-		// }
-
 		mGameManager.startNewGame(Integer.valueOf(mNumberOfTeams.getText().toString()), mCardList);
 		mGame = mGameManager.getGame();
 		

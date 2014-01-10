@@ -14,11 +14,16 @@ import org.uptime.engine.game.Team;
 import org.uptime.engine.game.Turn;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
-public class StatisticsEndTurnActivity extends Activity {
+public class StatisticsEndTurnActivity extends Activity implements OnClickListener {
 
 	private static GameManager mGameManager;
 
@@ -30,6 +35,10 @@ public class StatisticsEndTurnActivity extends Activity {
 
 	private TurnCardAdapter mTurnCardAdapter;
 
+	private Button mButtonNextTurn;
+
+	private TextView mNoCardFound;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,6 +48,8 @@ public class StatisticsEndTurnActivity extends Activity {
 		game = mGameManager.getGame();
 
 		refreshList();
+		initButtons();
+		initTexts();
 
 		// mStatsCardsList.setOnItemClickListener(new OnItemClickListener() {
 		// public void onItemClick(AdapterView<?> parent, View view,
@@ -55,6 +66,20 @@ public class StatisticsEndTurnActivity extends Activity {
 		// }
 		// });
 
+	}
+
+	private void initTexts() {
+		mNoCardFound = (TextView) findViewById(R.id.textCardCurrentTurn);	
+
+		if (mTurnCardAdapter != null && !mTurnCardAdapter.isEmpty()) {
+			mNoCardFound.setVisibility(View.GONE);
+		}	
+	}
+
+	private void initButtons() {
+		mButtonNextTurn = (Button) findViewById(R.id.buttonNextTurn);
+		mButtonNextTurn.setOnClickListener(this);
+		mButtonNextTurn.setText(String.format(mResources.getString(R.string.stats_next_turn), game.getNextTeamToPlay().getName()));
 	}
 
 	/**
@@ -89,10 +114,12 @@ public class StatisticsEndTurnActivity extends Activity {
 		registerForContextMenu(mStatsCardsEndTurnList);
 	}
 
-//	@Override
-//	protected void onPause() {
-//		super.onPause();
-//		setResult(Constants.TURN_STATS_DONE);
-//	}
+	@Override
+	public void onClick(View v) {
+		if (v.getId() == mButtonNextTurn.getId()) {
+			// Finish activity
+			finish();
+		}
+	}
 
 }

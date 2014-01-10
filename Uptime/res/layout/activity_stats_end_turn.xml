@@ -8,11 +8,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".activity/StatisticsActivity" >
 
+    <TextView
+        android:id="@+id/textCardCurrentTurn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stats_card_current_turn" />
+    
     <ListView
         android:id="@+id/statsCardEndTurnList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true" >
     </ListView>
+
+    <Button
+        android:id="@+id/buttonNextTurn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/statsCardEndTurnList"
+        android:layout_centerHorizontal="true"
+        android:text="@string/stats_next_turn" />
 
 </RelativeLayout>

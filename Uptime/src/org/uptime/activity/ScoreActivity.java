@@ -80,22 +80,6 @@ public class ScoreActivity extends Activity implements OnClickListener {
 	private void initTexts() {
 		mScoreTeam = (TextView) findViewById(R.id.textScoreBoard);
 
-		// List<Team> teamList = mGame.getTeamList();
-		// StringBuilder builder = new StringBuilder();
-		// for (Team team : teamList) {
-		// builder.append(team.getName());
-		// builder.append(": ");
-		// List<Round> roundList = mGame.getRoundList();
-		// for (Round round : roundList) {
-		// Integer teamRoundScore = round.getTeamRoundScore(team);
-		// builder.append(teamRoundScore);
-		// builder.append("|");
-		// }
-		// builder.append("--Total: ");
-		// builder.append(mGame.getTotalScore(team));
-		// builder.append("\n");
-		// }
-
 		Round currentRound = mGame.getCurrentRound();
 		if (currentRound == null) {
 			mScoreTeam.setText(String.format(mResources.getString(R.string.score_round_nothing)));

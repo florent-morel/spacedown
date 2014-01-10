@@ -23,7 +23,6 @@
     <string name="score_continue_round">Continue Round</string>
     <string name="score_title">Score per team</string>
     <string name="score_round_text">Team score</string>
-    
     <string name="score_round_nothing">No Round yet</string>
     <string name="score_round_finished">Round %1$d just finished, next team: %2$s</string>
     <string name="score_round_active">Round %1$d still active, next team: %2$s</string>
@@ -37,6 +36,8 @@
     
     <string name="stats_title">Stats for team: %1$s</string>
     <string name="stats_card_number">%1$d</string>
+    <string name="stats_next_turn">Next Team: %1$s</string>
+    <string name="stats_card_current_turn">No card found</string>
     
     <string name="dialog_import_file_not_found">No file found, taking hard-coded list</string>
     <string name="dialog_overwrite_current_game">This will cancel current game</string>
