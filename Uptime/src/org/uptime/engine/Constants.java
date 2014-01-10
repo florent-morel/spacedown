@@ -80,5 +80,5 @@ public interface Constants {
 
 	static final String DASH = "--";
 
-	static final int TURN_STATS_DONE = 132456;
+	static final int ACTIVITY_TURN_STATS = 132456;
 }

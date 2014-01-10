@@ -25,7 +25,7 @@
     <string name="score_round_text">Team score</string>
     
     <string name="score_round_nothing">No Round yet</string>
-    <string name="score_round_finished">Round %1$d just finished</string>
+    <string name="score_round_finished">Round %1$d just finished, next team: %2$s</string>
     <string name="score_round_active">Round %1$d still active, next team: %2$s</string>
     
     <string name="create_title">Set your game settings</string>

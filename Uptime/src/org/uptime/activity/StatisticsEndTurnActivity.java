@@ -89,10 +89,10 @@ public class StatisticsEndTurnActivity extends Activity {
 		registerForContextMenu(mStatsCardsEndTurnList);
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		setResult(Constants.TURN_STATS_DONE);
-	}
+//	@Override
+//	protected void onPause() {
+//		super.onPause();
+//		setResult(Constants.TURN_STATS_DONE);
+//	}
 
 }

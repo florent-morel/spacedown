@@ -107,10 +107,9 @@ public class CardActivity extends Activity implements OnClickListener {
 			mGame.cardSkip();
 		} else if (v.getId() == mButtonEndTurn.getId()) {
 			// Display stats for this turn
-			// Intent intent = new Intent(this,
-			// StatisticsEndTurnActivity.class);
-			// startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
-			mGame.endTurn();
+			Intent intent = new Intent(this, StatisticsEndTurnActivity.class);
+			startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS);
+//			mGame.endTurn();
 		}
 
 		if (!mGame.isGameOver() && mGame.isRoundActive()) {
@@ -124,14 +123,14 @@ public class CardActivity extends Activity implements OnClickListener {
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO not working, always getting 0 as value for resultCode
-		// if (resultCode == Constants.TURN_STATS_DONE) {
-		// // Stats for this turn is done, end turn
-		// mGame.endTurn();
-		//
-		// if (!mGame.isGameOver() && mGame.isRoundActive()) {
-		// refreshActivity();
-		// }
-		// }
+		if (requestCode == Constants.ACTIVITY_TURN_STATS) {
+			// Stats for this turn is done, end turn
+			mGame.endTurn();
+
+			if (!mGame.isGameOver() && mGame.isRoundActive()) {
+				refreshActivity();
+			}
+		}
 	}
 
 	/**

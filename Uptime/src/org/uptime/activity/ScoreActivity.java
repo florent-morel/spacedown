@@ -105,7 +105,7 @@ public class ScoreActivity extends Activity implements OnClickListener {
 						.getRoundNumber(), mGame.getCurrentTeam().getName()));
 			} else {
 				mScoreTeam.setText(String.format(mResources.getString(R.string.score_round_finished), currentRound
-						.getRoundNumber()));
+						.getRoundNumber(), mGame.getNextTeamToPlay().getName()));
 			}
 		}
 

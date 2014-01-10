@@ -82,7 +82,7 @@ public class Game {
 			}
 			mCurrentRound = new Round(roundNumber + 1);
 			mRoundList.add(mCurrentRound);
-			this.setNextTeamToPlay();
+			mCurrentTeam = getNextTeamToPlay();
 			this.refreshCards();
 			reshuffleCardsInPlay();
 			this.getNextCardToPlay(null, false);
@@ -180,7 +180,9 @@ public class Game {
 //
 //	}
 
-	public void setNextTeamToPlay() {
+	public Team getNextTeamToPlay() {
+		Team nextTeam = null;
+		
 		int nbTeams = this.getTeamList().size();
 		Team teams[] = new Team[nbTeams];
 		teams = this.getTeamList().toArray(teams);
@@ -190,12 +192,13 @@ public class Game {
 		}
 
 		int modulo = nextId % nbTeams;
-		mCurrentTeam = teams[modulo];
+		nextTeam = teams[modulo];
+		return nextTeam;
 	}
 
 	public void endTurn() {
 		mCurrentRound.createNewTurn();
-		setNextTeamToPlay();
+		mCurrentTeam = getNextTeamToPlay();
 		reshuffleCardsInPlay();
 		getNextCardToPlay(mCurrentCard, false);
 	}
@@ -262,7 +265,7 @@ public class Game {
 
 	public Team getCurrentTeam() {
 		if (mCurrentTeam == null) {
-			setNextTeamToPlay();
+			mCurrentTeam = getNextTeamToPlay();
 		}
 		return mCurrentTeam;
 	}
