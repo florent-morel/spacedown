@@ -35,6 +35,7 @@
     <string name="dialog_create_team_name_invalid">Invalid name.</string>
     
     <string name="stats_title">Stats for team: %1$s</string>
+    <string name="stats_round">Round %1$s: %2$d card(s) found</string>
     <string name="stats_card_number">%1$d</string>
     <string name="stats_next_turn">Next Team: %1$s</string>
     <string name="stats_card_current_turn">No card found</string>
@@ -138,7 +139,6 @@
     <string name="score_chart_img_alt">Current game score chart.</string>
 
     <!-- Stats -->
-    <string name="statistics">%1s Stats</string>
     <string name="number_of_rounds">Round(s) played so far</string>
     <string name="number_of_rounds_default">No round played</string>
 

@@ -8,11 +8,49 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".activity/StatisticsActivity" >
 
+
+    <TextView
+        android:id="@+id/statsRound1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stats_round" />
+    
     <ListView
-        android:id="@+id/statsCardList"
+        android:id="@+id/statsCardList1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true" >
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/statsRound1" >
+    </ListView>
+
+    <TextView
+        android:id="@+id/statsRound2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stats_round"
+        android:layout_below="@+id/statsCardList1" />
+    
+    <ListView
+        android:id="@+id/statsCardList2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/statsRound2" >
+    </ListView>
+
+    <TextView
+        android:id="@+id/statsRound3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stats_round"
+        android:layout_below="@+id/statsCardList2" />
+    
+    <ListView
+        android:id="@+id/statsCardList3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/statsRound3" >
     </ListView>
 
 </RelativeLayout>
