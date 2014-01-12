@@ -76,7 +76,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="150dp"
-        android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
@@ -95,7 +94,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/buttonFoundCard"
         android:layout_alignBottom="@+id/buttonFoundCard"
-        android:layout_toRightOf="@+id/textCardNameToFind"
+        android:layout_toRightOf="@+id/buttonFoundCard"
+        android:layout_marginLeft="70dp"
         android:text="@string/card_skip" />
 
     <Button

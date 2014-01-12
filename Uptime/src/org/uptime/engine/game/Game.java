@@ -36,7 +36,7 @@ public class Game {
 
 	private void initCards(List<Card> listCards) {
 		if (listCards == null) {
-			mCardList = CardBuilder.buildCards(Constants.RunMode.DEBUG);
+			mCardList = CardBuilder.buildCards(Constants.RunMode.DEBUG, null);
 		} else {
 			mCardList = listCards;
 		}
@@ -92,9 +92,7 @@ public class Game {
 	}
 
 	public Card getNextCardToPlay(Card currentCard, boolean skipCard) {
-		if (mCardsInPlay.isEmpty()) {
-			endRound();
-		} else {
+		if (!mCardsInPlay.isEmpty()) {
 			if (skipCard || currentCard == null || currentCard.isFound()) {
 				mCurrentCard = this.computeNextCard(mCardsInPlay, currentCard, mCardsInPlay.indexOf(currentCard) + 1);
 			} else {
@@ -212,7 +210,7 @@ public class Game {
 		}
 	}
 
-	private void endRound() {
+	public void endRound() {
 		mCurrentCard = null;
 		mCurrentRound.setRoundActive(false);
 		if (Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
@@ -287,6 +285,10 @@ public class Game {
 		this.mTeamList.add(team);
 	}
 
+	public List<Card> getCardsInPlay() {
+		return mCardsInPlay;
+	}
+
 	public Map<Team, Integer> getTotalScoreMap() {
 		Map<Team, Integer> teamScoreTotal = new HashMap<Team, Integer>();
 		List<Round> roundList = this.getRoundList();
@@ -333,5 +335,11 @@ public class Game {
 			}
 		}
 		return teamToReturn;
+	}
+
+	public void replayGame() {
+		setGameOver(false);
+		refreshCards();
+		initRounds();
 	}
 }

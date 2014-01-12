@@ -39,6 +39,7 @@ public class UpTime extends Activity implements OnClickListener {
 
 //	private GameManager mGameManager;
 	private Button mButtonNewGame;
+//	private Button mButtonQuickGame;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -48,6 +49,9 @@ public class UpTime extends Activity implements OnClickListener {
 
 		mButtonNewGame = (Button) findViewById(R.id.buttonNewGame);
 		mButtonNewGame.setOnClickListener(this);
+
+//		mButtonQuickGame = (Button) findViewById(R.id.buttonNewGame);
+//		mButtonQuickGame.setOnClickListener(this);
 
 //		mGameManager = GameManager.getSingletonObject();
 	}

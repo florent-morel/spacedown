@@ -10,23 +10,30 @@ import org.uptime.engine.game.Card;
 
 public class CardBuilder {
 
-	public static List<Card> buildCards(Constants.RunMode runMode) {
+	public static List<Card> buildCards(Constants.RunMode runMode, Integer numberOfCards) {
 		List<Card> cardList = new ArrayList<Card>();
 
 		if (Constants.RunMode.STANDARD.equals(runMode)) {
 			// cardList = ImportCards.buildCardsFromCSV();
 		} else if (Constants.RunMode.DEBUG.equals(runMode)) {
-			cardList = buildDebugCards();
+			if (numberOfCards == null) {
+				numberOfCards = 4;
+			}
+			cardList = buildDebugCards(numberOfCards.intValue());
+			cardList = getRandomCards(cardList, numberOfCards.intValue());
 		} else if (Constants.RunMode.HARDCODE.equals(runMode)) {
 			cardList = buildCardsFromHardCodedList();
-			cardList = getRandomCards(cardList);
+			if (numberOfCards == null) {
+				numberOfCards = 40;
+			}
+			cardList = getRandomCards(cardList, numberOfCards.intValue());
 		}
 
 		return cardList;
 
 	}
 
-	public static List<Card> getRandomCards(List<Card> initialList) {
+	public static List<Card> getRandomCards(List<Card> initialList, int numberOfCards) {
 		List<Card> randomList = new ArrayList<Card>();
 
 		// Get 40 cards out of the initial list
@@ -36,7 +43,7 @@ public class CardBuilder {
 			Random randomGenerator = new Random();
 			int idx = 0;
 			List<Integer> randomIndexList = new ArrayList<Integer>();
-			while (idx < Constants.NUMBER_OF_CARDS) {
+			while (idx < numberOfCards) {
 				int randomInt = randomGenerator.nextInt(size);
 				if (!randomIndexList.contains(randomInt)) {
 					randomIndexList.add(randomInt);
@@ -52,16 +59,22 @@ public class CardBuilder {
 
 	}
 
-	private static List<Card> buildDebugCards() {
+	private static List<Card> buildDebugCards(int i) {
 		List<Card> cardList = new ArrayList<Card>();
 		Card card = new Card(1, "Michael Jordan", "Sport");
 		cardList.add(card);
 		card = new Card(2, "Albert Einstein", "Science");
 		cardList.add(card);
-		card = new Card(3, "Homer Simpson", "Fiction");
-		cardList.add(card);
-		card = new Card(4, "Forrest Gump", "Movie");
-		cardList.add(card);
+		if (i > 2) {
+			card = new Card(3, "Homer Simpson", "Fiction");
+			cardList.add(card);
+			card = new Card(4, "Forrest Gump", "Movie");
+			cardList.add(card);
+			for (int k = 0; k < i - 2; k++) {
+				Card newCard = new Card(k + 4, "Michael Jordan " + k, "");
+				cardList.add(newCard);
+			}
+		}
 		return cardList;
 	}
 

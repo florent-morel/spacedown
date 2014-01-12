@@ -18,7 +18,7 @@ public class GameManager {
 	private static GameManager mGameManager;
 
 	private Game mGame;
-	
+
 	private GameManager() {
 	}
 

@@ -6,9 +6,8 @@
     <string name="hello_world">Hello world!</string>
     
     <string name="create_game">Create game</string>
+    <string name="replay_game">Replay game</string>
     <string name="continue_game">Continue game</string>
-    <string name="create_game_debug_mode">Debug mode</string>
-    <string name="create_game_import_cards">Import cards</string>
     
     <string name="card_current_round">Round #: %1$d</string>
     <string name="card_team">Current team:</string>
@@ -29,15 +28,20 @@
     
     <string name="create_title">Set your game settings</string>
     <string name="create_teams">Number of teams:</string>
-    <string name="text_create_team_name">Team name:</string>
+    <string name="create_team_name">Team name:</string>
+    <string name="create_number_of_cards">Number of cards:</string>
+    <string name="create_game_debug_mode">Debug mode</string>
+    <string name="create_game_import_cards">Import cards</string>
     <string name="button_create_team_name">Create team</string>
     <string name="dialog_create_team_confirm">Team %1$s added to game.</string>
     <string name="dialog_create_team_name_invalid">Invalid name.</string>
     
     <string name="stats_title">Stats for team: %1$s</string>
-    <string name="stats_round">Round %1$s: %2$d card(s) found</string>
+    <string name="stats_round">Round %1$d: %2$d card(s) found</string>
     <string name="stats_card_number">%1$d</string>
     <string name="stats_next_turn">Next Team: %1$s</string>
+    <string name="stats_end_round">Finish Round %1$d</string>
+    <string name="stats_end_round_question">Finish Round %1$d?</string>
     <string name="stats_card_current_turn">No card found</string>
     
     <string name="dialog_import_file_not_found">No file found, taking hard-coded list</string>

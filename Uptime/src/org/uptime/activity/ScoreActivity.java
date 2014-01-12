@@ -41,6 +41,7 @@ public class ScoreActivity extends Activity implements OnClickListener {
 
 	private Button mButtonNextRound;
 	private Button mButtonNewGame;
+	private Button mButtonReplayGame;
 
 	TableLayout scoreTable;
 
@@ -57,8 +58,8 @@ public class ScoreActivity extends Activity implements OnClickListener {
 
 		mScoreTeamList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//				Intent intent = new Intent(parent.getContext(), StatisticsActivity.class);
-				Intent intent = new Intent(parent.getContext(), RoundStatisticsActivity.class);
+				Intent intent = new Intent(parent.getContext(), StatisticsActivity.class);
+//				Intent intent = new Intent(parent.getContext(), RoundStatisticsActivity.class);
 				intent.putExtra(Constants.STATS_TEAM, mGame.getTeamList().get(position).getId());
 				startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 			}
@@ -101,6 +102,8 @@ public class ScoreActivity extends Activity implements OnClickListener {
 		mButtonNextRound.setOnClickListener(this);
 		mButtonNewGame = (Button) findViewById(R.id.buttonNewGame);
 		mButtonNewGame.setOnClickListener(this);
+		mButtonReplayGame = (Button) findViewById(R.id.buttonReplayGame);
+		mButtonReplayGame.setOnClickListener(this);
 
 		Round currentRound = mGame.getCurrentRound();
 
@@ -111,20 +114,24 @@ public class ScoreActivity extends Activity implements OnClickListener {
 		if (mGame.isGameOver()) {
 			mButtonNextRound.setVisibility(View.GONE);
 			mButtonNewGame.setVisibility(View.VISIBLE);
+			mButtonReplayGame.setVisibility(View.VISIBLE);
 		} else {
 			mButtonNextRound.setVisibility(View.VISIBLE);
 			mButtonNewGame.setVisibility(View.GONE);
+			mButtonReplayGame.setVisibility(View.GONE);
 		}
 	}
 
 	@Override
 	public void onClick(View v) {
-
 		if (v.getId() == mButtonNextRound.getId()) {
 			launchNextRound();
 		} else if (v.getId() == mButtonNewGame.getId()) {
 			Intent intent = new Intent(this, CreateGameActivity.class);
 			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
+		} else if (v.getId() == mButtonReplayGame.getId()) {
+			mGame.replayGame();
+			this.refreshActivity();
 		}
 
 	}
@@ -155,7 +162,7 @@ public class ScoreActivity extends Activity implements OnClickListener {
 			mGame.startNextRound();
 		}
 		Intent intent = new Intent(this, CardActivity.class);
-		startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
+		startActivityForResult(intent, Constants.ACTIVITY_CARDACTIVITY_NEXT_ROUND);
 	}
 
 }

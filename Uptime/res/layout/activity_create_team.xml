@@ -21,7 +21,7 @@
         android:layout_alignLeft="@+id/textCreateTitle"
         android:layout_below="@+id/textCreateTitle"
         android:layout_marginTop="26dp"
-        android:text="@string/text_create_team_name" />
+        android:text="@string/create_team_name" />
 
     <EditText
         android:id="@+id/editCreateTeamName"

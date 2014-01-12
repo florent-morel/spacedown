@@ -6,7 +6,6 @@ import java.util.Map;
 import org.uptime.GameManager;
 import org.uptime.R;
 import org.uptime.adapter.TurnCardAdapter;
-import org.uptime.engine.Constants;
 import org.uptime.engine.game.Card;
 import org.uptime.engine.game.Game;
 import org.uptime.engine.game.Round;
@@ -14,6 +13,8 @@ import org.uptime.engine.game.Team;
 import org.uptime.engine.game.Turn;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -79,7 +80,12 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 	private void initButtons() {
 		mButtonNextTurn = (Button) findViewById(R.id.buttonNextTurn);
 		mButtonNextTurn.setOnClickListener(this);
-		mButtonNextTurn.setText(String.format(mResources.getString(R.string.stats_next_turn), game.getNextTeamToPlay().getName()));
+		
+		if (game.getCardsInPlay().isEmpty()) {
+			mButtonNextTurn.setText(String.format(mResources.getString(R.string.stats_end_round), game.getCurrentRound().getRoundNumber()));
+		} else {
+			mButtonNextTurn.setText(String.format(mResources.getString(R.string.stats_next_turn), game.getNextTeamToPlay().getName()));
+		}
 	}
 
 	/**
@@ -113,6 +119,25 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 
 		registerForContextMenu(mStatsCardsEndTurnList);
 	}
+	
+	public void onBackPressed() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(String.format(mResources.getString(R.string.stats_end_round_question), game.getCurrentRound().getRoundNumber()))
+		.setCancelable(false)
+		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int id) {
+			finish();
+		}
+		})
+		.setNegativeButton("No", new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int id) {
+		dialog.cancel();
+		}
+		});
+		AlertDialog alert = builder.create();
+		alert.show();
+		}
+		
 
 	@Override
 	public void onClick(View v) {

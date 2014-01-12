@@ -91,7 +91,9 @@ public class CardActivity extends Activity implements OnClickListener {
 
 		mButtonCardSkip = (Button) findViewById(R.id.buttonSkipCard);
 		mButtonCardSkip.setOnClickListener(this);
-		if (Constants.ROUND_FIRST == mGame.getCurrentRound().getRoundNumber()) {
+		
+		if (Constants.ROUND_FIRST == mGame.getCurrentRound().getRoundNumber() || 
+				(mGame.getCardsInPlay().size() == 1)) {
 			mButtonCardSkip.setVisibility(View.GONE);
 		}
 
@@ -106,6 +108,15 @@ public class CardActivity extends Activity implements OnClickListener {
 			final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.ping);
 			mp1.start();
 			mGame.cardFound();
+
+			if (mGame.getCardsInPlay().isEmpty()) {
+				// This was the last card in play, round will end, display stats
+				// for turn
+				Intent intent = new Intent(this, StatisticsEndTurnActivity.class);
+				startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS_END_ROUND);
+			}
+			refreshActivity();
+
 		} else if (v.getId() == mButtonCardSkip.getId()) {
 			final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.button_27);
 			mp1.start();
@@ -114,27 +125,20 @@ public class CardActivity extends Activity implements OnClickListener {
 			// Display stats for this turn
 			Intent intent = new Intent(this, StatisticsEndTurnActivity.class);
 			startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS);
-			// mGame.endTurn();
 		}
 
-		if (!mGame.isGameOver() && mGame.isRoundActive()) {
-			refreshActivity();
-		} else {
-			Intent intent = new Intent(this, ScoreActivity.class);
-			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
-			finish();
-		}
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO not working, always getting 0 as value for resultCode
 		if (requestCode == Constants.ACTIVITY_TURN_STATS) {
 			// Stats for this turn is done, end turn
 			mGame.endTurn();
-
-			if (!mGame.isGameOver() && mGame.isRoundActive()) {
-				refreshActivity();
-			}
+			refreshActivity();
+		}
+		if (requestCode == Constants.ACTIVITY_TURN_STATS_END_ROUND) {
+			// This round is done
+			mGame.endRound();
+			refreshActivity();
 		}
 	}
 
@@ -144,7 +148,13 @@ public class CardActivity extends Activity implements OnClickListener {
 	 * @param descending
 	 */
 	private void refreshActivity() {
-		this.setTexts();
+		if (!mGame.isGameOver() && mGame.isRoundActive()) {
+			this.setTexts();
+		} else {
+			Intent intent = new Intent(this, ScoreActivity.class);
+			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
+			finish();
+		}
 	}
 
 }

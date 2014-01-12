@@ -22,9 +22,10 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class CreateGameActivity extends Activity implements OnClickListener {
@@ -37,13 +38,23 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 
 	private Context context;
 
-	private EditText mNumberOfTeams;
+	// private EditText mNumberOfTeams;
+	// private EditText mNumberOfCards;
+
+	private Spinner spinnerNumberOfTeams;
+
+	private Spinner spinnerNumberOfCards;
+
 	private Button mButtonNewGame;
+
 	private Button mButtonContinueGame;
+
 	// private Button mButtonAddTeam;
+
 	private CheckBox mImportCards;
 
 	private List<Card> mCardList;
+
 	boolean confirmNewGame = false;
 
 	@Override
@@ -57,15 +68,38 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 		mGameManager = GameManager.getSingletonObject();
 		mGame = mGameManager.getGame();
 
-		mNumberOfTeams = (EditText) findViewById(R.id.editCreateTeam);
+		// mNumberOfTeams = (EditText) findViewById(R.id.editCreateTeam);
+		// mNumberOfCards = (EditText) findViewById(R.id.CreateNumberOfCards);
 
+		this.initSpinners();
 		this.initButtons();
 
 		// Prefill with existing game values if any
 		if (mGame != null && !mGame.getTeamList().isEmpty()) {
-			mNumberOfTeams.setText(String.valueOf(mGame.getTeamList().size()));
+			// mNumberOfTeams.setText(String.valueOf(mGame.getTeamList().size()));
+			// mNumberOfCards.setText(String.valueOf(mGame.getCardList().size()));
+
+			// spinnerNumberOfTeams.set
 		}
 
+	}
+
+	private void initSpinners() {
+		spinnerNumberOfTeams = (Spinner) findViewById(R.id.spinnerNumberOfTeams);
+		// Create an ArrayAdapter using the string array and a default spinner
+		// layout
+		ArrayAdapter<CharSequence> adapterNumberOfTeams = ArrayAdapter.createFromResource(this,
+				R.array.array_number_of_teams, android.R.layout.simple_spinner_item);
+		// Specify the layout to use when the list of choices appears
+		adapterNumberOfTeams.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// Apply the adapter to the spinner
+		spinnerNumberOfTeams.setAdapter(adapterNumberOfTeams);
+
+		spinnerNumberOfCards = (Spinner) findViewById(R.id.spinnerNumberOfCards);
+		ArrayAdapter<CharSequence> adapterNumberOfCards = ArrayAdapter.createFromResource(this,
+				R.array.array_number_of_cards, android.R.layout.simple_spinner_item);
+		adapterNumberOfTeams.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerNumberOfCards.setAdapter(adapterNumberOfCards);
 	}
 
 	@Override
@@ -94,14 +128,6 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 		}
 	}
 
-	private void startNewGame() {
-		mGameManager.startNewGame(Integer.valueOf(mNumberOfTeams.getText().toString()), mCardList);
-		mGame = mGameManager.getGame();
-		
-		Intent intent = new Intent(this, ScoreActivity.class);
-		startActivityForResult(intent, Constants.GAME_NEW);
-	}
-
 	@Override
 	public void onClick(View v) {
 		// if (v.getId() == mButtonAddTeam.getId()) {
@@ -113,12 +139,15 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 			boolean confirmation = true;
 			if (mGame != null && !mGame.isGameOver()) {
 				// Ask for confirmation since it will cancel previous game
-//				confirmation = displayConfirmation();
+				// confirmation = displayConfirmation();
 			}
-			
+
 			if (confirmation) {
 				if (mImportCards.isChecked()) {
 					importCardsFromCSV();
+				} else {
+					String numberOfCards = spinnerNumberOfCards.getSelectedItem().toString();
+					mCardList = CardBuilder.buildCards(Constants.RunMode.DEBUG, Integer.valueOf(numberOfCards));
 				}
 				startNewGame();
 			}
@@ -129,9 +158,20 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 		}
 	}
 
+	private void startNewGame() {
+		// mGameManager.startNewGame(Integer.valueOf(mNumberOfTeams.getText().toString()),
+		// mCardList);
+		String numberOfTeams = spinnerNumberOfTeams.getSelectedItem().toString();
+		mGameManager.startNewGame(Integer.valueOf(numberOfTeams), mCardList);
+		mGame = mGameManager.getGame();
+
+		Intent intent = new Intent(this, ScoreActivity.class);
+		startActivityForResult(intent, Constants.GAME_NEW);
+	}
+
 	/**
-	 * Not working, getting
-	 * android.view.WindowManager$BadTokenException: Unable to add window -- token null is not for an application
+	 * Not working, getting android.view.WindowManager$BadTokenException: Unable
+	 * to add window -- token null is not for an application
 	 * 
 	 * @return
 	 */
@@ -140,8 +180,8 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 			@Override
 			public void run() {
 				// Ask the user if they want to start a new game
-				AlertDialog.Builder alert = new AlertDialog.Builder(context).setIcon(android.R.drawable.ic_dialog_alert)
-						.setTitle(R.string.dialog_overwrite_current_game)
+				AlertDialog.Builder alert = new AlertDialog.Builder(context)
+						.setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.dialog_overwrite_current_game)
 						.setMessage(R.string.dialog_overwrite_current_game_confirm)
 						.setPositiveButton(R.string.dialog_confirm_yes, new DialogInterface.OnClickListener() {
 
@@ -172,18 +212,23 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 		}
 		return confirmNewGame;
 	}
-	
 
 	private void importCardsFromCSV() {
+		String numberOfCards = spinnerNumberOfCards.getSelectedItem().toString();
 		try {
 			FileReader fileReader = new FileReader(context.getFilesDir().getPath() + "/testaa.csv");
 			List<Card> cardsFromCSV = ImportCards.buildCardsFromCSV(fileReader);
-			mCardList = CardBuilder.getRandomCards(cardsFromCSV);
+			// mCardList = CardBuilder.getRandomCards(cardsFromCSV,
+			// Integer.valueOf(mNumberOfCards.getText().toString()));
+			mCardList = CardBuilder.getRandomCards(cardsFromCSV, Integer.valueOf(numberOfCards));
 		} catch (FileNotFoundException e) {
+			// File is not found to import cards, fall-back to hard-coded list
 			Toast toast = Toast.makeText(this,
 					String.format(mResources.getString(R.string.dialog_import_file_not_found)), Toast.LENGTH_LONG);
 			toast.show();
-			mCardList = CardBuilder.buildCards(Constants.RunMode.HARDCODE);
+			// mCardList = CardBuilder.buildCards(Constants.RunMode.HARDCODE,
+			// Integer.valueOf(mNumberOfCards.getText().toString()));
+			mCardList = CardBuilder.buildCards(Constants.RunMode.HARDCODE, Integer.valueOf(numberOfCards));
 		}
 	}
 
