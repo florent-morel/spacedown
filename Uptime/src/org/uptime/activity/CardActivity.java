@@ -105,22 +105,25 @@ public class CardActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 
 		if (v.getId() == mButtonCardFound.getId()) {
-			final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.ping);
-			mp1.start();
-			mGame.cardFound();
-
-			if (mGame.getCardsInPlay().isEmpty()) {
-				// This was the last card in play, round will end, display stats
-				// for turn
-				Intent intent = new Intent(this, StatisticsEndTurnActivity.class);
-				startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS_END_ROUND);
+			if (!mGame.getCurrentCard().isFound()) {
+				final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.ping);
+				mp1.start();
+				mGame.cardFound();
+				
+				if (mGame.getCardsInPlay().isEmpty()) {
+					// This was the last card in play, round will end, display stats
+					// for turn
+					Intent intent = new Intent(this, StatisticsEndTurnActivity.class);
+					startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS_END_ROUND);
+				}
+				refreshActivity();
 			}
-			refreshActivity();
 
 		} else if (v.getId() == mButtonCardSkip.getId()) {
 			final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.button_27);
 			mp1.start();
 			mGame.cardSkip();
+			refreshActivity();
 		} else if (v.getId() == mButtonEndTurn.getId()) {
 			// Display stats for this turn
 			Intent intent = new Intent(this, StatisticsEndTurnActivity.class);

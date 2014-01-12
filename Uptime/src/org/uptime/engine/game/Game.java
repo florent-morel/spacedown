@@ -71,6 +71,7 @@ public class Game {
 	}
 
 	private void initRounds() {
+		mCurrentRound = null;
 		mRoundList = new ArrayList<Round>();
 	}
 

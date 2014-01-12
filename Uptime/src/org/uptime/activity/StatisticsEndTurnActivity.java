@@ -70,21 +70,23 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 	}
 
 	private void initTexts() {
-		mNoCardFound = (TextView) findViewById(R.id.textCardCurrentTurn);	
+		mNoCardFound = (TextView) findViewById(R.id.textCardCurrentTurn);
 
 		if (mTurnCardAdapter != null && !mTurnCardAdapter.isEmpty()) {
 			mNoCardFound.setVisibility(View.GONE);
-		}	
+		}
 	}
 
 	private void initButtons() {
 		mButtonNextTurn = (Button) findViewById(R.id.buttonNextTurn);
 		mButtonNextTurn.setOnClickListener(this);
-		
+
 		if (game.getCardsInPlay().isEmpty()) {
-			mButtonNextTurn.setText(String.format(mResources.getString(R.string.stats_end_round), game.getCurrentRound().getRoundNumber()));
+			mButtonNextTurn.setText(String.format(mResources.getString(R.string.stats_end_round), game
+					.getCurrentRound().getRoundNumber()));
 		} else {
-			mButtonNextTurn.setText(String.format(mResources.getString(R.string.stats_next_turn), game.getNextTeamToPlay().getName()));
+			mButtonNextTurn.setText(String.format(mResources.getString(R.string.stats_next_turn), game
+					.getNextTeamToPlay().getName()));
 		}
 	}
 
@@ -119,25 +121,28 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 
 		registerForContextMenu(mStatsCardsEndTurnList);
 	}
-	
+
 	public void onBackPressed() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(String.format(mResources.getString(R.string.stats_end_round_question), game.getCurrentRound().getRoundNumber()))
-		.setCancelable(false)
-		.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int id) {
-			finish();
+		if (game.getCardsInPlay().isEmpty()) {
+			builder.setMessage(String.format(mResources.getString(R.string.stats_end_round_question), game
+					.getCurrentRound().getRoundNumber()));
+		} else {
+			builder.setMessage(String.format(mResources.getString(R.string.stats_next_turn_question), game
+					.getNextTeamToPlay().getName()));
 		}
-		})
-		.setNegativeButton("No", new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int id) {
-		dialog.cancel();
-		}
+		builder.setCancelable(false).setPositiveButton(String.format(mResources.getString(R.string.dialog_confirm_yes)), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				finish();
+			}
+		}).setNegativeButton(String.format(mResources.getString(R.string.dialog_confirm_no)), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
 		});
 		AlertDialog alert = builder.create();
 		alert.show();
-		}
-		
+	}
 
 	@Override
 	public void onClick(View v) {

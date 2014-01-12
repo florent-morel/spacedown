@@ -40,6 +40,7 @@
     <string name="stats_round">Round %1$d: %2$d card(s) found</string>
     <string name="stats_card_number">%1$d</string>
     <string name="stats_next_turn">Next Team: %1$s</string>
+    <string name="stats_next_turn_question">End Turn (Next Team: %1$s)?</string>
     <string name="stats_end_round">Finish Round %1$d</string>
     <string name="stats_end_round_question">Finish Round %1$d?</string>
     <string name="stats_card_current_turn">No card found</string>
