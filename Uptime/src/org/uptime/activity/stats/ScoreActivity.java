@@ -1,9 +1,10 @@
-package org.uptime.activity;
+package org.uptime.activity.stats;
 
 import java.util.List;
 
 import org.uptime.GameManager;
 import org.uptime.R;
+import org.uptime.activity.CardActivity;
 import org.uptime.activity.create.CreateGameActivity;
 import org.uptime.adapter.ScoreTeamAdapter;
 import org.uptime.engine.Constants;

@@ -1,4 +1,4 @@
-package org.uptime.activity;
+package org.uptime.activity.stats;
 
 import java.util.List;
 import java.util.Map;
@@ -89,7 +89,7 @@ public class StatisticsActivity extends Activity {
 
 	private void buildListCards(Team team) {
 		if (team != null) {
-			List<Round> roundList = game.getRoundList();
+			List<Round> roundList = game.getSavedRoundList();
 			if (!roundList.isEmpty()) {
 				// build first round
 				mStatsCardsList1 = (ListView) findViewById(R.id.statsCardList1);
@@ -131,7 +131,7 @@ public class StatisticsActivity extends Activity {
 
 		TurnCardAdapter turnCardAdapter = new TurnCardAdapter(this, R.layout.layout_stats_card_row);
 
-		List<Turn> turnList = round.getTurnList();
+		List<Turn> turnList = round.getSavedTurnList();
 		for (Turn turn : turnList) {
 			Map<Team, List<Card>> teamTurnScore = turn.getTeamTurnScore();
 			if (teamTurnScore != null && !teamTurnScore.isEmpty()) {

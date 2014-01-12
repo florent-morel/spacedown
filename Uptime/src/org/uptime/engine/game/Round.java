@@ -11,8 +11,8 @@ public class Round {
 	private Integer mRoundNumber;
 
 	private Turn mCurrentTurn;
-	
-	private List<Turn> mTurnList;
+
+	private List<Turn> mSavedTurnList;
 
 	private boolean mRoundActive = true;
 
@@ -33,7 +33,7 @@ public class Round {
 	}
 
 	private void initTurns() {
-		mTurnList = new ArrayList<Turn>();
+		mSavedTurnList = new ArrayList<Turn>();
 		createNewTurn();
 	}
 
@@ -44,12 +44,10 @@ public class Round {
 				turnNumber = mCurrentTurn.getTurnNumber();
 			}
 			mCurrentTurn = new Turn(turnNumber + 1);
-			mTurnList.add(mCurrentTurn);
 		} else {
 			// Display message
 		}
 	}
-
 
 	// public Map<Integer, List<Integer>> getPlayerScoreMap() {
 	// return mPlayerScoreMap;
@@ -59,17 +57,21 @@ public class Round {
 		return mRoundNumber;
 	}
 
-	public List<Turn> getTurnList() {
-		return mTurnList;
+	public List<Turn> getSavedTurnList() {
+		return mSavedTurnList;
 	}
 
 	public Turn getCurrentTurn() {
 		return mCurrentTurn;
 	}
 
+	public void saveCurrentTurn() {
+		mSavedTurnList.add(mCurrentTurn);
+	}
+
 	public Integer getTeamRoundScore(Team currentTeam) {
 		Integer score = Constants.ZERO_VALUE;
-		List<Turn> listTurns = this.getTurnList();
+		List<Turn> listTurns = this.getSavedTurnList();
 		for (Turn turn : listTurns) {
 			Map<Team, List<Card>> turnScoreMap = turn.getTeamTurnScore();
 			List<Card> listCards = turnScoreMap.get(currentTeam);
@@ -77,8 +79,12 @@ public class Round {
 				score += listCards.size();
 			}
 		}
-		
+
 		return score;
+	}
+
+	public void setCurrentTurn(Turn lastTurn) {
+		mCurrentTurn = lastTurn;
 	}
 
 	// public Map<Integer, Turn> getPlayerTurnMap() {

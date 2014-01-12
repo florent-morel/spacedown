@@ -58,8 +58,8 @@ public class UpTime extends Activity implements OnClickListener {
 
 	private void buildMenu(Menu menu, boolean isOnCreate) {
 		if (isOnCreate) {
-			menu.add(0, Constants.GAME_NEW, 0, R.string.menu_new);
-			menu.add(0, Constants.NEW_GAME_QUICK, 1, R.string.menu_new_quick);
+//			menu.add(0, Constants.GAME_NEW, 0, R.string.menu_new);
+//			menu.add(0, Constants.NEW_GAME_QUICK, 1, R.string.menu_new_quick);
 		}
 
 //		if (!mGameManager.getGame().getPlayerList().isEmpty()) {

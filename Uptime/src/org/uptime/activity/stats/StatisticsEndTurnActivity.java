@@ -1,4 +1,4 @@
-package org.uptime.activity;
+package org.uptime.activity.stats;
 
 import java.util.List;
 import java.util.Map;

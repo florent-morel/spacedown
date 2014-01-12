@@ -2,20 +2,29 @@ package org.uptime.activity;
 
 import org.uptime.GameManager;
 import org.uptime.R;
+import org.uptime.activity.stats.ScoreActivity;
+import org.uptime.activity.stats.StatisticsEndTurnActivity;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Game;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class CardActivity extends Activity implements OnClickListener {
 
 	private static GameManager mGameManager;
@@ -54,8 +63,53 @@ public class CardActivity extends Activity implements OnClickListener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_card_actions, menu);
+
 		return true;
+
+	}
+
+	// public void showPopup(View v) {
+	// PopupMenu popup = new PopupMenu(this, v);
+	// MenuInflater inflater = popup.getMenuInflater();
+	// inflater.inflate(R.menu.menu_card_actions, popup.getMenu());
+	// popup.show();
+	// }
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+		// case R.id.new_game:
+		// newGame();
+		// return true;
+		case R.id.action_cancel_found:
+			cancelFoundCard();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private void cancelFoundCard() {
+		boolean isCardRemoved = mGame.cancelCardFound();
+
+		if (!isCardRemoved) {
+			Toast toast = Toast.makeText(this,
+					String.format(mResources.getString(R.string.dialog_cancel_card_not_found)), Toast.LENGTH_SHORT);
+			toast.show();
+		} else {
+
+			refreshActivity();
+		}
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		return super.onPrepareOptionsMenu(menu);
 	}
 
 	private void initTexts() {
@@ -91,9 +145,8 @@ public class CardActivity extends Activity implements OnClickListener {
 
 		mButtonCardSkip = (Button) findViewById(R.id.buttonSkipCard);
 		mButtonCardSkip.setOnClickListener(this);
-		
-		if (Constants.ROUND_FIRST == mGame.getCurrentRound().getRoundNumber() || 
-				(mGame.getCardsInPlay().size() == 1)) {
+
+		if (Constants.ROUND_FIRST == mGame.getCurrentRound().getRoundNumber() || (mGame.getCardsInPlay().size() == 1)) {
 			mButtonCardSkip.setVisibility(View.GONE);
 		}
 
@@ -109,9 +162,10 @@ public class CardActivity extends Activity implements OnClickListener {
 				final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.ping);
 				mp1.start();
 				mGame.cardFound();
-				
+
 				if (mGame.getCardsInPlay().isEmpty()) {
-					// This was the last card in play, round will end, display stats
+					// This was the last card in play, round will end, display
+					// stats
 					// for turn
 					Intent intent = new Intent(this, StatisticsEndTurnActivity.class);
 					startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS_END_ROUND);
@@ -154,8 +208,8 @@ public class CardActivity extends Activity implements OnClickListener {
 		if (!mGame.isGameOver() && mGame.isRoundActive()) {
 			this.setTexts();
 		} else {
-			Intent intent = new Intent(this, ScoreActivity.class);
-			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
+//			Intent intent = new Intent(this, ScoreActivity.class);
+//			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 			finish();
 		}
 	}

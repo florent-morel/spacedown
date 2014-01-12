@@ -1,4 +1,4 @@
-package org.uptime.activity;
+package org.uptime.activity.stats;
 
 import org.uptime.GameManager;
 import org.uptime.R;

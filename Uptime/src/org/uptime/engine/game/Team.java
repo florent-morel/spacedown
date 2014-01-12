@@ -65,6 +65,11 @@ public class Team {
 		return mId;
 	}
 
+	@Override
+	public String toString() {
+		return "Team [mId=" + mId + ", mName=" + mName + "]";
+	}
+
 //	/**
 //	 * Return current total score.
 //	 *

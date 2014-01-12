@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.uptime.GameManager;
 import org.uptime.R;
-import org.uptime.activity.ScoreActivity;
+import org.uptime.activity.stats.ScoreActivity;
 import org.uptime.cards.build.CardBuilder;
 import org.uptime.cards.build.ImportCards;
 import org.uptime.engine.Constants;

@@ -1,4 +1,4 @@
-package org.uptime.activity;
+package org.uptime.activity.stats;
 
 import android.R;
 import android.app.Fragment;

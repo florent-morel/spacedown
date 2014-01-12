@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.uptime.GameManager;
 import org.uptime.R;
-import org.uptime.activity.RoundStatisticsActivity;
+import org.uptime.activity.stats.RoundStatisticsActivity;
 import org.uptime.engine.game.Card;
 import org.uptime.engine.game.Round;
 import org.uptime.engine.game.Team;
@@ -66,7 +66,7 @@ public class RoundStatsCardAdapter extends PagerAdapter {
 	public Object instantiateItem(ViewGroup group, int position) {
 		LayoutInflater vi = (LayoutInflater) (mContext).getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mView = vi.inflate(R.layout.activity_stats_round, null);
-		mRound = mGameManager.getGame().getRoundList().get(position);
+		mRound = mGameManager.getGame().getSavedRoundList().get(position);
 
 		group.addView(mView, 0);
 
@@ -103,7 +103,7 @@ public class RoundStatsCardAdapter extends PagerAdapter {
 
 		TurnCardAdapter turnCardAdapter = new TurnCardAdapter(mActivity, R.layout.layout_stats_card_row);
 
-		List<Turn> turnList = round.getTurnList();
+		List<Turn> turnList = round.getSavedTurnList();
 		for (Turn turn : turnList) {
 			Map<Team, List<Card>> teamTurnScore = turn.getTeamTurnScore();
 			if (teamTurnScore != null && !teamTurnScore.isEmpty()) {

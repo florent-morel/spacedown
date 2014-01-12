@@ -90,7 +90,7 @@ public class ScoreTeamAdapter extends ArrayAdapter<Team> {
 		TextView total = (TextView) v.findViewById(R.id.totalScore);
 		total.setText(Constants.DASH);
 
-		List<Round> roundList = mGame.getRoundList();
+		List<Round> roundList = mGame.getSavedRoundList();
 
 		if (!roundList.isEmpty()) {
 			// build first round
