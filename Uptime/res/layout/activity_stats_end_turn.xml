@@ -13,11 +13,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/stats_card_current_turn" />
-    
+
     <ListView
         android:id="@+id/statsCardEndTurnList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textCardCurrentTurn"
+        android:layout_above="@+id/buttonNextTurn"
         android:layout_alignParentLeft="true" >
     </ListView>
 
@@ -25,7 +27,7 @@
         android:id="@+id/buttonNextTurn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/statsCardEndTurnList"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/stats_next_turn" />
 

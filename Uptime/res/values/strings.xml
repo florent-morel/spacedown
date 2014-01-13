@@ -10,10 +10,12 @@
     <string name="continue_game">Continue game</string>
     
     <string name="card_current_round">Round #: %1$d</string>
-    <string name="card_team">Current team:</string>
-    <string name="card_team_turn_score">Turn score:</string>
-    <string name="card_team_round_score">Round score:</string>
-    <string name="card_team_total_score">Total score:</string>
+    <string name="card_team">Current team: %1$s</string>
+    <string name="card_team_turn_score">Turn score: %1$d</string>
+    <string name="card_team_round_score">Round score: %1$d</string>
+    <string name="card_team_total_score">Total score: %1$d</string>
+    <string name="card_remaining">Remaining cards: %1$d</string>
+    <string name="card_remaining_last">Last card!</string>
     <string name="card_found">Found</string>
     <string name="card_skip">Skip</string>
     <string name="card_end_turn">End turn</string>
