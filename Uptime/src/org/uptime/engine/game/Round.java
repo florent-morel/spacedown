@@ -1,6 +1,7 @@
 package org.uptime.engine.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ public class Round {
 
 	private Turn mCurrentTurn;
 
-	private List<Turn> mSavedTurnList;
+	private Map<Team, List<Turn>> mSavedTurnMap;
 
 	private boolean mRoundActive = true;
 
@@ -31,7 +32,7 @@ public class Round {
 	}
 
 	private void initTurns() {
-		mSavedTurnList = new ArrayList<Turn>();
+		mSavedTurnMap = new HashMap<Team, List<Turn>>();
 		createNewTurn();
 	}
 
@@ -51,32 +52,49 @@ public class Round {
 		return mRoundNumber;
 	}
 
-	public List<Turn> getSavedTurnList() {
-		return mSavedTurnList;
+	public Map<Team, List<Turn>> getSavedTurnMap() {
+		return mSavedTurnMap;
 	}
 
 	public Turn getCurrentTurn() {
 		return mCurrentTurn;
 	}
 
-	public void saveCurrentTurn() {
-		mSavedTurnList.add(mCurrentTurn);
+	public void saveCurrentTurn(Team currentTeam) {
+		List<Turn> list = mSavedTurnMap.get(currentTeam);
+		if (list == null) {
+			list = new ArrayList<Turn>();
+			mSavedTurnMap.put(currentTeam, list);
+		}
+		list.add(getCurrentTurn());
+		
+		mCurrentTurn = null;
 	}
 
 	public Integer getTeamRoundScore(Team currentTeam) {
 		Integer score = Constants.ZERO_VALUE;
-		List<Turn> listTurns = this.getSavedTurnList();
-		for (Turn turn : listTurns) {
-			Map<Team, List<Card>> turnScoreMap = turn.getTeamTurnScore();
-			List<Card> listCards = turnScoreMap.get(currentTeam);
-			if (listCards != null) {
-				score += listCards.size();
+		List<Turn> listTurns = mSavedTurnMap.get(currentTeam);
+		if (listTurns != null) {
+			for (Turn turn : listTurns) {
+				List<Card> listCards = turn.getTurnListCards();
+				if (listCards != null) {
+					score += listCards.size();
+				}
 			}
 		}
 
 		// Include current turn of current round
-		if (getCurrentTurn() != null) {
-			score += getCurrentTurn().getTeamTurnScore(currentTeam);
+		score += getTeamTurnScore(getCurrentTurn());
+
+		return score;
+	}
+
+	public Integer getTeamTurnScore(Turn turn) {
+		Integer score = Constants.ZERO_VALUE;
+
+		// Include current turn of current round
+		if (turn != null) {
+			score += turn.getTurnListCards().size();
 		}
 
 		return score;

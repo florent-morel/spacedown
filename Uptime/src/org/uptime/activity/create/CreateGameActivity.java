@@ -14,9 +14,7 @@ import org.uptime.engine.game.Card;
 import org.uptime.engine.game.Game;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -175,43 +173,43 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 	 * 
 	 * @return
 	 */
-	private synchronized boolean displayConfirmation() {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				// Ask the user if they want to start a new game
-				AlertDialog.Builder alert = new AlertDialog.Builder(context)
-						.setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.dialog_overwrite_current_game)
-						.setMessage(R.string.dialog_overwrite_current_game_confirm)
-						.setPositiveButton(R.string.dialog_confirm_yes, new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								// Start new game
-								confirmNewGame = true;
-								notify();
-							}
-
-						}).setNegativeButton(R.string.dialog_confirm_no, new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								// Do not start a new game
-								confirmNewGame = false;
-								notify();
-							}
-
-						});
-				alert.show();
-			}
-		});
-
-		try {
-			wait();
-		} catch (InterruptedException e) {
-		}
-		return confirmNewGame;
-	}
+//	private synchronized boolean displayConfirmation() {
+//		runOnUiThread(new Runnable() {
+//			@Override
+//			public void run() {
+//				// Ask the user if they want to start a new game
+//				AlertDialog.Builder alert = new AlertDialog.Builder(context)
+//						.setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.dialog_overwrite_current_game)
+//						.setMessage(R.string.dialog_overwrite_current_game_confirm)
+//						.setPositiveButton(R.string.dialog_confirm_yes, new DialogInterface.OnClickListener() {
+//
+//							@Override
+//							public void onClick(DialogInterface dialog, int which) {
+//								// Start new game
+//								confirmNewGame = true;
+//								notify();
+//							}
+//
+//						}).setNegativeButton(R.string.dialog_confirm_no, new DialogInterface.OnClickListener() {
+//
+//							@Override
+//							public void onClick(DialogInterface dialog, int which) {
+//								// Do not start a new game
+//								confirmNewGame = false;
+//								notify();
+//							}
+//
+//						});
+//				alert.show();
+//			}
+//		});
+//
+//		try {
+//			wait();
+//		} catch (InterruptedException e) {
+//		}
+//		return confirmNewGame;
+//	}
 
 	private void importCardsFromCSV() {
 		String numberOfCards = spinnerNumberOfCards.getSelectedItem().toString();

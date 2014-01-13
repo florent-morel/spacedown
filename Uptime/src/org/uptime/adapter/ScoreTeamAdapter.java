@@ -12,7 +12,6 @@ import org.uptime.engine.game.Team;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,14 +26,10 @@ public class ScoreTeamAdapter extends ArrayAdapter<Team> {
 
 	private Game mGame;
 
-	private Resources mResources;
-
 	public LayoutInflater mInflater;
 
 	public ScoreTeamAdapter(Context context, int textViewResourceId) {
 		super(context, textViewResourceId);
-		this.mResources = context.getResources();
-
 		this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		mGameManager = GameManager.getSingletonObject();

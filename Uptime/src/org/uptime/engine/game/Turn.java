@@ -1,39 +1,30 @@
 package org.uptime.engine.game;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import org.uptime.engine.Constants;
 
 public class Turn {
 
 	private Integer mTurnNumber;
 	
-	private Map<Team, List<Card>> mTeamRunScore;
+	private List<Card> mListCards;
 
 	public Turn(Integer mTurnNumber) {
 		super();
 		this.mTurnNumber = mTurnNumber;
-		mTeamRunScore = new HashMap<Team, List<Card>>();
+		mListCards = new ArrayList<Card>();
 	}
 	
-	public Map<Team, List<Card>> getTeamTurnScore() {
-		return mTeamRunScore;
+	public List<Card> getTurnListCards() {
+		return mListCards;
 	}
 
 	public Integer getTurnNumber() {
 		return mTurnNumber;
 	}
-
-	public Integer getTeamTurnScore(Team currentTeam) {
-		Integer score = Constants.ZERO_VALUE;
-		List<Card> listCards = getTeamTurnScore().get(currentTeam);
-		if (listCards != null) {
-			score = listCards.size();
-		}
-
-		return score;
+	
+	public void addCardToTurn(Card card) {
+		mListCards.add(card);
 	}
 	
 }

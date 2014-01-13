@@ -1,7 +1,6 @@
 package org.uptime.activity.stats;
 
 import java.util.List;
-import java.util.Map;
 
 import org.uptime.GameManager;
 import org.uptime.R;
@@ -18,9 +17,9 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class StatisticsActivity extends Activity {
 
@@ -133,11 +132,10 @@ public class StatisticsActivity extends Activity {
 
 		TurnCardAdapter turnCardAdapter = new TurnCardAdapter(this, R.layout.layout_stats_card_row);
 
-		List<Turn> turnList = round.getSavedTurnList();
-		for (Turn turn : turnList) {
-			Map<Team, List<Card>> teamTurnScore = turn.getTeamTurnScore();
-			if (teamTurnScore != null && !teamTurnScore.isEmpty()) {
-				List<Card> listCards = teamTurnScore.get(team);
+		List<Turn> turnList = round.getSavedTurnMap().get(team);
+		if (turnList != null) {
+			for (Turn turn : turnList) {
+				List<Card> listCards = turn.getTurnListCards();
 				if (listCards != null && !listCards.isEmpty()) {
 					for (Card card : listCards) {
 						turnCardAdapter.addItem(card);

@@ -1,7 +1,6 @@
 package org.uptime.adapter;
 
 import java.util.List;
-import java.util.Map;
 
 import org.uptime.GameManager;
 import org.uptime.R;
@@ -40,7 +39,8 @@ public class RoundStatsCardAdapter extends PagerAdapter {
 	private View mView;
 
 	private RoundStatisticsActivity mActivity;
-//	private final Context context;
+
+	// private final Context context;
 
 	public RoundStatsCardAdapter(RoundStatisticsActivity activity) {
 		super();
@@ -103,11 +103,10 @@ public class RoundStatsCardAdapter extends PagerAdapter {
 
 		TurnCardAdapter turnCardAdapter = new TurnCardAdapter(mActivity, R.layout.layout_stats_card_row);
 
-		List<Turn> turnList = round.getSavedTurnList();
-		for (Turn turn : turnList) {
-			Map<Team, List<Card>> teamTurnScore = turn.getTeamTurnScore();
-			if (teamTurnScore != null && !teamTurnScore.isEmpty()) {
-				List<Card> listCards = teamTurnScore.get(team);
+		List<Turn> turnList = round.getSavedTurnMap().get(team);
+		if (turnList != null) {
+			for (Turn turn : turnList) {
+				List<Card> listCards = turn.getTurnListCards();
 				if (listCards != null && !listCards.isEmpty()) {
 					for (Card card : listCards) {
 						turnCardAdapter.addItem(card);

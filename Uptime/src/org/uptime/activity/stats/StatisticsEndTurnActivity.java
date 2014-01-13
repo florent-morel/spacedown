@@ -1,7 +1,6 @@
 package org.uptime.activity.stats;
 
 import java.util.List;
-import java.util.Map;
 
 import org.uptime.GameManager;
 import org.uptime.R;
@@ -15,7 +14,6 @@ import org.uptime.engine.game.Turn;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -106,13 +104,10 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 		if (team != null) {
 			Round round = game.getCurrentRound();
 			Turn turn = round.getCurrentTurn();
-			Map<Team, List<Card>> teamTurnScore = turn.getTeamTurnScore();
-			if (teamTurnScore != null && !teamTurnScore.isEmpty()) {
-				List<Card> listCards = teamTurnScore.get(team);
-				if (listCards != null && !listCards.isEmpty()) {
-					for (Card card : listCards) {
-						mTurnCardAdapter.addItem(card);
-					}
+			List<Card> listCards = turn.getTurnListCards();
+			if (listCards != null && !listCards.isEmpty()) {
+				for (Card card : listCards) {
+					mTurnCardAdapter.addItem(card);
 				}
 			}
 		}
@@ -131,15 +126,19 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 			builder.setMessage(String.format(mResources.getString(R.string.stats_next_turn_question), game
 					.getNextTeamToPlay().getName()));
 		}
-		builder.setCancelable(false).setPositiveButton(String.format(mResources.getString(R.string.dialog_confirm_yes)), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				finish();
-			}
-		}).setNegativeButton(String.format(mResources.getString(R.string.dialog_confirm_no)), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-			}
-		});
+		builder.setCancelable(false)
+				.setPositiveButton(String.format(mResources.getString(R.string.dialog_confirm_yes)),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								finish();
+							}
+						})
+				.setNegativeButton(String.format(mResources.getString(R.string.dialog_confirm_no)),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.cancel();
+							}
+						});
 		AlertDialog alert = builder.create();
 		alert.show();
 	}

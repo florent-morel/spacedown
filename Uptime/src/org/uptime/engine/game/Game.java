@@ -199,7 +199,7 @@ public class Game {
 	}
 
 	public void endTurn() {
-		mCurrentRound.saveCurrentTurn();
+		mCurrentRound.saveCurrentTurn(mCurrentTeam);
 		mCurrentRound.createNewTurn();
 		mCurrentTeam = getNextTeamToPlay();
 		reshuffleCardsInPlay();
@@ -217,7 +217,7 @@ public class Game {
 
 	public void endRound() {
 		mCurrentCard = null;
-		mCurrentRound.saveCurrentTurn();
+		mCurrentRound.saveCurrentTurn(mCurrentTeam);
 		mCurrentRound.setRoundActive(Boolean.FALSE);
 		if (Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
 			this.setGameOver(Boolean.TRUE);
@@ -228,15 +228,7 @@ public class Game {
 		mCurrentCard.setFound(Boolean.TRUE);
 		// Remove the card from the list of cards yet to be found
 		mCardsInPlay.remove(mCurrentCard);
-		List<Card> listFoundByTeam = mCurrentRound.getCurrentTurn().getTeamTurnScore().get(mCurrentTeam);
-
-		if (listFoundByTeam == null) {
-			listFoundByTeam = new ArrayList<Card>();
-		}
-
-		listFoundByTeam.add(mCurrentCard);
-
-		mCurrentRound.getCurrentTurn().getTeamTurnScore().put(mCurrentTeam, listFoundByTeam);
+		mCurrentRound.getCurrentTurn().addCardToTurn(mCurrentCard);
 	}
 
 	public void setGameOver(boolean mIsGameOver) {
@@ -285,11 +277,14 @@ public class Game {
 	 */
 	public boolean cancelCardFound() {
 		boolean isCardRemoved = false;
-
+		List<Card> listFoundByTeam = null;
+		Turn currentTurn = mCurrentRound.getCurrentTurn();
+		if (currentTurn != null) {
+			listFoundByTeam = currentTurn.getTurnListCards();
+		}
+		
 		// Simple case: card is in current turn and turn is not finished
-		List<Card> listFoundByTeam = mCurrentRound.getCurrentTurn().getTeamTurnScore().get(mCurrentTeam);
-		isCardRemoved = removeCardFromCurrentTurn(listFoundByTeam, mCardsInPlay, mCurrentRound.getCurrentTurn()
-				.getTeamTurnScore());
+		isCardRemoved = removeCardFromCurrentTurn(listFoundByTeam, mCardsInPlay);
 
 		if (!isCardRemoved) {
 			// Card not found in current turn, try in previous one
@@ -309,8 +304,7 @@ public class Game {
 	 * @return true if the card has been removed and other variables are set
 	 *         back to what they were.
 	 */
-	private boolean removeCardFromCurrentTurn(List<Card> listFoundByTeam, List<Card> cardsInPlay,
-			Map<Team, List<Card>> teamTurnScore) {
+	private boolean removeCardFromCurrentTurn(List<Card> listFoundByTeam, List<Card> cardsInPlay) {
 		boolean isCardRemoved = false;
 
 		// From list of found cards for given team
@@ -352,51 +346,37 @@ public class Game {
 	private boolean removeCardFromPreviousTurn(Round round, List<Card> cardsInPlay) {
 		boolean isCardRemoved = false;
 
+		// Get last team
+		List<Team> teamList = getTeamList();
+		int indexOfCurrentTeam = teamList.indexOf(mCurrentTeam);
+		Team lastTeam = null;
+		if (indexOfCurrentTeam == 0) {
+			// If first team, take last one
+			lastTeam = teamList.get(teamList.size() - 1);
+		} else {
+			lastTeam = teamList.get(indexOfCurrentTeam - 1);
+		}
+		
 		// From list of turns in given round
-		List<Turn> turnList = round.getSavedTurnList();
+		List<Turn> turnList = round.getSavedTurnMap().get(lastTeam);
 		if (turnList != null && !turnList.isEmpty()) {
-			// No need to check previous turn if we are at the first one
-			// Unless we come from a previous round
-			if (turnList.size() > 1 || round != mCurrentRound) {
-				Turn currentTurn = round.getCurrentTurn();
-				// Get last turn
-				Turn lastTurn = null;
-				if (turnList.size() == 1) {
-					lastTurn = turnList.get(0);
-				} else {
-					// If current turn is not the last one, get the previous one
-					int indexOfCurrentTurn = turnList.indexOf(currentTurn);
-					lastTurn = turnList.get(indexOfCurrentTurn - 1);
-				}
-
-				// Get last team
-				List<Team> teamList = getTeamList();
-				int indexOfCurrentTeam = teamList.indexOf(mCurrentTeam);
-				Team lastTeam = null;
-				if (indexOfCurrentTeam == 0) {
-					// If first team, take last one
-					lastTeam = teamList.get(teamList.size() - 1);
-				} else {
-					lastTeam = teamList.get(indexOfCurrentTeam - 1);
-				}
-
-				Map<Team, List<Card>> teamTurnScore = lastTurn.getTeamTurnScore();
-				List<Card> listFoundByTeam = teamTurnScore.get(lastTeam);
+			// Take last turn cards
+				Turn lastTurn = turnList.get(turnList.size() - 1);
+				List<Card> listFoundByTeam = lastTurn.getTurnListCards();
 
 				// Try to remove last card for this case
-				isCardRemoved = removeCardFromCurrentTurn(listFoundByTeam, cardsInPlay, teamTurnScore);
+				isCardRemoved = removeCardFromCurrentTurn(listFoundByTeam, cardsInPlay);
 
 				if (isCardRemoved) {
 					// Set previous team as current team
 					mCurrentTeam = lastTeam;
 
 					// Remove current turn from saved turn
-					round.getSavedTurnList().remove(currentTurn);
+					round.getSavedTurnMap().remove(lastTurn);
 
-					// Set last turn as current turn in current round
+					// Set previous turn as current turn in current round
 					round.setCurrentTurn(lastTurn);
 				}
-			}
 		}
 		return isCardRemoved;
 	}

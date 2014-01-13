@@ -2,10 +2,10 @@ package org.uptime.activity;
 
 import org.uptime.GameManager;
 import org.uptime.R;
-import org.uptime.activity.stats.ScoreActivity;
 import org.uptime.activity.stats.StatisticsEndTurnActivity;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Game;
+import org.uptime.engine.game.Round;
 import org.uptime.engine.game.Team;
 
 import android.annotation.TargetApi;
@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -102,7 +101,6 @@ public class CardActivity extends Activity implements OnClickListener {
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -116,13 +114,13 @@ public class CardActivity extends Activity implements OnClickListener {
 	}
 
 	private void setTexts() {
-		mCurrentRoundValue.setText(String.format(mResources.getString(R.string.card_current_round), mGame
-				.getCurrentRound().getRoundNumber()));
+		Round currentRound = mGame.getCurrentRound();
+		mCurrentRoundValue.setText(String.format(mResources.getString(R.string.card_current_round), currentRound.getRoundNumber()));
 		Team currentTeam = mGame.getCurrentTeam();
 		mCurrentTeamValue.setText(currentTeam.getName());
-		Integer turnScore = mGame.getCurrentRound().getCurrentTurn().getTeamTurnScore(currentTeam);
+		Integer turnScore = currentRound.getTeamTurnScore(currentRound.getCurrentTurn());
 		mTeamTurnScoreValue.setText(turnScore.toString());
-		Integer roundScore = mGame.getCurrentRound().getTeamRoundScore(currentTeam);
+		Integer roundScore = currentRound.getTeamRoundScore(currentTeam);
 		mTeamRoundScoreValue.setText(roundScore.toString());
 		Integer totalScore = mGame.getTotalScore(currentTeam);
 		mTeamTotalScoreValue.setText(totalScore.toString());
@@ -204,6 +202,7 @@ public class CardActivity extends Activity implements OnClickListener {
 	private void refreshActivity() {
 		if (!mGame.isGameOver() && mGame.isRoundActive()) {
 			this.setTexts();
+			this.initButtons();
 		} else {
 //			Intent intent = new Intent(this, ScoreActivity.class);
 //			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
