@@ -57,19 +57,21 @@ public class StatisticsActivity extends Activity {
 		mStatsCardsRound3.setVisibility(View.GONE);
 		refreshList();
 
-		mStatsCardsList1.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (mGameManager.getGame().isGameOver()) {
-					// Prevent from creating next turn
-					// StringBuilder message = new StringBuilder();
-					// buildGameOverMessage(null, null, message);
-					// // Create the dialog
-					// createAlert(message.toString());
-				} else {
-					// playNextTurn();
+		if (mStatsCardsList1 != null) {
+			mStatsCardsList1.setOnItemClickListener(new OnItemClickListener() {
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					if (mGameManager.getGame().isGameOver()) {
+						// Prevent from creating next turn
+						// StringBuilder message = new StringBuilder();
+						// buildGameOverMessage(null, null, message);
+						// // Create the dialog
+						// createAlert(message.toString());
+					} else {
+						// playNextTurn();
+					}
 				}
-			}
-		});
+			});
+		}
 
 	}
 
@@ -97,8 +99,8 @@ public class StatisticsActivity extends Activity {
 				TurnCardAdapter cardAdapter = buildCardAdapter(team, round);
 				mStatsCardsList1.setAdapter(cardAdapter);
 				registerForContextMenu(mStatsCardsList1);
-				mStatsCardsRound1.setText(String.format(mResources.getString(R.string.stats_round), round
-						.getRoundNumber(), cardAdapter.getCount()));
+				mStatsCardsRound1.setText(String.format(mResources.getString(R.string.stats_round),
+						round.getRoundNumber(), cardAdapter.getCount()));
 				if (roundList.size() > 1) {
 					// build second round
 					mStatsCardsList2 = (ListView) findViewById(R.id.statsCardList2);
@@ -106,8 +108,8 @@ public class StatisticsActivity extends Activity {
 					cardAdapter = buildCardAdapter(team, round);
 					mStatsCardsList2.setAdapter(cardAdapter);
 					registerForContextMenu(mStatsCardsList2);
-					mStatsCardsRound2.setText(String.format(mResources.getString(R.string.stats_round), round
-							.getRoundNumber(), cardAdapter.getCount()));
+					mStatsCardsRound2.setText(String.format(mResources.getString(R.string.stats_round),
+							round.getRoundNumber(), cardAdapter.getCount()));
 					mStatsCardsRound2.setVisibility(View.VISIBLE);
 				}
 				if (roundList.size() > 2) {
@@ -117,8 +119,8 @@ public class StatisticsActivity extends Activity {
 					cardAdapter = buildCardAdapter(team, round);
 					mStatsCardsList3.setAdapter(cardAdapter);
 					registerForContextMenu(mStatsCardsList3);
-					mStatsCardsRound3.setText(String.format(mResources.getString(R.string.stats_round), round
-							.getRoundNumber(), cardAdapter.getCount()));
+					mStatsCardsRound3.setText(String.format(mResources.getString(R.string.stats_round),
+							round.getRoundNumber(), cardAdapter.getCount()));
 					mStatsCardsRound3.setVisibility(View.VISIBLE);
 				}
 			} else {

@@ -6,6 +6,7 @@ import org.uptime.activity.stats.ScoreActivity;
 import org.uptime.activity.stats.StatisticsEndTurnActivity;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Game;
+import org.uptime.engine.game.Team;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -71,13 +72,6 @@ public class CardActivity extends Activity implements OnClickListener {
 
 	}
 
-	// public void showPopup(View v) {
-	// PopupMenu popup = new PopupMenu(this, v);
-	// MenuInflater inflater = popup.getMenuInflater();
-	// inflater.inflate(R.menu.menu_card_actions, popup.getMenu());
-	// popup.show();
-	// }
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
@@ -114,27 +108,23 @@ public class CardActivity extends Activity implements OnClickListener {
 
 	private void initTexts() {
 		mCurrentRoundValue = (TextView) findViewById(R.id.textCardCurrentRound);
-
 		mCurrentTeamValue = (TextView) findViewById(R.id.textCardTeamValue);
-
 		mTeamTurnScoreValue = (TextView) findViewById(R.id.textCardTurnScoreValue);
-
 		mTeamRoundScoreValue = (TextView) findViewById(R.id.textCardRoundScoreValue);
-
 		mTeamTotalScoreValue = (TextView) findViewById(R.id.textCardTotalScoreValue);
-
 		mNameToFind = (TextView) findViewById(R.id.textCardNameToFind);
 	}
 
 	private void setTexts() {
 		mCurrentRoundValue.setText(String.format(mResources.getString(R.string.card_current_round), mGame
 				.getCurrentRound().getRoundNumber()));
-		mCurrentTeamValue.setText(mGame.getCurrentTeam().getName());
-		Integer turnScore = mGame.getCurrentRound().getCurrentTurn().getTeamTurnScore(mGame.getCurrentTeam());
+		Team currentTeam = mGame.getCurrentTeam();
+		mCurrentTeamValue.setText(currentTeam.getName());
+		Integer turnScore = mGame.getCurrentRound().getCurrentTurn().getTeamTurnScore(currentTeam);
 		mTeamTurnScoreValue.setText(turnScore.toString());
-		Integer roundScore = mGame.getCurrentRound().getTeamRoundScore(mGame.getCurrentTeam());
+		Integer roundScore = mGame.getCurrentRound().getTeamRoundScore(currentTeam);
 		mTeamRoundScoreValue.setText(roundScore.toString());
-		Integer totalScore = mGame.getTotalScore(mGame.getCurrentTeam());
+		Integer totalScore = mGame.getTotalScore(currentTeam);
 		mTeamTotalScoreValue.setText(totalScore.toString());
 		mNameToFind.setText(mGame.getCurrentCard().getNameToFind());
 	}
@@ -157,8 +147,12 @@ public class CardActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 
+		boolean allowCardFoundButton = true;
+		
 		if (v.getId() == mButtonCardFound.getId()) {
-			if (!mGame.getCurrentCard().isFound()) {
+			if (allowCardFoundButton && !mGame.getCurrentCard().isFound()) {
+				// Protect from multi clicks
+				allowCardFoundButton = false;
 				final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.ping);
 				mp1.start();
 				mGame.cardFound();
@@ -171,10 +165,13 @@ public class CardActivity extends Activity implements OnClickListener {
 					startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS_END_ROUND);
 				}
 				refreshActivity();
+				
+				// Process is done, enable next clicks
+				allowCardFoundButton = true;
 			}
 
 		} else if (v.getId() == mButtonCardSkip.getId()) {
-			final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.button_27);
+			final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.button_skip);
 			mp1.start();
 			mGame.cardSkip();
 			refreshActivity();

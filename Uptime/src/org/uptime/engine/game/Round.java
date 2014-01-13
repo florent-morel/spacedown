@@ -16,8 +16,6 @@ public class Round {
 
 	private boolean mRoundActive = true;
 
-	// private Map<Integer, Turn> mPlayerTurnMap;
-
 	public boolean isRoundActive() {
 		return mRoundActive;
 	}
@@ -49,10 +47,6 @@ public class Round {
 		}
 	}
 
-	// public Map<Integer, List<Integer>> getPlayerScoreMap() {
-	// return mPlayerScoreMap;
-	// }
-
 	public Integer getRoundNumber() {
 		return mRoundNumber;
 	}
@@ -80,27 +74,16 @@ public class Round {
 			}
 		}
 
+		// Include current turn of current round
+		if (getCurrentTurn() != null) {
+			score += getCurrentTurn().getTeamTurnScore(currentTeam);
+		}
+
 		return score;
 	}
 
 	public void setCurrentTurn(Turn lastTurn) {
 		mCurrentTurn = lastTurn;
 	}
-
-	// public Map<Integer, Turn> getPlayerTurnMap() {
-	// return mPlayerTurnMap;
-	// }
-	//
-	// public void addTurnToPlayerMap(Integer playerId, Turn turn) {
-	// this.mPlayerTurnMap.put(playerId, turn);
-	// }
-
-	// public boolean atLeastOneScore() {
-	// return mAtLeastOneScore;
-	// }
-	//
-	// public void setAtLeastOneScore(boolean atLeastOneScore) {
-	// this.mAtLeastOneScore = atLeastOneScore;
-	// }
 
 }
