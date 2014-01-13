@@ -50,7 +50,11 @@
     <string name="dialog_overwrite_current_game_confirm">Do you confirm?</string>
     <string name="dialog_confirm_yes">Yes</string>
     <string name="dialog_confirm_no">No</string>
+    
     <string name="dialog_cancel_card_not_found">No card was cancelled</string>
+    <string name="dialog_cancel_card_current_turn">Last card cancelled</string>
+    <string name="dialog_cancel_card_previous_turn">Card cancelled, back to previous turn</string>
+    <string name="dialog_cancel_card_previous_round">Card cancelled, back to previous round</string>
 
     <string name="menu_action_cancel_found_settings">Cancel previous found card</string>
 

@@ -275,8 +275,8 @@ public class Game {
 	 * Needs to remove card from team list. Put it back in game. Set current
 	 * card to card just found.
 	 */
-	public boolean cancelCardFound() {
-		boolean isCardRemoved = false;
+	public Constants.CancelCardMode cancelCardFound() {
+		Constants.CancelCardMode cardRemovedMode = Constants.CancelCardMode.NO_FOUND_CARD;
 		List<Card> listFoundByTeam = null;
 		Turn currentTurn = mCurrentRound.getCurrentTurn();
 		if (currentTurn != null) {
@@ -284,18 +284,19 @@ public class Game {
 		}
 		
 		// Simple case: card is in current turn and turn is not finished
-		isCardRemoved = removeCardFromCurrentTurn(listFoundByTeam, mCardsInPlay);
+		cardRemovedMode = removeCardFromCurrentTurn(listFoundByTeam, mCardsInPlay);
 
-		if (!isCardRemoved) {
+		if (Constants.CancelCardMode.NO_FOUND_CARD.equals(cardRemovedMode)) {
 			// Card not found in current turn, try in previous one
-			isCardRemoved = removeCardFromPreviousTurn(mCurrentRound, mCardsInPlay);
+			cardRemovedMode = removeCardFromPreviousTurn(mCurrentRound, mCardsInPlay);
 		}
-		if (!isCardRemoved) {
+		
+		if (Constants.CancelCardMode.NO_FOUND_CARD.equals(cardRemovedMode)) {
 			// Card not found in current round, try in previous one
-			isCardRemoved = removeCardFromPreviousRound();
+			cardRemovedMode = removeCardFromPreviousRound();
 		}
 
-		return isCardRemoved;
+		return cardRemovedMode;
 	}
 
 	/**
@@ -304,8 +305,8 @@ public class Game {
 	 * @return true if the card has been removed and other variables are set
 	 *         back to what they were.
 	 */
-	private boolean removeCardFromCurrentTurn(List<Card> listFoundByTeam, List<Card> cardsInPlay) {
-		boolean isCardRemoved = false;
+	private Constants.CancelCardMode removeCardFromCurrentTurn(List<Card> listFoundByTeam, List<Card> cardsInPlay) {
+		Constants.CancelCardMode cardRemovedMode = Constants.CancelCardMode.NO_FOUND_CARD;
 
 		// From list of found cards for given team
 		if (listFoundByTeam != null && !listFoundByTeam.isEmpty()) {
@@ -330,9 +331,9 @@ public class Game {
 			// Set current card to last found card
 			mCurrentCard = lastFoundCard;
 
-			isCardRemoved = true;
+			cardRemovedMode = Constants.CancelCardMode.CURRENT_TURN;
 		}
-		return isCardRemoved;
+		return cardRemovedMode;
 	}
 
 	/**
@@ -343,8 +344,8 @@ public class Game {
 	 * @return true if the card has been removed and other variables are set
 	 *         back to what they were.
 	 */
-	private boolean removeCardFromPreviousTurn(Round round, List<Card> cardsInPlay) {
-		boolean isCardRemoved = false;
+	private Constants.CancelCardMode removeCardFromPreviousTurn(Round round, List<Card> cardsInPlay) {
+		Constants.CancelCardMode cardRemovedMode = Constants.CancelCardMode.NO_FOUND_CARD;
 
 		// Get last team
 		List<Team> teamList = getTeamList();
@@ -365,20 +366,23 @@ public class Game {
 				List<Card> listFoundByTeam = lastTurn.getTurnListCards();
 
 				// Try to remove last card for this case
-				isCardRemoved = removeCardFromCurrentTurn(listFoundByTeam, cardsInPlay);
+				cardRemovedMode = removeCardFromCurrentTurn(listFoundByTeam, cardsInPlay);
 
-				if (isCardRemoved) {
+				if (!Constants.CancelCardMode.NO_FOUND_CARD.equals(cardRemovedMode)) {
 					// Set previous team as current team
 					mCurrentTeam = lastTeam;
 
 					// Remove current turn from saved turn
-					round.getSavedTurnMap().remove(lastTurn);
+					round.removeTurnFromSavedMap(lastTeam, lastTurn);
+//					getSavedTurnMap().remove(lastTurn);
 
 					// Set previous turn as current turn in current round
 					round.setCurrentTurn(lastTurn);
+					
+					cardRemovedMode = Constants.CancelCardMode.PREVIOUS_TURN;
 				}
 		}
-		return isCardRemoved;
+		return cardRemovedMode;
 	}
 
 	/**
@@ -387,8 +391,8 @@ public class Game {
 	 * @return true if the card has been removed and other variables are set
 	 *         back to what they were.
 	 */
-	private boolean removeCardFromPreviousRound() {
-		boolean isCardRemoved = false;
+	private Constants.CancelCardMode removeCardFromPreviousRound() {
+		Constants.CancelCardMode cardRemovedMode = Constants.CancelCardMode.NO_FOUND_CARD;
 
 		// No need to check previous round if we are at the first one
 		if (mSavedRoundList != null && mSavedRoundList.size() > 1) {
@@ -398,9 +402,9 @@ public class Game {
 
 			// Try to remove last card for this case
 			// Previous round => cards in play are empty at this stage
-			isCardRemoved = removeCardFromPreviousTurn(lastRound, new ArrayList<Card>());
+			cardRemovedMode = removeCardFromPreviousTurn(lastRound, new ArrayList<Card>());
 
-			if (isCardRemoved) {
+			if (!Constants.CancelCardMode.NO_FOUND_CARD.equals(cardRemovedMode)) {
 				// Remove current round from current game
 				mSavedRoundList.remove(mCurrentRound);
 
@@ -412,9 +416,11 @@ public class Game {
 
 				// In case game was over, fix it.
 				this.setGameOver(Boolean.FALSE);
+				
+				cardRemovedMode = Constants.CancelCardMode.PREVIOUS_ROUND;
 			}
 		}
-		return isCardRemoved;
+		return cardRemovedMode;
 	}
 
 	public void cardSkip() {

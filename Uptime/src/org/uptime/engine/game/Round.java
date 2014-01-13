@@ -104,4 +104,11 @@ public class Round {
 		mCurrentTurn = lastTurn;
 	}
 
+	public void removeTurnFromSavedMap(Team team, Turn turn) {
+		List<Turn> listTurns = mSavedTurnMap.get(team);
+		if (listTurns != null) {
+			listTurns.remove(turn);
+		}
+	}
+
 }

@@ -87,13 +87,29 @@ public class CardActivity extends Activity implements OnClickListener {
 	}
 
 	private void cancelFoundCard() {
-		boolean isCardRemoved = mGame.cancelCardFound();
+		Constants.CancelCardMode cardRemovedMode = mGame.cancelCardFound();
 
-		if (!isCardRemoved) {
+		if (Constants.CancelCardMode.NO_FOUND_CARD.equals(cardRemovedMode)) {
 			Toast toast = Toast.makeText(this,
 					String.format(mResources.getString(R.string.dialog_cancel_card_not_found)), Toast.LENGTH_SHORT);
 			toast.show();
 		} else {
+			if (Constants.CancelCardMode.CURRENT_TURN.equals(cardRemovedMode)) {
+				Toast toast = Toast.makeText(this,
+						String.format(mResources.getString(R.string.dialog_cancel_card_current_turn)),
+						Toast.LENGTH_SHORT);
+				toast.show();
+			} else if (Constants.CancelCardMode.PREVIOUS_TURN.equals(cardRemovedMode)) {
+				Toast toast = Toast.makeText(this,
+						String.format(mResources.getString(R.string.dialog_cancel_card_previous_turn)),
+						Toast.LENGTH_LONG);
+				toast.show();
+			} else if (Constants.CancelCardMode.PREVIOUS_ROUND.equals(cardRemovedMode)) {
+				Toast toast = Toast.makeText(this,
+						String.format(mResources.getString(R.string.dialog_cancel_card_previous_round)),
+						Toast.LENGTH_LONG);
+				toast.show();
+			}
 
 			refreshActivity();
 		}

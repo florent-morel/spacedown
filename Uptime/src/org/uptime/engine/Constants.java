@@ -78,6 +78,8 @@ public interface Constants {
 
 	static enum RunMode {STANDARD, DEBUG, HARDCODE};
 
+	static enum CancelCardMode {NO_FOUND_CARD, CURRENT_TURN, PREVIOUS_TURN, PREVIOUS_ROUND};
+
 	static final int NUMBER_OF_CARDS = 40;
 
 	static final String DASH = "--";
