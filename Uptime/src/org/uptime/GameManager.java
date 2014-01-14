@@ -1,9 +1,10 @@
 package org.uptime;
 
-import java.util.List;
-
-import org.uptime.engine.game.Card;
+import org.uptime.engine.Constants;
 import org.uptime.engine.game.Game;
+
+import android.content.Context;
+import android.content.res.Resources;
 
 /**
  * Singleton handling the game instance.
@@ -33,8 +34,14 @@ public class GameManager {
 		return mGame;
 	}
 
-	public void startNewGame(Integer numberOfTeams, List<Card> listCards) {
-		mGame = new Game(numberOfTeams, listCards);
+	public void startNewGame(Constants.RunMode runMode, Integer numberOfTeams, Integer numberOfCards,
+			Resources resources, Context context) {
+		mGame = new Game(runMode, numberOfTeams, numberOfCards, resources, context);
+	}
+
+	public Game initNewGame() {
+		mGame = new Game();
+		return mGame;
 	}
 
 }

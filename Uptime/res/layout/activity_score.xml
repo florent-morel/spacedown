@@ -32,13 +32,23 @@
         android:layout_below="@+id/textScoreTitle"
         android:layout_marginTop="20dp"
         android:text="@string/score_round_text" />
+
+    <TextView
+        android:id="@+id/textScoreRemainingCards"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textScoreTitle"
+        android:layout_below="@+id/textScoreBoard"
+        android:layout_marginTop="20dp"
+        android:text="@string/score_round_text" />
     
 
     <ListView
         android:id="@+id/scoreTeamScoreList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textScoreBoard"
+        android:layout_below="@+id/textScoreRemainingCards"
+        android:layout_above="@+id/buttonNewGame"
         android:layout_alignParentLeft="true" >
     </ListView>
 
@@ -48,7 +58,6 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/buttonNextRound"
         android:layout_alignBottom="@+id/buttonNextRound"
-        android:layout_below="@+id/scoreTeamScoreList"
         android:layout_marginLeft="19dp"
         android:layout_toRightOf="@+id/buttonNextRound"
         android:text="@string/create_game" />

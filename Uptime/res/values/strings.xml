@@ -57,7 +57,9 @@
     <string name="dialog_cancel_card_current_turn">Last card cancelled</string>
     <string name="dialog_cancel_card_previous_turn">Card cancelled, back to previous turn</string>
     <string name="dialog_cancel_card_previous_round">Card cancelled, back to previous round</string>
+    <string name="dialog_card_replaced">Card has been replaced</string>
 
+    <string name="menu_action_change_card">Replace card</string>
     <string name="menu_action_cancel_found_settings">Cancel previous found card</string>
 
     <string name="menu_game_options">Game options</string>

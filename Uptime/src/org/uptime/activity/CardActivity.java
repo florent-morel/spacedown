@@ -57,7 +57,6 @@ public class CardActivity extends Activity implements OnClickListener {
 
 		this.initTexts();
 		this.setTexts();
-
 		this.initButtons();
 	}
 
@@ -68,6 +67,12 @@ public class CardActivity extends Activity implements OnClickListener {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_card_actions, menu);
 
+		if (Constants.ROUND_FIRST != mGame.getCurrentRound().getRoundNumber()) {
+//		    MenuItem item = menu.findItem(R.id.action_change_card);
+//		    item.setEnabled(false);
+		    menu.removeItem(R.id.action_change_card);
+		}
+		
 		return true;
 
 	}
@@ -76,14 +81,29 @@ public class CardActivity extends Activity implements OnClickListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
-		// case R.id.new_game:
-		// newGame();
-		// return true;
+		case R.id.action_change_card:
+			replaceCard();
+			return true;
 		case R.id.action_cancel_found:
 			cancelFoundCard();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	/**
+	 * Replace current card by another one from the list of available cards.
+	 */
+	private void replaceCard() {
+		boolean cardReplaced = mGame.replaceCard();
+		
+		if (cardReplaced) {
+			Toast toast = Toast.makeText(this,
+					String.format(mResources.getString(R.string.dialog_card_replaced)), Toast.LENGTH_SHORT);
+			toast.show();
+			// If card has been replaced, refresh the activity
+			refreshActivity();
 		}
 	}
 
@@ -112,6 +132,7 @@ public class CardActivity extends Activity implements OnClickListener {
 				toast.show();
 			}
 
+			// If card has been cancelled, refresh the activity
 			refreshActivity();
 		}
 	}

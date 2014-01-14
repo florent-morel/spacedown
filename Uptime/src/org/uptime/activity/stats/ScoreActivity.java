@@ -35,6 +35,7 @@ public class ScoreActivity extends Activity implements OnClickListener {
 	private Game mGame;
 
 	private TextView mScoreTeam;
+	private TextView mRemainingCards;
 
 	private ListView mScoreTeamList;
 
@@ -82,6 +83,7 @@ public class ScoreActivity extends Activity implements OnClickListener {
 
 	private void initTexts() {
 		mScoreTeam = (TextView) findViewById(R.id.textScoreBoard);
+		mRemainingCards = (TextView) findViewById(R.id.textScoreRemainingCards);
 
 		Round currentRound = mGame.getCurrentRound();
 		if (currentRound == null) {
@@ -95,6 +97,19 @@ public class ScoreActivity extends Activity implements OnClickListener {
 						.getRoundNumber(), mGame.getNextTeamToPlay().getName()));
 			}
 		}
+		
+		
+		int remainingCards = mGame.getCardsInPlay().size();
+		StringBuilder builderRemaining = new StringBuilder();
+		if (remainingCards == 0) {
+			// No more card to play => we'll start next round
+			builderRemaining.append(String.format(mResources.getString(R.string.card_remaining), mGame.getCardList().size()));
+		} else if (remainingCards == 1) {
+			builderRemaining.append(String.format(mResources.getString(R.string.card_remaining_last)));
+		} else {
+			builderRemaining.append(String.format(mResources.getString(R.string.card_remaining), remainingCards));
+		}
+		mRemainingCards.setText(builderRemaining.toString());
 
 	}
 

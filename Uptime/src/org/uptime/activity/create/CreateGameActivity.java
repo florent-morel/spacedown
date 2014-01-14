@@ -14,7 +14,9 @@ import org.uptime.engine.game.Card;
 import org.uptime.engine.game.Game;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -24,7 +26,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 public class CreateGameActivity extends Activity implements OnClickListener {
 
@@ -141,13 +142,11 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 			}
 
 			if (confirmation) {
+				Constants.RunMode runMode = Constants.RunMode.DEBUG;
 				if (mImportCards.isChecked()) {
-					importCardsFromCSV();
-				} else {
-					String numberOfCards = spinnerNumberOfCards.getSelectedItem().toString();
-					mCardList = CardBuilder.buildCards(Constants.RunMode.DEBUG, Integer.valueOf(numberOfCards));
+					runMode = Constants.RunMode.IMPORT_CSV;
 				}
-				startNewGame();
+				startNewGame(runMode);
 			}
 		} else if (v.getId() == mButtonContinueGame.getId()) {
 			// Go directly to Score activity
@@ -156,78 +155,47 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 		}
 	}
 
-	private void startNewGame() {
+	private void startNewGame(Constants.RunMode runMode) {
 		// mGameManager.startNewGame(Integer.valueOf(mNumberOfTeams.getText().toString()),
 		// mCardList);
 		String numberOfTeams = spinnerNumberOfTeams.getSelectedItem().toString();
-		mGameManager.startNewGame(Integer.valueOf(numberOfTeams), mCardList);
-		mGame = mGameManager.getGame();
+		String numberOfCards = spinnerNumberOfCards.getSelectedItem().toString();
 
+		mGameManager.startNewGame(runMode, Integer.valueOf(numberOfTeams), Integer.valueOf(numberOfCards), mResources,
+				context);
+		mGame = mGameManager.getGame();
 		Intent intent = new Intent(this, ScoreActivity.class);
 		startActivityForResult(intent, Constants.GAME_NEW);
 	}
 
 	/**
-	 * Not working, getting android.view.WindowManager$BadTokenException: Unable
-	 * to add window -- token null is not for an application
+	 * TODO Not working, dialog is still showing up when going back to the
+	 * activity.
 	 * 
 	 * @return
 	 */
-//	private synchronized boolean displayConfirmation() {
-//		runOnUiThread(new Runnable() {
-//			@Override
-//			public void run() {
-//				// Ask the user if they want to start a new game
-//				AlertDialog.Builder alert = new AlertDialog.Builder(context)
-//						.setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.dialog_overwrite_current_game)
-//						.setMessage(R.string.dialog_overwrite_current_game_confirm)
-//						.setPositiveButton(R.string.dialog_confirm_yes, new DialogInterface.OnClickListener() {
-//
-//							@Override
-//							public void onClick(DialogInterface dialog, int which) {
-//								// Start new game
-//								confirmNewGame = true;
-//								notify();
-//							}
-//
-//						}).setNegativeButton(R.string.dialog_confirm_no, new DialogInterface.OnClickListener() {
-//
-//							@Override
-//							public void onClick(DialogInterface dialog, int which) {
-//								// Do not start a new game
-//								confirmNewGame = false;
-//								notify();
-//							}
-//
-//						});
-//				alert.show();
-//			}
-//		});
-//
-//		try {
-//			wait();
-//		} catch (InterruptedException e) {
-//		}
-//		return confirmNewGame;
-//	}
-
-	private void importCardsFromCSV() {
-		String numberOfCards = spinnerNumberOfCards.getSelectedItem().toString();
-		try {
-			FileReader fileReader = new FileReader(context.getFilesDir().getPath() + "/testaa.csv");
-			List<Card> cardsFromCSV = ImportCards.buildCardsFromCSV(fileReader);
-			// mCardList = CardBuilder.getRandomCards(cardsFromCSV,
-			// Integer.valueOf(mNumberOfCards.getText().toString()));
-			mCardList = CardBuilder.getRandomCards(cardsFromCSV, Integer.valueOf(numberOfCards));
-		} catch (FileNotFoundException e) {
-			// File is not found to import cards, fall-back to hard-coded list
-			Toast toast = Toast.makeText(this,
-					String.format(mResources.getString(R.string.dialog_import_file_not_found)), Toast.LENGTH_LONG);
-			toast.show();
-			// mCardList = CardBuilder.buildCards(Constants.RunMode.HARDCODE,
-			// Integer.valueOf(mNumberOfCards.getText().toString()));
-			mCardList = CardBuilder.buildCards(Constants.RunMode.HARDCODE, Integer.valueOf(numberOfCards));
-		}
-	}
+	// private boolean displayConfirmation() {
+	// AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	// builder.setMessage(R.string.dialog_overwrite_current_game_confirm);
+	// builder.setCancelable(false)
+	// .setPositiveButton(String.format(mResources.getString(R.string.dialog_confirm_yes)),
+	// new DialogInterface.OnClickListener() {
+	// public void onClick(DialogInterface dialog, int id) {
+	// // Start new game
+	// confirmNewGame = true;
+	// }
+	// })
+	// .setNegativeButton(String.format(mResources.getString(R.string.dialog_confirm_no)),
+	// new DialogInterface.OnClickListener() {
+	// public void onClick(DialogInterface dialog, int id) {
+	// // Do not start a new game
+	// confirmNewGame = false;
+	// }
+	// });
+	// AlertDialog alert = builder.create();
+	// alert.setTitle(R.string.dialog_overwrite_current_game);
+	// alert.show();
+	// return confirmNewGame;
+	// }
 
 }

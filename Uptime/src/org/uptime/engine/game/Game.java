@@ -9,11 +9,18 @@ import java.util.Map;
 import org.uptime.cards.build.CardBuilder;
 import org.uptime.engine.Constants;
 
+import android.content.Context;
+import android.content.res.Resources;
+
 public class Game {
 
-	private List<Card> mCardList;
+	private CardBuilder cardBuilder;
 
-	private List<Card> mCardsInPlay;
+	private List<Card> mAvailableCardList;
+
+	private List<Card> mCardListForGame;
+
+	private List<Card> mCardsCurrentlyInPlay;
 
 	private List<Team> mTeamList;
 
@@ -27,28 +34,36 @@ public class Game {
 
 	private boolean mIsGameOver = false;
 
-	public Game(Integer numberOfTeams, List<Card> listCards) {
+	public Game() {
 		super();
+	}
+
+	public Game(Constants.RunMode runMode, Integer numberOfTeams, Integer numberOfCards, Resources resources,
+			Context context) {
+		super();
+
+		cardBuilder = new CardBuilder(resources, context);
+
 		initTeams(numberOfTeams);
-		initCards(listCards);
+		initCards(runMode, numberOfCards);
 		initRounds();
 	}
 
-	private void initCards(List<Card> listCards) {
-		if (listCards == null) {
-			mCardList = CardBuilder.buildCards(Constants.RunMode.DEBUG, null);
-		} else {
-			mCardList = listCards;
-		}
+	private void initCards(Constants.RunMode runMode, Integer numberOfCards) {
+		mAvailableCardList = cardBuilder.buildAvailableCards(runMode, numberOfCards);
+
+		// Once we have the available cards
+		mCardListForGame = cardBuilder.buildCardListForGame(mAvailableCardList, numberOfCards);
+
 		refreshCards();
 	}
 
 	private void refreshCards() {
-		for (Card card : mCardList) {
+		for (Card card : mCardListForGame) {
 			card.setFound(false);
 		}
-		mCardsInPlay = new ArrayList<Card>();
-		mCardsInPlay.addAll(mCardList);
+		mCardsCurrentlyInPlay = new ArrayList<Card>();
+		mCardsCurrentlyInPlay.addAll(mCardListForGame);
 	}
 
 	private void initTeams(Integer numberOfTeams) {
@@ -93,25 +108,13 @@ public class Game {
 	}
 
 	public Card getNextCardToPlay(Card currentCard, boolean skipCard) {
-		if (!mCardsInPlay.isEmpty()) {
+		if (!mCardsCurrentlyInPlay.isEmpty()) {
 			if (skipCard || currentCard == null || currentCard.isFound()) {
-				mCurrentCard = this.computeNextCard(mCardsInPlay, currentCard, mCardsInPlay.indexOf(currentCard) + 1);
+				mCurrentCard = this.computeNextCard(mCardsCurrentlyInPlay, currentCard,
+						mCardsCurrentlyInPlay.indexOf(currentCard) + 1);
 			} else {
 				mCurrentCard = currentCard;
 			}
-			// if (Constants.ROUND_FIRST == mCurrentRound.getRoundNumber()) {
-			// if (currentCard == null || currentCard.isFound()) {
-			// mCurrentCard = this.computeNextCard(mCardList, currentCard,
-			// mCardList.indexOf(currentCard) + 1);
-			// } else {
-			// mCurrentCard = currentCard;
-			// }
-			// } else if (Constants.ROUND_SECOND ==
-			// mCurrentRound.getRoundNumber()
-			// || Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
-			// // Get random card
-			// mCurrentCard = computeNextRandomCard();
-			// }
 		}
 
 		return mCurrentCard;
@@ -145,43 +148,6 @@ public class Game {
 		return nextCard;
 	}
 
-	/**
-	 * Get a random next card.
-	 * 
-	 * @param initialList
-	 * @return
-	 */
-	// private Card computeNextRandomCard() {
-	// Card nextCard = null;
-	// List<Card> listCardForCurrentTurn =
-	// mCurrentRound.getCurrentTurn().getListCardForCurrentTurn();
-	// if (mCardsInPlay != null && !mCardsInPlay.isEmpty()) {
-	// int size = mCardsInPlay.size();
-	//
-	// Random randomGenerator = new Random();
-	//
-	// for (int i = 0; i < size; i++) {
-	// int randomInt = randomGenerator.nextInt(size);
-	// // Get a random card from remaining list
-	// nextCard = mCardsInPlay.get(randomInt);
-	// if (!listCardForCurrentTurn.contains(nextCard)) {
-	// listCardForCurrentTurn.add(nextCard);
-	// } else {
-	// // If already proposed in current turn, get another one.
-	//
-	// }
-	// }
-	//
-	// } else {
-	// // If no more cards are available go back to first one in current turn
-	// nextCard = computeNextCard(listCardForCurrentTurn, mCurrentCard,
-	// listCardForCurrentTurn.indexOf(mCurrentCard) + 1);
-	// }
-	//
-	// return nextCard;
-	//
-	// }
-
 	public Team getNextTeamToPlay() {
 		Team nextTeam = null;
 
@@ -210,7 +176,7 @@ public class Game {
 		// For second and third round, shuffle remaining cards
 		if (Constants.ROUND_SECOND == mCurrentRound.getRoundNumber()
 				|| Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
-			Collections.shuffle(mCardsInPlay);
+			Collections.shuffle(mCardsCurrentlyInPlay);
 			mCurrentCard = null;
 		}
 	}
@@ -227,7 +193,7 @@ public class Game {
 	public void addCardToTeamScore() {
 		mCurrentCard.setFound(Boolean.TRUE);
 		// Remove the card from the list of cards yet to be found
-		mCardsInPlay.remove(mCurrentCard);
+		mCardsCurrentlyInPlay.remove(mCurrentCard);
 		mCurrentRound.getCurrentTurn().addCardToTurn(mCurrentCard);
 	}
 
@@ -248,7 +214,7 @@ public class Game {
 	}
 
 	public List<Card> getCardList() {
-		return mCardList;
+		return mCardListForGame;
 	}
 
 	public Card getCurrentCard() {
@@ -282,15 +248,15 @@ public class Game {
 		if (currentTurn != null) {
 			listFoundByTeam = currentTurn.getTurnListCards();
 		}
-		
+
 		// Simple case: card is in current turn and turn is not finished
-		cardRemovedMode = removeCardFromCurrentTurn(listFoundByTeam, mCardsInPlay);
+		cardRemovedMode = removeCardFromCurrentTurn(listFoundByTeam, mCardsCurrentlyInPlay);
 
 		if (Constants.CancelCardMode.NO_FOUND_CARD.equals(cardRemovedMode)) {
 			// Card not found in current turn, try in previous one
-			cardRemovedMode = removeCardFromPreviousTurn(mCurrentRound, mCardsInPlay);
+			cardRemovedMode = removeCardFromPreviousTurn(mCurrentRound, mCardsCurrentlyInPlay);
 		}
-		
+
 		if (Constants.CancelCardMode.NO_FOUND_CARD.equals(cardRemovedMode)) {
 			// Card not found in current round, try in previous one
 			cardRemovedMode = removeCardFromPreviousRound();
@@ -323,7 +289,7 @@ public class Game {
 			cardsInPlay.add(Constants.ZERO_VALUE, lastFoundCard);
 
 			// Needed in case of previous round
-			mCardsInPlay = cardsInPlay;
+			mCardsCurrentlyInPlay = cardsInPlay;
 
 			// Update list found cards for team: NOT NEEDED
 			// teamTurnScore.put(mCurrentTeam, listFoundByTeam);
@@ -357,30 +323,30 @@ public class Game {
 		} else {
 			lastTeam = teamList.get(indexOfCurrentTeam - 1);
 		}
-		
+
 		// From list of turns in given round
 		List<Turn> turnList = round.getSavedTurnMap().get(lastTeam);
 		if (turnList != null && !turnList.isEmpty()) {
 			// Take last turn cards
-				Turn lastTurn = turnList.get(turnList.size() - 1);
-				List<Card> listFoundByTeam = lastTurn.getTurnListCards();
+			Turn lastTurn = turnList.get(turnList.size() - 1);
+			List<Card> listFoundByTeam = lastTurn.getTurnListCards();
 
-				// Try to remove last card for this case
-				cardRemovedMode = removeCardFromCurrentTurn(listFoundByTeam, cardsInPlay);
+			// Try to remove last card for this case
+			cardRemovedMode = removeCardFromCurrentTurn(listFoundByTeam, cardsInPlay);
 
-				if (!Constants.CancelCardMode.NO_FOUND_CARD.equals(cardRemovedMode)) {
-					// Set previous team as current team
-					mCurrentTeam = lastTeam;
+			if (!Constants.CancelCardMode.NO_FOUND_CARD.equals(cardRemovedMode)) {
+				// Set previous team as current team
+				mCurrentTeam = lastTeam;
 
-					// Remove current turn from saved turn
-					round.removeTurnFromSavedMap(lastTeam, lastTurn);
-//					getSavedTurnMap().remove(lastTurn);
+				// Remove current turn from saved turn
+				round.removeTurnFromSavedMap(lastTeam, lastTurn);
+				// getSavedTurnMap().remove(lastTurn);
 
-					// Set previous turn as current turn in current round
-					round.setCurrentTurn(lastTurn);
-					
-					cardRemovedMode = Constants.CancelCardMode.PREVIOUS_TURN;
-				}
+				// Set previous turn as current turn in current round
+				round.setCurrentTurn(lastTurn);
+
+				cardRemovedMode = Constants.CancelCardMode.PREVIOUS_TURN;
+			}
 		}
 		return cardRemovedMode;
 	}
@@ -416,7 +382,7 @@ public class Game {
 
 				// In case game was over, fix it.
 				this.setGameOver(Boolean.FALSE);
-				
+
 				cardRemovedMode = Constants.CancelCardMode.PREVIOUS_ROUND;
 			}
 		}
@@ -436,7 +402,7 @@ public class Game {
 	}
 
 	public List<Card> getCardsInPlay() {
-		return mCardsInPlay;
+		return mCardsCurrentlyInPlay;
 	}
 
 	public Map<Team, Integer> getTotalScoreMap() {
@@ -491,5 +457,27 @@ public class Game {
 		setGameOver(false);
 		refreshCards();
 		initRounds();
+	}
+
+	public boolean replaceCard() {
+		boolean cardReplaced = false;
+		// Pick a new one from available deck
+		Card newCard = cardBuilder.getRandomCard(mAvailableCardList, mCardListForGame);
+		if (newCard != null) {
+			// Remove current card from list of cards in play and cards for game
+			mCardListForGame.remove(mCurrentCard);
+			mCardsCurrentlyInPlay.remove(mCurrentCard);
+
+			// Add new card to lists of cards
+			mCardListForGame.add(newCard);
+			mCardsCurrentlyInPlay.add(newCard);
+			
+			// Get next card to play
+			this.getNextCardToPlay(null, false);
+			
+			cardReplaced = true;
+		}
+		
+		return cardReplaced;
 	}
 }

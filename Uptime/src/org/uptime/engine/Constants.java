@@ -76,7 +76,7 @@ public interface Constants {
 
 	static final String LEFT = "left";
 
-	static enum RunMode {STANDARD, DEBUG, HARDCODE};
+	static enum RunMode {STANDARD, DEBUG, IMPORT_CSV, HARDCODE};
 
 	static enum CancelCardMode {NO_FOUND_CARD, CURRENT_TURN, PREVIOUS_TURN, PREVIOUS_ROUND};
 
