@@ -1,22 +1,13 @@
 package org.uptime.activity.create;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.List;
-
 import org.uptime.GameManager;
 import org.uptime.R;
 import org.uptime.activity.stats.ScoreActivity;
-import org.uptime.cards.build.CardBuilder;
-import org.uptime.cards.build.ImportCards;
 import org.uptime.engine.Constants;
-import org.uptime.engine.game.Card;
 import org.uptime.engine.game.Game;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -38,7 +29,6 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 	private Context context;
 
 	// private EditText mNumberOfTeams;
-	// private EditText mNumberOfCards;
 
 	private Spinner spinnerNumberOfTeams;
 
@@ -51,8 +41,6 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 	// private Button mButtonAddTeam;
 
 	private CheckBox mImportCards;
-
-	private List<Card> mCardList;
 
 	boolean confirmNewGame = false;
 
@@ -68,7 +56,6 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 		mGame = mGameManager.getGame();
 
 		// mNumberOfTeams = (EditText) findViewById(R.id.editCreateTeam);
-		// mNumberOfCards = (EditText) findViewById(R.id.CreateNumberOfCards);
 
 		this.initSpinners();
 		this.initButtons();
@@ -76,7 +63,6 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 		// Prefill with existing game values if any
 		if (mGame != null && !mGame.getTeamList().isEmpty()) {
 			// mNumberOfTeams.setText(String.valueOf(mGame.getTeamList().size()));
-			// mNumberOfCards.setText(String.valueOf(mGame.getCardList().size()));
 
 			// spinnerNumberOfTeams.set
 		}
@@ -156,8 +142,6 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 	}
 
 	private void startNewGame(Constants.RunMode runMode) {
-		// mGameManager.startNewGame(Integer.valueOf(mNumberOfTeams.getText().toString()),
-		// mCardList);
 		String numberOfTeams = spinnerNumberOfTeams.getSelectedItem().toString();
 		String numberOfCards = spinnerNumberOfCards.getSelectedItem().toString();
 
