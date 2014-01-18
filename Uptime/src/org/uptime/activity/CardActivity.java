@@ -198,7 +198,7 @@ public class CardActivity extends Activity implements OnClickListener {
 		if (v.getId() == mButtonCardFound.getId()) {
 			if (allowCardFoundButton && !mGame.getCurrentCard().isFound()) {
 				// Protect from multi clicks
-				mButtonCardFound.setEnabled(false);
+//				mButtonCardFound.setEnabled(false);
 				allowCardFoundButton = false;
 				final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.ping);
 				mp1.start();
@@ -213,15 +213,15 @@ public class CardActivity extends Activity implements OnClickListener {
 				}
 				
 				// Process is done, wait a bit before enabling next clicks
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
 				
 				refreshActivity();
 				allowCardFoundButton = true;
-				mButtonCardFound.setEnabled(true);
+//				mButtonCardFound.setEnabled(true);
 			}
 
 		} else if (v.getId() == mButtonCardSkip.getId()) {

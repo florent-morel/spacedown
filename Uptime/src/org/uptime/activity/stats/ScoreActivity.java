@@ -17,6 +17,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -42,8 +44,8 @@ public class ScoreActivity extends Activity implements OnClickListener {
 	private ScoreTeamAdapter mScoreTeamAdapter;
 
 	private Button mButtonNextRound;
-	private Button mButtonNewGame;
-	private Button mButtonReplayGame;
+//	private Button mButtonNewGame;
+//	private Button mButtonReplayGame;
 
 	TableLayout scoreTable;
 
@@ -77,8 +79,33 @@ public class ScoreActivity extends Activity implements OnClickListener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_score_actions, menu);
+
+//		if (!mGame.isGameOver()) {
+//		    menu.removeItem(R.id.action_new_game);
+//		    menu.removeItem(R.id.action_replay_game);
+//		}
+//		
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+		case R.id.action_new_game:
+			Intent intent = new Intent(this, CreateGameActivity.class);
+			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
+			return true;
+		case R.id.action_replay_game:
+			mGame.replayGame();
+			this.refreshActivity();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 	private void initTexts() {
@@ -116,10 +143,6 @@ public class ScoreActivity extends Activity implements OnClickListener {
 	private void initButtons() {
 		mButtonNextRound = (Button) findViewById(R.id.buttonNextRound);
 		mButtonNextRound.setOnClickListener(this);
-		mButtonNewGame = (Button) findViewById(R.id.buttonNewGame);
-		mButtonNewGame.setOnClickListener(this);
-		mButtonReplayGame = (Button) findViewById(R.id.buttonReplayGame);
-		mButtonReplayGame.setOnClickListener(this);
 
 		Round currentRound = mGame.getCurrentRound();
 
@@ -129,12 +152,8 @@ public class ScoreActivity extends Activity implements OnClickListener {
 
 		if (mGame.isGameOver()) {
 			mButtonNextRound.setVisibility(View.GONE);
-			mButtonNewGame.setVisibility(View.VISIBLE);
-			mButtonReplayGame.setVisibility(View.VISIBLE);
 		} else {
 			mButtonNextRound.setVisibility(View.VISIBLE);
-			mButtonNewGame.setVisibility(View.GONE);
-			mButtonReplayGame.setVisibility(View.GONE);
 		}
 	}
 
@@ -142,12 +161,6 @@ public class ScoreActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		if (v.getId() == mButtonNextRound.getId()) {
 			launchNextRound();
-		} else if (v.getId() == mButtonNewGame.getId()) {
-			Intent intent = new Intent(this, CreateGameActivity.class);
-			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
-		} else if (v.getId() == mButtonReplayGame.getId()) {
-			mGame.replayGame();
-			this.refreshActivity();
 		}
 
 	}

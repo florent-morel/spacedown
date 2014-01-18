@@ -52,24 +52,4 @@
         android:layout_alignParentLeft="true" >
     </ListView>
 
-    <Button
-        android:id="@+id/buttonNewGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/buttonNextRound"
-        android:layout_alignBottom="@+id/buttonNextRound"
-        android:layout_marginLeft="19dp"
-        android:layout_toRightOf="@+id/buttonNextRound"
-        android:text="@string/create_game" />
-
-    <Button
-        android:id="@+id/buttonReplayGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/buttonNewGame"
-        android:layout_alignBottom="@+id/buttonNewGame"
-        android:layout_marginLeft="19dp"
-        android:layout_toRightOf="@+id/buttonNewGame"
-        android:text="@string/replay_game" />
-
 </RelativeLayout>
