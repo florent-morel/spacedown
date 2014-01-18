@@ -46,6 +46,8 @@ public class CardActivity extends Activity implements OnClickListener {
 	private Button mButtonCardSkip;
 	private Button mButtonEndTurn;
 
+	boolean allowCardFoundButton = true;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -192,12 +194,11 @@ public class CardActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-
-		boolean allowCardFoundButton = true;
 		
 		if (v.getId() == mButtonCardFound.getId()) {
 			if (allowCardFoundButton && !mGame.getCurrentCard().isFound()) {
 				// Protect from multi clicks
+				mButtonCardFound.setEnabled(false);
 				allowCardFoundButton = false;
 				final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.ping);
 				mp1.start();
@@ -210,10 +211,17 @@ public class CardActivity extends Activity implements OnClickListener {
 					Intent intent = new Intent(this, StatisticsEndTurnActivity.class);
 					startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS_END_ROUND);
 				}
-				refreshActivity();
 				
-				// Process is done, enable next clicks
+				// Process is done, wait a bit before enabling next clicks
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+				refreshActivity();
 				allowCardFoundButton = true;
+				mButtonCardFound.setEnabled(true);
 			}
 
 		} else if (v.getId() == mButtonCardSkip.getId()) {
