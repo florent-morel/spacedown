@@ -14,17 +14,23 @@ import org.uptime.engine.game.Card;
 import android.content.Context;
 import android.content.res.Resources;
 import android.widget.Toast;
+import database.CardsDataSource;
 
 public class CardBuilder {
 
 	private Resources mResources;
 
 	private Context context;
+	
+	private CardsDataSource datasource;
 
 	public CardBuilder(Resources mResources, Context context) {
 		super();
 		this.mResources = mResources;
 		this.context = context;
+		
+//		datasource = new CardsDataSource(context);
+//		datasource.open();
 	}
 
 	public List<Card> buildAvailableCards(Constants.RunMode runMode, Integer numberOfCards) {

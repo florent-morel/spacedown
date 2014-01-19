@@ -89,4 +89,10 @@ public interface Constants {
 	static final int ACTIVITY_TURN_STATS_END_ROUND = 45564;
 
 	static final int ACTIVITY_CARDACTIVITY_NEXT_ROUND = 543564;
+
+	static final int CARD_CREATE = 32132145;
+
+	static final int CARD_UPDATE = 5641323;
+
+	static final String CARD_ID = "CARD_ID";
 }

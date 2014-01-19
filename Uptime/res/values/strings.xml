@@ -58,12 +58,27 @@
     <string name="dialog_cancel_card_previous_turn">Card cancelled, back to previous turn</string>
     <string name="dialog_cancel_card_previous_round">Card cancelled, back to previous round</string>
     <string name="dialog_card_replaced">Card has been replaced</string>
+    <string name="dialog_create_card_ok">Card has been created with id: %1$d</string>
+    <string name="dialog_update_card_ok">Card %1$d has been updated</string>
+    <string name="dialog_create_card_ko">Missing card information</string>
 
     <string name="menu_action_change_card">Replace card</string>
     <string name="menu_action_cancel_found_settings">Cancel previous found card</string>
 
     <string name="menu_game_options">Game options</string>
     <string name="menu_start_new_game">Start a new game</string>
+    
+    <string name="create_card_title">Create a new card</string>
+    <string name="create_card_name">Name to find:</string>
+    <string name="create_card_name_hint">Celebrity, place, event &#8230;</string>
+    <string name="create_card_category">Category:</string>
+    <string name="create_card_category_custom">Custom</string>
+    <string name="create_card_confirm">Confirm</string>
+    
+    
+    <string name="db_number_cards">Number of cards in DB: %1$d</string>
+    <string name="db_no_card">No card in DB</string>
+    <string name="db_display_card_list">Display cards in DB</string>
     
     <!-- Previous strings  -->
     

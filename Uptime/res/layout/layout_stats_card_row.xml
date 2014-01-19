@@ -6,29 +6,33 @@
     android:padding="5dip" >
 
     <TextView
-        android:id="@+id/teamName"
+        android:id="@+id/cardId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dip"
+        android:text="#"
         android:textAppearance="?android:attr/textAppearanceLarge" >
+
     </TextView>
 
     <TextView
-        android:id="@+id/Round"
+        android:id="@+id/nameToFind"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dip"
-        android:layout_toRightOf="@+id/teamName"
-        android:textAppearance="?android:attr/textAppearanceLarge" >
+        android:layout_toRightOf="@+id/cardId"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="nameToFind" >
     </TextView>
 
     <TextView
-        android:id="@+id/secondLine"
+        android:id="@+id/category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Round"
+        android:layout_below="@+id/nameToFind"
         android:layout_marginLeft="2dip"
-        android:layout_toRightOf="@+id/teamName" >
+        android:layout_toRightOf="@+id/cardId"
+        android:text="category" >
     </TextView>
 
 </RelativeLayout>

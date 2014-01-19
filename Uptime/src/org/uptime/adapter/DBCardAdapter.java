@@ -8,24 +8,20 @@ import org.uptime.engine.game.Card;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class TurnCardAdapter extends ArrayAdapter<Card> {
+public class DBCardAdapter extends ArrayAdapter<Card> {
 
 	private List<Card> mItems = new ArrayList<Card>();
 
-	private Resources mResources;
-
 	public LayoutInflater mInflater;
 
-	public TurnCardAdapter(Context context, int textViewResourceId) {
+	public DBCardAdapter(Context context, int textViewResourceId) {
 		super(context, textViewResourceId);
-		this.mResources = context.getResources();
 
 		this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
@@ -59,12 +55,7 @@ public class TurnCardAdapter extends ArrayAdapter<Card> {
 		}
 
 		Card card = mItems.get(position);
-
-		TextView cardNumber = (TextView) v.findViewById(R.id.cardId);
-		cardNumber.setText(String.format(mResources.getString(R.string.stats_card_number), position + 1));
-
 		buildFirstLine(v, card);
-
 		buildSecondLine(v, card);
 
 		return v;
@@ -72,19 +63,21 @@ public class TurnCardAdapter extends ArrayAdapter<Card> {
 	}
 
 	private void buildFirstLine(View v, Card card) {
-		TextView firstLine = (TextView) v.findViewById(R.id.nameToFind);
+		TextView cardId = (TextView) v.findViewById(R.id.cardId);
+		cardId.setText(card.getId().toString());
+		TextView nameToFind = (TextView) v.findViewById(R.id.nameToFind);
 		StringBuilder firstLineBuilder = new StringBuilder();
 		firstLineBuilder.append(card.getNameToFind());
 
-		firstLine.setText(firstLineBuilder);
+		nameToFind.setText(firstLineBuilder);
 	}
 
 	private void buildSecondLine(View v, Card card) {
-		TextView secondLine = (TextView) v.findViewById(R.id.category);
+		TextView category = (TextView) v.findViewById(R.id.category);
 		StringBuilder secondLineBuilder = new StringBuilder();
 		secondLineBuilder.append(card.getCategory());
 
-		secondLine.setText(secondLineBuilder);
+		category.setText(secondLineBuilder);
 	}
 
 }

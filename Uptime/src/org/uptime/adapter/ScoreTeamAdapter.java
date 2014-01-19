@@ -66,7 +66,7 @@ public class ScoreTeamAdapter extends ArrayAdapter<Team> {
 
 		Team team = mItems.get(position);
 
-		TextView teamName = (TextView) v.findViewById(R.id.teamName);
+		TextView teamName = (TextView) v.findViewById(R.id.cardId);
 		teamName.setText(team.getName());
 
 		buildScore(v, team);

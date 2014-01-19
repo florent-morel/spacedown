@@ -50,6 +50,14 @@
             android:name="org.uptime.activity.stats.RoundStatisticsActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="org.uptime.activity.db.DBDisplayCardsActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="org.uptime.activity.create.CreateCardActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>

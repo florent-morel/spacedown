@@ -1,7 +1,9 @@
 package org.uptime;
 
 
+import org.uptime.activity.create.CreateCardActivity;
 import org.uptime.activity.create.CreateGameActivity;
+import org.uptime.activity.db.DBDisplayCardsActivity;
 import org.uptime.engine.Constants;
 
 import android.app.Activity;
@@ -39,6 +41,8 @@ public class UpTime extends Activity implements OnClickListener {
 
 //	private GameManager mGameManager;
 	private Button mButtonNewGame;
+	private Button mButtonCreateCard;
+	private Button mButtonDBListCard;
 //	private Button mButtonQuickGame;
 
 	/** Called when the activity is first created. */
@@ -49,6 +53,12 @@ public class UpTime extends Activity implements OnClickListener {
 
 		mButtonNewGame = (Button) findViewById(R.id.buttonNewGame);
 		mButtonNewGame.setOnClickListener(this);
+
+		mButtonCreateCard = (Button) findViewById(R.id.buttonCreateCard);
+		mButtonCreateCard.setOnClickListener(this);
+
+		mButtonDBListCard = (Button) findViewById(R.id.buttonDBListCard);
+		mButtonDBListCard.setOnClickListener(this);
 
 //		mButtonQuickGame = (Button) findViewById(R.id.buttonNewGame);
 //		mButtonQuickGame.setOnClickListener(this);
@@ -147,6 +157,14 @@ public class UpTime extends Activity implements OnClickListener {
 
 		if (v.getId() == mButtonNewGame.getId()) {
 			launchNewGame();
+		}
+		else if (v.getId() == mButtonCreateCard.getId()) {
+			Intent intent = new Intent(this, CreateCardActivity.class);
+			startActivityForResult(intent, Constants.CARD_CREATE);
+		}
+		else if (v.getId() == mButtonDBListCard.getId()) {
+			Intent intent = new Intent(this, DBDisplayCardsActivity.class);
+			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 		}
 	}
 }
