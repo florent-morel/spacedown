@@ -110,7 +110,7 @@ public class CardActivity extends Activity implements OnClickListener {
 	}
 
 	private void cancelFoundCard() {
-		Constants.CancelCardMode cardRemovedMode = mGame.cancelCardFound();
+		Constants.CancelCardMode cardRemovedMode = mGame.cancelFoundCard();
 
 		if (Constants.CancelCardMode.NO_FOUND_CARD.equals(cardRemovedMode)) {
 			Toast toast = Toast.makeText(this,
@@ -202,7 +202,7 @@ public class CardActivity extends Activity implements OnClickListener {
 				allowCardFoundButton = false;
 				final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.ping);
 				mp1.start();
-				mGame.cardFound();
+				mGame.findCard();
 
 				if (mGame.getCardsInPlay().isEmpty()) {
 					// This was the last card in play, round will end, display
@@ -227,7 +227,7 @@ public class CardActivity extends Activity implements OnClickListener {
 		} else if (v.getId() == mButtonCardSkip.getId()) {
 			final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.button_skip);
 			mp1.start();
-			mGame.cardSkip();
+			mGame.skipCard();
 			refreshActivity();
 		} else if (v.getId() == mButtonEndTurn.getId()) {
 			// Display stats for this turn

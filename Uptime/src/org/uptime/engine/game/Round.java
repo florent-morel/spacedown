@@ -61,6 +61,7 @@ public class Round {
 	}
 
 	public void saveCurrentTurn(Team currentTeam) {
+		// Save current turn
 		List<Turn> list = mSavedTurnMap.get(currentTeam);
 		if (list == null) {
 			list = new ArrayList<Turn>();
@@ -76,7 +77,7 @@ public class Round {
 		List<Turn> listTurns = mSavedTurnMap.get(currentTeam);
 		if (listTurns != null) {
 			for (Turn turn : listTurns) {
-				List<Card> listCards = turn.getTurnListCards();
+				List<Card> listCards = turn.getTurnListFoundCards();
 				if (listCards != null) {
 					score += listCards.size();
 				}
@@ -94,7 +95,7 @@ public class Round {
 
 		// Include current turn of current round
 		if (turn != null) {
-			score += turn.getTurnListCards().size();
+			score += turn.getTurnListFoundCards().size();
 		}
 
 		return score;

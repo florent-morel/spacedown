@@ -15,38 +15,30 @@ public class Card {
 		this.category = category;
 	}
 
-
 	public boolean isFound() {
 		return isFound;
 	}
-
 
 	public void setFound(boolean isFound) {
 		this.isFound = isFound;
 	}
 
-
 	public String getNameToFind() {
 		return nameToFind;
 	}
-
 
 	public Integer getId() {
 		return id;
 	}
 
-
 	public String getCategory() {
 		return category;
 	}
-
 
 	@Override
 	public String toString() {
 		return "Card [id=" + id + ", nameToFind=" + nameToFind + ", category=" + category + ", isFound=" + isFound
 				+ "]";
 	}
-	
-	
 	
 }

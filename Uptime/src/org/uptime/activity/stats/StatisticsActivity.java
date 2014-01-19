@@ -135,7 +135,7 @@ public class StatisticsActivity extends Activity {
 		List<Turn> turnList = round.getSavedTurnMap().get(team);
 		if (turnList != null) {
 			for (Turn turn : turnList) {
-				List<Card> listCards = turn.getTurnListCards();
+				List<Card> listCards = turn.getTurnListFoundCards();
 				if (listCards != null && !listCards.isEmpty()) {
 					for (Card card : listCards) {
 						turnCardAdapter.addItem(card);

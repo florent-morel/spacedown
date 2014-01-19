@@ -104,7 +104,7 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 		if (team != null) {
 			Round round = game.getCurrentRound();
 			Turn turn = round.getCurrentTurn();
-			List<Card> listCards = turn.getTurnListCards();
+			List<Card> listCards = turn.getTurnListFoundCards();
 			if (listCards != null && !listCards.isEmpty()) {
 				for (Card card : listCards) {
 					mTurnCardAdapter.addItem(card);
