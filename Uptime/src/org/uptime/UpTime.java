@@ -3,7 +3,7 @@ package org.uptime;
 
 import org.uptime.activity.create.CreateCardActivity;
 import org.uptime.activity.create.CreateGameActivity;
-import org.uptime.activity.db.DBDisplayCardsActivity;
+import org.uptime.activity.db.FilterDBCardsActivity;
 import org.uptime.engine.Constants;
 
 import android.app.Activity;
@@ -163,7 +163,7 @@ public class UpTime extends Activity implements OnClickListener {
 			startActivityForResult(intent, Constants.CARD_CREATE);
 		}
 		else if (v.getId() == mButtonDBListCard.getId()) {
-			Intent intent = new Intent(this, DBDisplayCardsActivity.class);
+			Intent intent = new Intent(this, FilterDBCardsActivity.class);
 			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 		}
 	}

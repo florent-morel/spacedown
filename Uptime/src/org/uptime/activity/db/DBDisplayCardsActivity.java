@@ -60,8 +60,10 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 
 	private void refreshActivity() {
 		initTexts();
+		
+		boolean displayActiveCards = this.getIntent().getBooleanExtra(Constants.CARD_ACTIVE, Boolean.TRUE);
 
-		List<Card> listCards = datasource.getAllCards();
+		List<Card> listCards = datasource.getAllCards(displayActiveCards);
 		if (listCards != null && !listCards.isEmpty()) {
 			numberOfCards.setText(String.format(mResources.getString(R.string.db_number_cards), listCards.size()));
 			if (listCards.size() < 25) {

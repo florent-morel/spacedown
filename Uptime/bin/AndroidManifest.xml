@@ -51,6 +51,10 @@
             android:label="@string/app_name" >
         </activity>
         <activity
+            android:name="org.uptime.activity.db.FilterDBCardsActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name="org.uptime.activity.db.DBDisplayCardsActivity"
             android:label="@string/app_name" >
         </activity>

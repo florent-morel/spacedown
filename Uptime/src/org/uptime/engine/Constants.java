@@ -95,4 +95,6 @@ public interface Constants {
 	static final int CARD_UPDATE = 5641323;
 
 	static final String CARD_ID = "CARD_ID";
+
+	static final String CARD_ACTIVE = "CARD_ACTIVE";
 }

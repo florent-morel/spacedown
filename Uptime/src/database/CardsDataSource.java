@@ -86,6 +86,22 @@ public class CardsDataSource {
 		return cards;
 	}
 
+	public List<Card> getAllCards(Boolean isActive) {
+		List<Card> cards = new ArrayList<Card>();
+
+		Cursor cursor = database.query(DBHelper.TABLE_CARDS, allColumns, DBHelper.COLUMN_ACTIVE + " = '" + isActive.toString() + "'", null, null, null, null);
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Card card = cursorToCard(cursor);
+			cards.add(card);
+			cursor.moveToNext();
+		}
+		// make sure to close the cursor
+		cursor.close();
+		return cards;
+	}
+
 	private Card cursorToCard(Cursor cursor) {
 		Card card = new Card();
 		card.setId(cursor.getInt(0));
