@@ -3,6 +3,12 @@ package org.uptime.engine.game;
 public class Card {
 
 	private Integer id;
+	
+	/**
+	 * Non active cards will not be used when building card lists for a game.
+	 */
+	private boolean isActiveInDB;
+	
 	private String nameToFind;
 	private String category;
 	private String url;
@@ -54,7 +60,7 @@ public class Card {
 	@Override
 	public String toString() {
 		return "Card [id=" + id + ", nameToFind=" + nameToFind + ", category=" + category + ", isFound=" + isFound
-				+ "]";
+				+ ", isActiveInDB=" + isActiveInDB + "]";
 	}
 
 	public String getUrl() {
@@ -63,6 +69,14 @@ public class Card {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public boolean isActiveInDB() {
+		return isActiveInDB;
+	}
+
+	public void setActiveInDB(boolean isActiveInDB) {
+		this.isActiveInDB = isActiveInDB;
 	}
 	
 }

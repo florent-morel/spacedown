@@ -66,6 +66,15 @@
 <!--             android:hint="@string/create_card_category_hint" > -->
 <!--         </EditText> -->
 
+        <CheckBox
+            android:id="@+id/checkBoxCardActive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textCreateCardCategoryCustom"
+            android:layout_below="@+id/textCreateCardCategoryCustom"
+            android:checked="true"
+            android:text="@string/create_card_active" />
+
         <Button
             android:id="@+id/buttonConfirmCreateCard"
             android:layout_width="wrap_content"
@@ -74,6 +83,7 @@
             android:layout_below="@+id/textCreateCardCategoryCustom"
             android:layout_marginTop="37dp"
             android:text="@string/create_card_confirm" />
+
     </RelativeLayout>
 
 </ScrollView>

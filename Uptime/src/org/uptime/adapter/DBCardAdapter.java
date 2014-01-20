@@ -8,6 +8,7 @@ import org.uptime.engine.game.Card;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,11 @@ public class DBCardAdapter extends ArrayAdapter<Card> {
 		firstLineBuilder.append(card.getNameToFind());
 
 		nameToFind.setText(firstLineBuilder);
+		if (!card.isActiveInDB()) {
+			nameToFind.setPaintFlags(nameToFind.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+		} else {
+			nameToFind.setPaintFlags(nameToFind.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+		}
 	}
 
 	private void buildSecondLine(View v, Card card) {

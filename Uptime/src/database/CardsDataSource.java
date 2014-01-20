@@ -16,7 +16,7 @@ public class CardsDataSource {
 	// Database fields
 	private SQLiteDatabase database;
 	private DBHelper dbHelper;
-	private String[] allColumns = { DBHelper.COLUMN_ID, DBHelper.COLUMN_NAME , DBHelper.COLUMN_CATEGORY , DBHelper.COLUMN_URL };
+	private String[] allColumns = { DBHelper.COLUMN_ID, DBHelper.COLUMN_NAME, DBHelper.COLUMN_CATEGORY, DBHelper.COLUMN_URL, DBHelper.COLUMN_ACTIVE };
 
 	public CardsDataSource(Context context) {
 		dbHelper = new DBHelper(context);
@@ -35,6 +35,7 @@ public class CardsDataSource {
 		values.put(DBHelper.COLUMN_NAME, card.getNameToFind());
 		values.put(DBHelper.COLUMN_CATEGORY, card.getCategory());
 		values.put(DBHelper.COLUMN_URL, card.getUrl());
+		values.put(DBHelper.COLUMN_ACTIVE, Boolean.valueOf(card.isActiveInDB()).toString());
 		
 		long insertId = database.insert(DBHelper.TABLE_CARDS, null, values);
 		Card newCard = getCard(insertId);
@@ -46,6 +47,7 @@ public class CardsDataSource {
 		values.put(DBHelper.COLUMN_NAME, card.getNameToFind());
 		values.put(DBHelper.COLUMN_CATEGORY, card.getCategory());
 		values.put(DBHelper.COLUMN_URL, card.getUrl());
+		values.put(DBHelper.COLUMN_ACTIVE, Boolean.valueOf(card.isActiveInDB()).toString());
 		
 		Integer id = card.getId();
 		database.update(DBHelper.TABLE_CARDS, values, DBHelper.COLUMN_ID + "=" + id, null);
@@ -90,6 +92,7 @@ public class CardsDataSource {
 		card.setNameToFind(cursor.getString(1));
 		card.setCategory(cursor.getString(2));
 		card.setUrl(cursor.getString(3));
+		card.setActiveInDB(Boolean.valueOf(cursor.getString(4)));
 		return card;
 	}
 }

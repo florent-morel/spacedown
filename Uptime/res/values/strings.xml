@@ -74,6 +74,7 @@
     <string name="create_card_category">Category:</string>
     <string name="create_card_category_custom">Custom</string>
     <string name="create_card_confirm">Confirm</string>
+    <string name="create_card_active">Card is active</string>
     
     
     <string name="db_number_cards">Number of cards in DB: %1$d</string>

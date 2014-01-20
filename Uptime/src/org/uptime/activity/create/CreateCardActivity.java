@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,8 @@ public class CreateCardActivity extends Activity implements OnClickListener {
 	private TextView cardCategory;
 
 	private EditText cardNameToFind;
+
+	private CheckBox activeCard;
 
 	private CardsDataSource datasource;
 
@@ -51,6 +54,7 @@ public class CreateCardActivity extends Activity implements OnClickListener {
 			if (cardToUpdate != null) {
 				cardNameToFind.setText(cardToUpdate.getNameToFind());
 				cardCategory.setText(cardToUpdate.getCategory());
+				activeCard.setChecked(cardToUpdate.isActiveInDB());
 			}
 		}
 	}
@@ -58,6 +62,8 @@ public class CreateCardActivity extends Activity implements OnClickListener {
 	private void initButtons() {
 		buttonCreateCard = (Button) findViewById(R.id.buttonConfirmCreateCard);
 		buttonCreateCard.setOnClickListener(this);
+		activeCard = (CheckBox) findViewById(R.id.checkBoxCardActive);
+		activeCard.setOnClickListener(this);
 	}
 
 	private void initTexts() {
@@ -77,16 +83,19 @@ public class CreateCardActivity extends Activity implements OnClickListener {
 				Card cardToPutInDb = null;
 				Card newCard = null;
 				String message = null;
+				boolean isActive = activeCard.isChecked();
 				if (cardToUpdate == null) {
 					this.createCard();
 					cardToPutInDb = new Card();
 					cardToPutInDb.setNameToFind(nameToFind);
 					cardToPutInDb.setCategory(category);
+					cardToPutInDb.setActiveInDB(isActive);
 					newCard = datasource.createCard(cardToPutInDb);
 					message = String.format(mResources.getString(R.string.dialog_create_card_ok), newCard.getId());
 				} else {
 					cardToUpdate.setNameToFind(nameToFind);
 					cardToUpdate.setCategory(category);
+					cardToUpdate.setActiveInDB(isActive);
 					newCard = datasource.updateCard(cardToUpdate);
 					message = String.format(mResources.getString(R.string.dialog_update_card_ok), newCard.getId());
 				}
