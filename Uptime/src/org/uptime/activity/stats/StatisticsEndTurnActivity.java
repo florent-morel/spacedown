@@ -5,6 +5,7 @@ import java.util.List;
 import org.uptime.GameManager;
 import org.uptime.R;
 import org.uptime.adapter.TurnCardAdapter;
+import org.uptime.engine.Constants;
 import org.uptime.engine.game.Card;
 import org.uptime.engine.game.Game;
 import org.uptime.engine.game.Round;
@@ -79,7 +80,7 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 		mButtonNextTurn = (Button) findViewById(R.id.buttonNextTurn);
 		mButtonNextTurn.setOnClickListener(this);
 
-		if (game.getCardsInPlay().isEmpty()) {
+		if (game.getNumberCardsInPlay() == Constants.VALUE_ZERO) {
 			mButtonNextTurn.setText(String.format(mResources.getString(R.string.stats_end_round), game
 					.getCurrentRound().getRoundNumber()));
 		} else {
@@ -119,7 +120,7 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 
 	public void onBackPressed() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		if (game.getCardsInPlay().isEmpty()) {
+		if (game.getNumberCardsInPlay() == Constants.VALUE_ZERO) {
 			builder.setMessage(String.format(mResources.getString(R.string.stats_end_round_question), game
 					.getCurrentRound().getRoundNumber()));
 		} else {

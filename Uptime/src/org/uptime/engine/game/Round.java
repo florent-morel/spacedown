@@ -73,7 +73,7 @@ public class Round {
 	}
 
 	public Integer getTeamRoundScore(Team currentTeam) {
-		Integer score = Constants.ZERO_VALUE;
+		Integer score = Constants.VALUE_ZERO;
 		List<Turn> listTurns = mSavedTurnMap.get(currentTeam);
 		if (listTurns != null) {
 			for (Turn turn : listTurns) {
@@ -91,7 +91,7 @@ public class Round {
 	}
 
 	public Integer getTeamTurnScore(Turn turn) {
-		Integer score = Constants.ZERO_VALUE;
+		Integer score = Constants.VALUE_ZERO;
 
 		// Include current turn of current round
 		if (turn != null) {

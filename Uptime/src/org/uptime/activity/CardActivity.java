@@ -47,6 +47,9 @@ public class CardActivity extends Activity implements OnClickListener {
 	private Button mButtonEndTurn;
 
 	boolean allowCardFoundButton = true;
+	
+	private static MediaPlayer foundMediaPlayer;
+	private static MediaPlayer skipMediaPlayer; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,9 @@ public class CardActivity extends Activity implements OnClickListener {
 
 		mGameManager = GameManager.getSingletonObject();
 		mGame = mGameManager.getGame();
+		
+		foundMediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.ping);
+		skipMediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.button_skip);
 
 		this.initTexts();
 		this.setTexts();
@@ -166,9 +172,9 @@ public class CardActivity extends Activity implements OnClickListener {
 		Integer totalScore = mGame.getTotalScore(currentTeam);
 		mTeamTotalScore.setText(String.format(mResources.getString(R.string.card_team_total_score), totalScore));
 		
-		int remainingCards = mGame.getCardsInPlay().size();
+		int remainingCards = mGame.getNumberCardsInPlay();
 		StringBuilder builderRemaining = new StringBuilder();
-		if (remainingCards == 1) {
+		if (remainingCards == Constants.VALUE_ONE) {
 			builderRemaining.append(String.format(mResources.getString(R.string.card_remaining_last)));
 		} else {
 			builderRemaining.append(String.format(mResources.getString(R.string.card_remaining), remainingCards));
@@ -184,8 +190,10 @@ public class CardActivity extends Activity implements OnClickListener {
 		mButtonCardSkip = (Button) findViewById(R.id.buttonSkipCard);
 		mButtonCardSkip.setOnClickListener(this);
 
-		if (Constants.ROUND_FIRST == mGame.getCurrentRound().getRoundNumber() || (mGame.getCardsInPlay().size() == 1)) {
+		if (Constants.ROUND_FIRST == mGame.getCurrentRound().getRoundNumber() || (mGame.getNumberCardsInPlay() == Constants.VALUE_ONE)) {
 			mButtonCardSkip.setVisibility(View.GONE);
+		} else {
+			mButtonCardSkip.setVisibility(View.VISIBLE);
 		}
 
 		mButtonEndTurn = (Button) findViewById(R.id.buttonEndTurn);
@@ -200,11 +208,10 @@ public class CardActivity extends Activity implements OnClickListener {
 				// Protect from multi clicks
 //				mButtonCardFound.setEnabled(false);
 				allowCardFoundButton = false;
-				final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.ping);
-				mp1.start();
+				foundMediaPlayer.start();
 				mGame.findCard();
 
-				if (mGame.getCardsInPlay().isEmpty()) {
+				if (mGame.getNumberCardsInPlay() == Constants.VALUE_ZERO) {
 					// This was the last card in play, round will end, display
 					// stats
 					// for turn
@@ -225,8 +232,7 @@ public class CardActivity extends Activity implements OnClickListener {
 			}
 
 		} else if (v.getId() == mButtonCardSkip.getId()) {
-			final MediaPlayer mp1 = MediaPlayer.create(getBaseContext(), R.raw.button_skip);
-			mp1.start();
+			skipMediaPlayer.start();
 			mGame.skipCard();
 			refreshActivity();
 		} else if (v.getId() == mButtonEndTurn.getId()) {

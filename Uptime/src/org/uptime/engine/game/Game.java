@@ -18,13 +18,13 @@ public class Game {
 
 	private CardBuilder cardBuilder;
 
-	private List<Card> mAvailableCardList;
+	private List<Card> mAvailableCardListFromDB;
 
 	private List<Card> mCardListForGame;
 
 	private List<Card> mCardsCurrentlyInPlay;
 
-	private List<Card> mDiscardedCards;
+	private List<Card> mDiscardedCardsInDB;
 
 	private List<Team> mTeamList;
 
@@ -53,7 +53,7 @@ public class Game {
 		datasource = new CardsDataSource(context);
 		datasource.open();
 
-		mDiscardedCards = new ArrayList<Card>();
+		mDiscardedCardsInDB = new ArrayList<Card>();
 
 		initTeams(numberOfTeams);
 		initCards(runMode, numberOfCards);
@@ -61,10 +61,10 @@ public class Game {
 	}
 
 	private void initCards(Constants.RunMode runMode, Integer numberOfCards) {
-		mAvailableCardList = cardBuilder.buildAvailableCards(runMode, numberOfCards);
+		mAvailableCardListFromDB = cardBuilder.buildAvailableCards(runMode, numberOfCards);
 
 		// Once we have the available cards
-		mCardListForGame = cardBuilder.buildCardListForGame(mAvailableCardList, numberOfCards);
+		mCardListForGame = cardBuilder.buildCardListForGame(mAvailableCardListFromDB, numberOfCards);
 
 		refreshCards();
 	}
@@ -148,7 +148,7 @@ public class Game {
 
 		// Pick first card if no current card.
 		if (currentCard == null) {
-			nextId = Constants.ZERO_VALUE;
+			nextId = Constants.VALUE_ZERO;
 		}
 
 		int modulo = nextId % nbCards;
@@ -167,7 +167,7 @@ public class Game {
 		int nbTeams = this.getTeamList().size();
 		Team teams[] = new Team[nbTeams];
 		teams = this.getTeamList().toArray(teams);
-		Integer nextId = Constants.ZERO_VALUE;
+		Integer nextId = Constants.VALUE_ZERO;
 		if (mCurrentTeam != null) {
 			nextId = mCurrentTeam.getId();
 		}
@@ -178,11 +178,24 @@ public class Game {
 	}
 
 	public void endTurn() {
+		skippedCardsBackInGame();
+
 		mCurrentRound.saveCurrentTurn(mCurrentTeam);
 		mCurrentRound.createNewTurn();
 		mCurrentTeam = getNextTeamToPlay();
 		reshuffleCardsInPlay();
 		getNextCardToPlay(mCurrentCard, false);
+	}
+
+	/**
+	 * Check if some cards have been skipped and put them back in the game.
+	 */
+	private void skippedCardsBackInGame() {
+		List<Card> turnListSkippedCards = mCurrentRound.getCurrentTurn().getTurnListSkippedCards();
+		if (!turnListSkippedCards.isEmpty()) {
+			mCardsCurrentlyInPlay.addAll(turnListSkippedCards);
+			turnListSkippedCards.clear();
+		}
 	}
 
 	private void reshuffleCardsInPlay() {
@@ -203,13 +216,13 @@ public class Game {
 			this.setGameOver(Boolean.TRUE);
 
 			// Update database with list of discarded cards
-			if (mDiscardedCards != null && !mDiscardedCards.isEmpty()) {
-				for (Card discardedCard : mDiscardedCards) {
+			if (mDiscardedCardsInDB != null && !mDiscardedCardsInDB.isEmpty()) {
+				for (Card discardedCard : mDiscardedCardsInDB) {
 					discardedCard.setActiveInDB(Boolean.FALSE);
 					datasource.updateCard(discardedCard);
 				}
 				// Flush list of discarded cards
-				mDiscardedCards.clear();
+				mDiscardedCardsInDB.clear();
 			}
 		}
 	}
@@ -222,11 +235,7 @@ public class Game {
 		// If no more cards in play, check if some cards have been skipped and
 		// put them back in the game.
 		if (mCardsCurrentlyInPlay.isEmpty()) {
-			List<Card> turnListSkippedCards = mCurrentRound.getCurrentTurn().getTurnListSkippedCards();
-			if (!turnListSkippedCards.isEmpty()) {
-				mCardsCurrentlyInPlay.addAll(turnListSkippedCards);
-				turnListSkippedCards.clear();
-			}
+			skippedCardsBackInGame();
 		}
 
 		mCurrentRound.getCurrentTurn().addFoundCardToTurn(mCurrentCard);
@@ -321,7 +330,7 @@ public class Game {
 			lastFoundCard.setFound(Boolean.FALSE);
 
 			// Put it back at first place to cards in play
-			cardsInPlay.add(Constants.ZERO_VALUE, lastFoundCard);
+			cardsInPlay.add(Constants.VALUE_ZERO, lastFoundCard);
 
 			// Needed in case of previous round
 			mCardsCurrentlyInPlay = cardsInPlay;
@@ -429,6 +438,13 @@ public class Game {
 		// of skipped cards
 		mCardsCurrentlyInPlay.remove(this.getCurrentCard());
 		this.getCurrentRound().getCurrentTurn().addSkippedCardToTurn(this.getCurrentCard());
+		
+		// If no more cards in play, check if some cards have been skipped and
+		// put them back in the game.
+		if (mCardsCurrentlyInPlay.isEmpty()) {
+			skippedCardsBackInGame();
+		}
+		
 		this.getNextCardToPlay(this.getCurrentCard(), true);
 	}
 
@@ -450,11 +466,11 @@ public class Game {
 
 		if (roundList == null || roundList.isEmpty()) {
 			for (Team team : this.getTeamList()) {
-				teamScoreTotal.put(team, Constants.ZERO_VALUE);
+				teamScoreTotal.put(team, Constants.VALUE_ZERO);
 			}
 		} else {
 			for (Team team : this.getTeamList()) {
-				Integer totalScore = Constants.ZERO_VALUE;
+				Integer totalScore = Constants.VALUE_ZERO;
 				for (Round round : roundList) {
 					Integer teamRoundScore = round.getTeamRoundScore(team);
 					if (teamRoundScore != null) {
@@ -475,7 +491,7 @@ public class Game {
 		}
 
 		if (score == null) {
-			score = Constants.ZERO_VALUE;
+			score = Constants.VALUE_ZERO;
 		}
 
 		return score;
@@ -501,14 +517,14 @@ public class Game {
 	public boolean replaceCard() {
 		boolean cardReplaced = false;
 		// Pick a new one from available deck
-		Card newCard = cardBuilder.getRandomCard(mAvailableCardList, mCardListForGame);
+		Card newCard = cardBuilder.getRandomCard(mAvailableCardListFromDB, mCardListForGame);
 		if (newCard != null) {
 			// Remove current card from list of cards in play and cards for game
 			mCardListForGame.remove(mCurrentCard);
 			mCardsCurrentlyInPlay.remove(mCurrentCard);
 			// Add the discarded card to the appropriate list for further
 			// process
-			mDiscardedCards.add(mCurrentCard);
+			mDiscardedCardsInDB.add(mCurrentCard);
 
 			// Add new card to lists of cards
 			mCardListForGame.add(newCard);
@@ -521,5 +537,29 @@ public class Game {
 		}
 
 		return cardReplaced;
+	}
+
+	/**
+	 * Get the number of cards currently in play (including skipped cards for
+	 * this turn).
+	 * 
+	 * @return
+	 */
+	public Integer getNumberCardsInPlay() {
+		Integer numberCards = Constants.VALUE_ZERO;
+
+		numberCards += mCardsCurrentlyInPlay.size();
+
+		if (mCurrentRound != null) {
+			Turn currentTurn = mCurrentRound.getCurrentTurn();
+			if (currentTurn != null) {
+				List<Card> turnListSkippedCards = currentTurn.getTurnListSkippedCards();
+				if (turnListSkippedCards != null && !turnListSkippedCards.isEmpty()) {
+					numberCards += turnListSkippedCards.size();
+				}
+			}
+		}
+
+		return numberCards;
 	}
 }

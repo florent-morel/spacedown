@@ -8,8 +8,6 @@ public interface Constants {
 
 	static final int ROUND_THIRD = 3;
 
-	static final Integer ZERO_VALUE = 0;
-
 	static final Integer PENALTY_VALUE = -1000;
 
 	static final Integer DEFAULT_SCORE_TO_REACH = 10000;
@@ -97,4 +95,8 @@ public interface Constants {
 	static final String CARD_ID = "CARD_ID";
 
 	static final String CARD_ACTIVE = "CARD_ACTIVE";
+
+	static final Integer VALUE_ZERO = 0;
+	
+	static final Integer VALUE_ONE = 1;
 }

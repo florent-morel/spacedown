@@ -126,9 +126,9 @@ public class ScoreActivity extends Activity implements OnClickListener {
 		}
 		
 		
-		int remainingCards = mGame.getCardsInPlay().size();
+		int remainingCards = mGame.getNumberCardsInPlay();
 		StringBuilder builderRemaining = new StringBuilder();
-		if (remainingCards == 0) {
+		if (remainingCards == Constants.VALUE_ZERO) {
 			// No more card to play => we'll start next round
 			builderRemaining.append(String.format(mResources.getString(R.string.card_remaining), mGame.getCardList().size()));
 		} else if (remainingCards == 1) {

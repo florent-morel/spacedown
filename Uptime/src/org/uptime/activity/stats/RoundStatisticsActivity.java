@@ -35,7 +35,7 @@ public class RoundStatisticsActivity extends Activity {
 		roundStatsAdapter = new RoundStatsCardAdapter(this);
 		statsPager = (ViewPager) findViewById(R.id.stats_round_pager);
 		statsPager.setAdapter(roundStatsAdapter);
-		statsPager.setCurrentItem(Constants.ZERO_VALUE);
+		statsPager.setCurrentItem(Constants.VALUE_ZERO);
 
 		// If you are asking how one could implements a carousel (infinite
 		// loop), then that would involve manipulating the PagerAdapter to
