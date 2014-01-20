@@ -5,9 +5,11 @@ import org.uptime.activity.create.CreateCardActivity;
 import org.uptime.activity.create.CreateGameActivity;
 import org.uptime.activity.db.FilterDBCardsActivity;
 import org.uptime.engine.Constants;
+import org.uptime.engine.cards.build.CardBuilder;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -40,9 +42,12 @@ import android.widget.Button;
 public class UpTime extends Activity implements OnClickListener {
 
 //	private GameManager mGameManager;
+
+	private Resources mResources;
 	private Button mButtonNewGame;
 	private Button mButtonCreateCard;
 	private Button mButtonDBListCard;
+	private Button mButtonImportCardsInDB;
 //	private Button mButtonQuickGame;
 
 	/** Called when the activity is first created. */
@@ -50,6 +55,7 @@ public class UpTime extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		mResources = getResources();
 
 		mButtonNewGame = (Button) findViewById(R.id.buttonNewGame);
 		mButtonNewGame.setOnClickListener(this);
@@ -59,6 +65,9 @@ public class UpTime extends Activity implements OnClickListener {
 
 		mButtonDBListCard = (Button) findViewById(R.id.buttonDBListCard);
 		mButtonDBListCard.setOnClickListener(this);
+
+		mButtonImportCardsInDB = (Button) findViewById(R.id.buttonImportCards);
+		mButtonImportCardsInDB.setOnClickListener(this);
 
 //		mButtonQuickGame = (Button) findViewById(R.id.buttonNewGame);
 //		mButtonQuickGame.setOnClickListener(this);
@@ -166,5 +175,13 @@ public class UpTime extends Activity implements OnClickListener {
 			Intent intent = new Intent(this, FilterDBCardsActivity.class);
 			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 		}
+		else if (v.getId() == mButtonImportCardsInDB.getId()) {
+			CardBuilder cardBuilder = new CardBuilder(mResources, this);
+			cardBuilder.importHardCodedListToDB();
+		}
+		
+
+
+		
 	}
 }

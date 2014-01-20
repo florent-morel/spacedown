@@ -99,4 +99,6 @@ public interface Constants {
 	static final Integer VALUE_ZERO = 0;
 	
 	static final Integer VALUE_ONE = 1;
+
+	static final String CATEGORY_CUSTOM = "Custom";
 }

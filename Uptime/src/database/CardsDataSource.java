@@ -3,6 +3,7 @@ package database;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.uptime.engine.Constants;
 import org.uptime.engine.game.Card;
 
 import android.content.ContentValues;
@@ -16,7 +17,8 @@ public class CardsDataSource {
 	// Database fields
 	private SQLiteDatabase database;
 	private DBHelper dbHelper;
-	private String[] allColumns = { DBHelper.COLUMN_ID, DBHelper.COLUMN_NAME, DBHelper.COLUMN_CATEGORY, DBHelper.COLUMN_URL, DBHelper.COLUMN_ACTIVE };
+	private String[] allColumns = { DBHelper.COLUMN_ID, DBHelper.COLUMN_NAME, DBHelper.COLUMN_CATEGORY,
+			DBHelper.COLUMN_URL, DBHelper.COLUMN_ACTIVE };
 
 	public CardsDataSource(Context context) {
 		dbHelper = new DBHelper(context);
@@ -30,13 +32,23 @@ public class CardsDataSource {
 		dbHelper.close();
 	}
 
+	public List<Card> addCards(List<Card> cardList) {
+		List<Card> addedCards = new ArrayList<Card>();
+		if (cardList != null && !cardList.isEmpty()) {
+			for (Card card : cardList) {
+				addedCards.add(this.createCard(card));
+			}
+		}
+		return addedCards;
+	}
+
 	public Card createCard(Card card) {
 		ContentValues values = new ContentValues();
 		values.put(DBHelper.COLUMN_NAME, card.getNameToFind());
 		values.put(DBHelper.COLUMN_CATEGORY, card.getCategory());
 		values.put(DBHelper.COLUMN_URL, card.getUrl());
 		values.put(DBHelper.COLUMN_ACTIVE, Boolean.valueOf(card.isActiveInDB()).toString());
-		
+
 		long insertId = database.insert(DBHelper.TABLE_CARDS, null, values);
 		Card newCard = getCard(insertId);
 		return newCard;
@@ -48,7 +60,7 @@ public class CardsDataSource {
 		values.put(DBHelper.COLUMN_CATEGORY, card.getCategory());
 		values.put(DBHelper.COLUMN_URL, card.getUrl());
 		values.put(DBHelper.COLUMN_ACTIVE, Boolean.valueOf(card.isActiveInDB()).toString());
-		
+
 		Integer id = card.getId();
 		database.update(DBHelper.TABLE_CARDS, values, DBHelper.COLUMN_ID + "=" + id, null);
 		Card newCard = getCard(id);
@@ -70,10 +82,11 @@ public class CardsDataSource {
 		database.delete(DBHelper.TABLE_CARDS, DBHelper.COLUMN_ID + " = " + id, null);
 	}
 
-	public List<Card> getAllCards() {
+	public List<Card> getAllCards(Boolean isActive) {
 		List<Card> cards = new ArrayList<Card>();
 
-		Cursor cursor = database.query(DBHelper.TABLE_CARDS, allColumns, null, null, null, null, null);
+		Cursor cursor = database.query(DBHelper.TABLE_CARDS, allColumns,
+				DBHelper.COLUMN_ACTIVE + " = '" + isActive.toString() + "'", null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -86,10 +99,11 @@ public class CardsDataSource {
 		return cards;
 	}
 
-	public List<Card> getAllCards(Boolean isActive) {
+	public List<Card> getAllCustomCards() {
 		List<Card> cards = new ArrayList<Card>();
 
-		Cursor cursor = database.query(DBHelper.TABLE_CARDS, allColumns, DBHelper.COLUMN_ACTIVE + " = '" + isActive.toString() + "'", null, null, null, null);
+		Cursor cursor = database.query(DBHelper.TABLE_CARDS, allColumns,
+				DBHelper.COLUMN_CATEGORY + " = '" + Constants.CATEGORY_CUSTOM + "'", null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -110,5 +124,12 @@ public class CardsDataSource {
 		card.setUrl(cursor.getString(3));
 		card.setActiveInDB(Boolean.valueOf(cursor.getString(4)));
 		return card;
+	}
+
+	/**
+	 * Warning! Will drop current card table.
+	 */
+	public void dropCardTable() {
+		dbHelper.dropTable(database, DBHelper.TABLE_CARDS);
 	}
 }

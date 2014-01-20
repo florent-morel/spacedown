@@ -3,10 +3,8 @@ package org.uptime.activity.create;
 import org.uptime.R;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Card;
-import org.uptime.engine.game.Team;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -76,7 +74,7 @@ public class CreateCardActivity extends Activity implements OnClickListener {
 		if (v.getId() == buttonCreateCard.getId()) {
 
 			String nameToFind = cardNameToFind.getText().toString();
-			String category = cardCategory.getText().toString();
+			String category = Constants.CATEGORY_CUSTOM;//cardCategory.getText().toString();
 
 			if (nameToFind != null && !nameToFind.isEmpty()) {
 				// Create the card and store in DB

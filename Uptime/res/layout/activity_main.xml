@@ -41,4 +41,13 @@
         android:layout_marginTop="42dp"
         android:text="@string/db_display_card_list" />
 
+    <Button
+        android:id="@+id/buttonImportCards"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonDBListCard"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:text="@string/import_cards" />
+
 </RelativeLayout>
