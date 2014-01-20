@@ -41,15 +41,16 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 		datasource.open();
 		this.refreshActivity();
 
-		dbCardList.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Card card = (Card) parent.getItemAtPosition(position);
-				Intent intent = new Intent(parent.getContext(), CreateCardActivity.class);
-				intent.putExtra(Constants.CARD_ID, card.getId());
-				startActivityForResult(intent, Constants.CARD_UPDATE);
-			}
-		});
-
+		if (dbCardList != null) {
+			dbCardList.setOnItemClickListener(new OnItemClickListener() {
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					Card card = (Card) parent.getItemAtPosition(position);
+					Intent intent = new Intent(parent.getContext(), CreateCardActivity.class);
+					intent.putExtra(Constants.CARD_ID, card.getId());
+					startActivityForResult(intent, Constants.CARD_UPDATE);
+				}
+			});
+		}
 	}
 
 	@Override
@@ -60,7 +61,7 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 
 	private void refreshActivity() {
 		initTexts();
-		
+
 		boolean displayActiveCards = this.getIntent().getBooleanExtra(Constants.CARD_ACTIVE, Boolean.TRUE);
 
 		List<Card> listCards = datasource.getAllCards(displayActiveCards);
@@ -74,7 +75,8 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 		} else {
 			numberOfCards.setText(String.format(mResources.getString(R.string.db_no_card)));
 		}
-		initButtons();}
+		initButtons();
+	}
 
 	private void initTexts() {
 		numberOfCards = (TextView) findViewById(R.id.textDbDisplayCard);

@@ -9,6 +9,8 @@ import java.util.Map;
 import org.uptime.engine.Constants;
 import org.uptime.engine.cards.build.CardBuilder;
 
+import database.CardsDataSource;
+
 import android.content.Context;
 import android.content.res.Resources;
 
@@ -22,6 +24,8 @@ public class Game {
 
 	private List<Card> mCardsCurrentlyInPlay;
 
+	private List<Card> mDiscardedCards;
+
 	private List<Team> mTeamList;
 
 	private Card mCurrentCard;
@@ -34,6 +38,8 @@ public class Game {
 
 	private boolean mIsGameOver = false;
 
+	private CardsDataSource datasource;
+
 	public Game() {
 		super();
 	}
@@ -43,6 +49,11 @@ public class Game {
 		super();
 
 		cardBuilder = new CardBuilder(resources, context);
+
+		datasource = new CardsDataSource(context);
+		datasource.open();
+
+		mDiscardedCards = new ArrayList<Card>();
 
 		initTeams(numberOfTeams);
 		initCards(runMode, numberOfCards);
@@ -139,7 +150,7 @@ public class Game {
 		if (currentCard == null) {
 			nextId = Constants.ZERO_VALUE;
 		}
-		
+
 		int modulo = nextId % nbCards;
 		nextCard = cards[modulo];
 
@@ -190,6 +201,16 @@ public class Game {
 		mCurrentRound.setRoundActive(Boolean.FALSE);
 		if (Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
 			this.setGameOver(Boolean.TRUE);
+
+			// Update database with list of discarded cards
+			if (mDiscardedCards != null && !mDiscardedCards.isEmpty()) {
+				for (Card discardedCard : mDiscardedCards) {
+					discardedCard.setActiveInDB(Boolean.FALSE);
+					datasource.updateCard(discardedCard);
+				}
+				// Flush list of discarded cards
+				mDiscardedCards.clear();
+			}
 		}
 	}
 
@@ -197,8 +218,9 @@ public class Game {
 		mCurrentCard.setFound(Boolean.TRUE);
 		// Remove the card from the list of cards yet to be found
 		mCardsCurrentlyInPlay.remove(this.getCurrentCard());
-		
-		// If no more cards in play, check if some cards have been skipped and put them back in the game.
+
+		// If no more cards in play, check if some cards have been skipped and
+		// put them back in the game.
 		if (mCardsCurrentlyInPlay.isEmpty()) {
 			List<Card> turnListSkippedCards = mCurrentRound.getCurrentTurn().getTurnListSkippedCards();
 			if (!turnListSkippedCards.isEmpty()) {
@@ -206,7 +228,7 @@ public class Game {
 				turnListSkippedCards.clear();
 			}
 		}
-		
+
 		mCurrentRound.getCurrentTurn().addFoundCardToTurn(mCurrentCard);
 	}
 
@@ -403,7 +425,8 @@ public class Game {
 	}
 
 	public void skipCard() {
-		// Remove current card from list of cards in play and put it in the list of skipped cards
+		// Remove current card from list of cards in play and put it in the list
+		// of skipped cards
 		mCardsCurrentlyInPlay.remove(this.getCurrentCard());
 		this.getCurrentRound().getCurrentTurn().addSkippedCardToTurn(this.getCurrentCard());
 		this.getNextCardToPlay(this.getCurrentCard(), true);
@@ -483,6 +506,9 @@ public class Game {
 			// Remove current card from list of cards in play and cards for game
 			mCardListForGame.remove(mCurrentCard);
 			mCardsCurrentlyInPlay.remove(mCurrentCard);
+			// Add the discarded card to the appropriate list for further
+			// process
+			mDiscardedCards.add(mCurrentCard);
 
 			// Add new card to lists of cards
 			mCardListForGame.add(newCard);

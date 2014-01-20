@@ -29,12 +29,16 @@ public class CardBuilder {
 		this.mResources = mResources;
 		this.context = context;
 		
-//		datasource = new CardsDataSource(context);
-//		datasource.open();
+		datasource = new CardsDataSource(context);
+		datasource.open();
 	}
 
 	public List<Card> buildAvailableCards(Constants.RunMode runMode, Integer numberOfCards) {
 		List<Card> cardList = new ArrayList<Card>();
+
+		if (Constants.RunMode.DB.equals(runMode)) {
+			cardList = importCardsFromDB();
+		}
 
 		if (Constants.RunMode.IMPORT_CSV.equals(runMode)) {
 			cardList = importCardsFromCSV();
@@ -64,6 +68,11 @@ public class CardBuilder {
 		}
 		return cardsForGame;
 
+	}
+
+	private List<Card> importCardsFromDB() {
+		List<Card> allCards = datasource.getAllCards(true);
+		return allCards;
 	}
 
 	private List<Card> importCardsFromCSV() {
@@ -169,6 +178,7 @@ public class CardBuilder {
 		int i = 0;
 		while (st.hasMoreTokens()) {
 			Card newCard = new Card(i, st.nextToken(), "");
+			newCard.setActiveInDB(true);
 			cardList.add(newCard);
 			i++;
 		}

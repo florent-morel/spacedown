@@ -40,7 +40,7 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 
 	// private Button mButtonAddTeam;
 
-	private CheckBox mImportCards;
+	private CheckBox mDebugMode;
 
 	boolean confirmNewGame = false;
 
@@ -98,8 +98,8 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 		mButtonNewGame.setOnClickListener(this);
 		mButtonContinueGame = (Button) findViewById(R.id.buttonContinueGame);
 		mButtonContinueGame.setOnClickListener(this);
-		mImportCards = (CheckBox) findViewById(R.id.checkBoxImportCards);
-		mImportCards.setOnClickListener(this);
+		mDebugMode = (CheckBox) findViewById(R.id.checkBoxDebugMode);
+		mDebugMode.setOnClickListener(this);
 
 		// mButtonAddTeam = (Button) findViewById(R.id.buttonAddTeam);
 		// mButtonAddTeam.setOnClickListener(this);
@@ -128,9 +128,9 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 			}
 
 			if (confirmation) {
-				Constants.RunMode runMode = Constants.RunMode.DEBUG;
-				if (mImportCards.isChecked()) {
-					runMode = Constants.RunMode.IMPORT_CSV;
+				Constants.RunMode runMode = Constants.RunMode.DB;
+				if (mDebugMode.isChecked()) {
+					runMode = Constants.RunMode.DEBUG;
 				}
 				startNewGame(runMode);
 			}
