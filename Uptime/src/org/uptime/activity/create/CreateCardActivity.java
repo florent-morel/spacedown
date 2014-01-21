@@ -74,7 +74,7 @@ public class CreateCardActivity extends Activity implements OnClickListener {
 		if (v.getId() == buttonCreateCard.getId()) {
 
 			String nameToFind = cardNameToFind.getText().toString();
-			String category = Constants.CATEGORY_CUSTOM;//cardCategory.getText().toString();
+			String category = cardCategory.getText().toString();
 
 			if (nameToFind != null && !nameToFind.isEmpty()) {
 				// Create the card and store in DB

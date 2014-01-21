@@ -13,6 +13,7 @@ import database.CardsDataSource;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.widget.Toast;
 
 public class Game {
 
@@ -57,6 +58,7 @@ public class Game {
 
 		initTeams(numberOfTeams);
 		initCards(runMode, numberOfCards);
+		
 		initRounds();
 	}
 
@@ -212,9 +214,8 @@ public class Game {
 		mCurrentCard = null;
 		mCurrentRound.saveCurrentTurn(mCurrentTeam);
 		mCurrentRound.setRoundActive(Boolean.FALSE);
+		
 		if (Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
-			this.setGameOver(Boolean.TRUE);
-
 			// Update database with list of discarded cards
 			if (mDiscardedCardsInDB != null && !mDiscardedCardsInDB.isEmpty()) {
 				for (Card discardedCard : mDiscardedCardsInDB) {
@@ -224,6 +225,11 @@ public class Game {
 				// Flush list of discarded cards
 				mDiscardedCardsInDB.clear();
 			}
+		}
+		
+		if (Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
+			this.setGameOver(Boolean.TRUE);
+
 		}
 	}
 
@@ -257,7 +263,7 @@ public class Game {
 		return mSavedRoundList;
 	}
 
-	public List<Card> getCardList() {
+	public List<Card> getCardListForGame() {
 		return mCardListForGame;
 	}
 
@@ -438,13 +444,13 @@ public class Game {
 		// of skipped cards
 		mCardsCurrentlyInPlay.remove(this.getCurrentCard());
 		this.getCurrentRound().getCurrentTurn().addSkippedCardToTurn(this.getCurrentCard());
-		
+
 		// If no more cards in play, check if some cards have been skipped and
 		// put them back in the game.
 		if (mCardsCurrentlyInPlay.isEmpty()) {
 			skippedCardsBackInGame();
 		}
-		
+
 		this.getNextCardToPlay(this.getCurrentCard(), true);
 	}
 

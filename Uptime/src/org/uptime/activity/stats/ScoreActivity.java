@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ScoreActivity extends Activity implements OnClickListener {
 
@@ -57,6 +58,13 @@ public class ScoreActivity extends Activity implements OnClickListener {
 
 		mGameManager = GameManager.getSingletonObject();
 		mGame = mGameManager.getGame();
+		
+		if (mGame.getCardListForGame() == null || mGame.getCardListForGame().isEmpty()) {
+			// No cards available for the game, display message and exit
+			Toast toast = Toast.makeText(this, String.format(mResources.getString(R.string.create_game_ko)), Toast.LENGTH_LONG);
+			toast.show();
+			finish();
+		}
 
 		this.refreshActivity();
 
@@ -130,7 +138,7 @@ public class ScoreActivity extends Activity implements OnClickListener {
 		StringBuilder builderRemaining = new StringBuilder();
 		if (remainingCards == Constants.VALUE_ZERO) {
 			// No more card to play => we'll start next round
-			builderRemaining.append(String.format(mResources.getString(R.string.card_remaining), mGame.getCardList().size()));
+			builderRemaining.append(String.format(mResources.getString(R.string.card_remaining), mGame.getCardListForGame().size()));
 		} else if (remainingCards == 1) {
 			builderRemaining.append(String.format(mResources.getString(R.string.card_remaining_last)));
 		} else {

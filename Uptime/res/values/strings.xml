@@ -6,6 +6,7 @@
     <string name="hello_world">Hello world!</string>
     
     <string name="create_game">Create game</string>
+    <string name="create_game_ko">Unable to start game, exiting.</string>
     <string name="replay_game">Replay game</string>
     <string name="continue_game">Continue game</string>
     
@@ -86,5 +87,9 @@
     <string name="db_display_card_list">Display cards in DB</string>
     <string name="db_filter_card_active">Display active cards</string>
     <string name="db_filter_confirm">Process</string>
+    
+    <string name="import_cards_keep_custom">Keep custom cards</string>
+    <string name="dialog_import_cards_ok">%1$d cards imported in database</string>
+    <string name="dialog_import_cards_ko">No card imported in database</string>
     
 </resources>

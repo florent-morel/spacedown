@@ -104,7 +104,7 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 		// mButtonAddTeam = (Button) findViewById(R.id.buttonAddTeam);
 		// mButtonAddTeam.setOnClickListener(this);
 
-		if (mGame == null || mGame.isGameOver()) {
+		if (mGame == null || mGame.isGameOver() || mGame.getCardListForGame() == null || mGame.getCardListForGame().isEmpty()) {
 			mButtonContinueGame.setVisibility(View.GONE);
 			mButtonNewGame.setVisibility(View.VISIBLE);
 		} else {

@@ -59,6 +59,10 @@
             android:label="@string/app_name" >
         </activity>
         <activity
+            android:name="org.uptime.activity.db.ImportCardsInDBActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name="org.uptime.activity.create.CreateCardActivity"
             android:label="@string/app_name" >
         </activity>

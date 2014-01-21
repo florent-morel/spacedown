@@ -4,12 +4,11 @@ package org.uptime;
 import org.uptime.activity.create.CreateCardActivity;
 import org.uptime.activity.create.CreateGameActivity;
 import org.uptime.activity.db.FilterDBCardsActivity;
+import org.uptime.activity.db.ImportCardsInDBActivity;
 import org.uptime.engine.Constants;
-import org.uptime.engine.cards.build.CardBuilder;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -43,7 +42,6 @@ public class UpTime extends Activity implements OnClickListener {
 
 //	private GameManager mGameManager;
 
-	private Resources mResources;
 	private Button mButtonNewGame;
 	private Button mButtonCreateCard;
 	private Button mButtonDBListCard;
@@ -55,7 +53,6 @@ public class UpTime extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		mResources = getResources();
 
 		mButtonNewGame = (Button) findViewById(R.id.buttonNewGame);
 		mButtonNewGame.setOnClickListener(this);
@@ -176,8 +173,8 @@ public class UpTime extends Activity implements OnClickListener {
 			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 		}
 		else if (v.getId() == mButtonImportCardsInDB.getId()) {
-			CardBuilder cardBuilder = new CardBuilder(mResources, this);
-			cardBuilder.importHardCodedListToDB();
+			Intent intent = new Intent(this, ImportCardsInDBActivity.class);
+			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 		}
 		
 
