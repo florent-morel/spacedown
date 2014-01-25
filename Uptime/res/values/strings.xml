@@ -62,6 +62,8 @@
     <string name="stats_end_round">Finish Round %1$d</string>
     <string name="stats_end_round_question">Finish Round %1$d?</string>
     <string name="stats_card_current_turn">No card found</string>
+
+    <!-- DIALOGS -->
     <string name="dialog_import_file_not_found">No file found, taking hard-coded list</string>
     <string name="dialog_overwrite_current_game">This will cancel current game</string>
     <string name="dialog_overwrite_current_game_confirm">Do you confirm?</string>
@@ -79,6 +81,8 @@
     <string name="menu_action_cancel_found_settings">Cancel previous found card</string>
     <string name="menu_game_options">Game options</string>
     <string name="menu_start_new_game">Start a new game</string>
+
+    <!-- CREATE CARD -->
     <string name="create_card_title">Create a new card</string>
     <string name="create_card_name">Name to find:</string>
     <string name="create_card_name_hint">Celebrity, place, event &#8230;</string>
@@ -123,5 +127,10 @@
     
     <string name="build_date">Build date: %1$s</string>
     <string name="about_dialog_message">Open source card game for Android.\n\nSource code:\nhttp://somesite.org</string>
+    
+    <string name="menu_action_delete_card">Delete card</string>
+    <string name="menu_action_update_card">Modify card</string>
+    <string name="db_cancel_card_question">Card will be deleted</string>
+    
 
 </resources>

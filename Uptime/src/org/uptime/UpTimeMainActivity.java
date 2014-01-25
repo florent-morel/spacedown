@@ -363,7 +363,6 @@ public class UpTimeMainActivity extends Activity implements OnClickListener {
 			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
 
-				importDatabaseFileName = importFiles[whichButton];
 				mainHandler.post(restoreDatabaseRunnable);
 
 				dialog.dismiss();

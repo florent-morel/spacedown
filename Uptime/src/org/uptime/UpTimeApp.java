@@ -86,7 +86,7 @@ public class UpTimeApp extends Application {
 		appDir = Environment.getExternalStorageDirectory().getAbsolutePath() + Constants.SLASH + Constants.PATH_APP_NAME;
 
 		// database helper
-		dbHelper = new DBHelper(this);
+		dbHelper = DBHelper.getInstance(this);
 
 		// SQLiteDatabase
 		try {
@@ -192,7 +192,7 @@ public class UpTimeApp extends Application {
 	 * 
 	 */
 	public void setDatabase() {
-		dbHelper = new DBHelper(this);
+		dbHelper = DBHelper.getInstance(this);
 		db = dbHelper.getWritableDatabase();
 	}
 

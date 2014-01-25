@@ -9,6 +9,11 @@ import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
 
+	/**
+	 * Singleton instance.
+	 */
+	private static DBHelper sInstance;
+
 	public static final String TABLE_CARDS = "cards";
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_NAME = "name";
@@ -23,7 +28,18 @@ public class DBHelper extends SQLiteOpenHelper {
 			+ " integer primary key autoincrement, " + COLUMN_NAME + " text not null, " + COLUMN_CATEGORY + " text, "
 			+ COLUMN_URL + " text, " + COLUMN_ACTIVE + " text" + ");";
 
-	public DBHelper(Context context) {
+	public static DBHelper getInstance(Context context) {
+
+		// Use the application context, which will ensure that you
+		// don't accidentally leak an Activity's context.
+		// See this article for more information: http://bit.ly/6LRzfx
+		if (sInstance == null) {
+			sInstance = new DBHelper(context.getApplicationContext());
+		}
+		return sInstance;
+	}
+
+	private DBHelper(Context context) {
 		super(context, Constants.DATABASE_FILE, null, DATABASE_VERSION);
 	}
 
@@ -39,7 +55,7 @@ public class DBHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_CARDS);
 		onCreate(db);
 	}
-	
+
 	public void dropTable(SQLiteDatabase db, String table) {
 		db.execSQL("DROP TABLE IF EXISTS " + table);
 		onCreate(db);

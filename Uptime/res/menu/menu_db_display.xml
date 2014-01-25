@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/settingsMenuItem"
+        android:title="@string/settings"/>
+    <item
+        android:id="@+id/backupMenuItem"
+        android:title="@string/backup_db"/>
+    <item
+        android:id="@+id/restoreMenuItem"
+        android:title="@string/restore_db"/>
+
+</menu>
