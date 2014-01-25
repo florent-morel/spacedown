@@ -3,6 +3,8 @@ package org.uptime;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Game;
 
+import database.CardsDataSource;
+
 import android.content.Context;
 import android.content.res.Resources;
 
@@ -35,8 +37,8 @@ public class GameManager {
 	}
 
 	public void startNewGame(Constants.RunMode runMode, Integer numberOfTeams, Integer numberOfCards,
-			Resources resources, Context context) {
-		mGame = new Game(runMode, numberOfTeams, numberOfCards, resources, context);
+			Resources resources, Context context, CardsDataSource datasource) {
+		mGame = new Game(runMode, numberOfTeams, numberOfCards, resources, context, datasource);
 	}
 
 	public Game initNewGame() {

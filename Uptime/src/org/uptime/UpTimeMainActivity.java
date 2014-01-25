@@ -38,7 +38,12 @@ import android.widget.Button;
  * @author florent
  *
  */
-public class UpTime extends Activity implements OnClickListener {
+public class UpTimeMainActivity extends Activity implements OnClickListener {
+
+	/**
+	 * Reference to Application object
+	 */
+	private UpTimeApp app;
 
 //	private GameManager mGameManager;
 
@@ -52,6 +57,10 @@ public class UpTime extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// reference to application object
+		app = ((UpTimeApp) getApplication());
+		
 		setContentView(R.layout.activity_main);
 
 		mButtonNewGame = (Button) findViewById(R.id.buttonNewGame);

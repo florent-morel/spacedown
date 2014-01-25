@@ -2,9 +2,12 @@ package org.uptime.activity.create;
 
 import org.uptime.GameManager;
 import org.uptime.R;
+import org.uptime.UpTimeApp;
 import org.uptime.activity.stats.ScoreActivity;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Game;
+
+import database.CardsDataSource;
 
 import android.app.Activity;
 import android.content.Context;
@@ -19,6 +22,8 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 
 public class CreateGameActivity extends Activity implements OnClickListener {
+	
+	private UpTimeApp app;
 
 	private static GameManager mGameManager;
 
@@ -47,6 +52,8 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		app = ((UpTimeApp) getApplication());
 		mResources = getResources();
 		context = getApplicationContext();
 		setContentView(R.layout.activity_create_game);
@@ -146,7 +153,7 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 		String numberOfCards = spinnerNumberOfCards.getSelectedItem().toString();
 
 		mGameManager.startNewGame(runMode, Integer.valueOf(numberOfTeams), Integer.valueOf(numberOfCards), mResources,
-				context);
+				context, new CardsDataSource(app.getDatabase(), app.getDbHelper()));
 		mGame = mGameManager.getGame();
 		Intent intent = new Intent(this, ScoreActivity.class);
 		startActivityForResult(intent, Constants.GAME_NEW);

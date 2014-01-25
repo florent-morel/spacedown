@@ -1,6 +1,15 @@
 package org.uptime.engine;
 
 public interface Constants {
+	
+	public static final String TAG = "UpTime";
+
+	public static final String APP_NAME = "UpTime";
+	
+	public static final String PATH_DATABASE = "database";
+	public static final String PATH_BACKUP = "backup";
+	public static final String PATH_LOGS = "logs";
+	public static final String PATH_DEBUG = "debug";
 
 	static final int ROUND_FIRST = 1;
 
@@ -27,6 +36,8 @@ public interface Constants {
 	static final String SPACE = " ";
 
 	static final String GTH = ">";
+
+	static final String SLASH = "/";
 
 	static final int RESULT_OK = -1;
 

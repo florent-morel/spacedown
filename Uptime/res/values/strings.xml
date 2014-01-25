@@ -92,4 +92,9 @@
     <string name="dialog_import_cards_ok">%1$d cards imported in database</string>
     <string name="dialog_import_cards_ko">No card imported in database</string>
     
+    
+    
+    <string name="memory_card_not_available">Memory card not available</string>
+    <string name="memory_card_not_writable">No write access to memory card</string>
+    
 </resources>

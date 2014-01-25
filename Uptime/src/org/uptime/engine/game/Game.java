@@ -9,11 +9,9 @@ import java.util.Map;
 import org.uptime.engine.Constants;
 import org.uptime.engine.cards.build.CardBuilder;
 
-import database.CardsDataSource;
-
 import android.content.Context;
 import android.content.res.Resources;
-import android.widget.Toast;
+import database.CardsDataSource;
 
 public class Game {
 
@@ -46,13 +44,12 @@ public class Game {
 	}
 
 	public Game(Constants.RunMode runMode, Integer numberOfTeams, Integer numberOfCards, Resources resources,
-			Context context) {
+			Context context, CardsDataSource data) {
 		super();
 
-		cardBuilder = new CardBuilder(resources, context);
-
-		datasource = new CardsDataSource(context);
-		datasource.open();
+		datasource = data;
+		
+		cardBuilder = new CardBuilder(resources, context, datasource);
 
 		mDiscardedCardsInDB = new ArrayList<Card>();
 

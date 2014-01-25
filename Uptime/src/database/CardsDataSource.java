@@ -15,17 +15,14 @@ import android.database.sqlite.SQLiteDatabase;
 public class CardsDataSource {
 
 	// Database fields
-	private SQLiteDatabase database;
+	private SQLiteDatabase db;
 	private DBHelper dbHelper;
 	private String[] allColumns = { DBHelper.COLUMN_ID, DBHelper.COLUMN_NAME, DBHelper.COLUMN_CATEGORY,
 			DBHelper.COLUMN_URL, DBHelper.COLUMN_ACTIVE };
 
-	public CardsDataSource(Context context) {
-		dbHelper = new DBHelper(context);
-	}
-
-	public void open() throws SQLException {
-		database = dbHelper.getWritableDatabase();
+	public CardsDataSource(SQLiteDatabase database, DBHelper databaseHelper) {
+		dbHelper = databaseHelper;
+		db = database;
 	}
 
 	public void close() {
@@ -49,7 +46,7 @@ public class CardsDataSource {
 		values.put(DBHelper.COLUMN_URL, card.getUrl());
 		values.put(DBHelper.COLUMN_ACTIVE, Boolean.valueOf(card.isActiveInDB()).toString());
 
-		long insertId = database.insert(DBHelper.TABLE_CARDS, null, values);
+		long insertId = db.insert(DBHelper.TABLE_CARDS, null, values);
 		Card newCard = getCard(insertId);
 		return newCard;
 	}
@@ -62,13 +59,13 @@ public class CardsDataSource {
 		values.put(DBHelper.COLUMN_ACTIVE, Boolean.valueOf(card.isActiveInDB()).toString());
 
 		Integer id = card.getId();
-		database.update(DBHelper.TABLE_CARDS, values, DBHelper.COLUMN_ID + "=" + id, null);
+		db.update(DBHelper.TABLE_CARDS, values, DBHelper.COLUMN_ID + "=" + id, null);
 		Card newCard = getCard(id);
 		return newCard;
 	}
 
 	public Card getCard(long insertId) {
-		Cursor cursor = database.query(DBHelper.TABLE_CARDS, allColumns, DBHelper.COLUMN_ID + " = " + insertId, null,
+		Cursor cursor = db.query(DBHelper.TABLE_CARDS, allColumns, DBHelper.COLUMN_ID + " = " + insertId, null,
 				null, null, null);
 		cursor.moveToFirst();
 		Card card = cursorToCard(cursor);
@@ -79,13 +76,13 @@ public class CardsDataSource {
 	public void deleteCard(Card card) {
 		long id = card.getId();
 		System.out.println("Card deleted with id: " + id);
-		database.delete(DBHelper.TABLE_CARDS, DBHelper.COLUMN_ID + " = " + id, null);
+		db.delete(DBHelper.TABLE_CARDS, DBHelper.COLUMN_ID + " = " + id, null);
 	}
 
 	public List<Card> getAllCards(Boolean isActive) {
 		List<Card> cards = new ArrayList<Card>();
 
-		Cursor cursor = database.query(DBHelper.TABLE_CARDS, allColumns,
+		Cursor cursor = db.query(DBHelper.TABLE_CARDS, allColumns,
 				DBHelper.COLUMN_ACTIVE + " = '" + isActive.toString() + "'", null, null, null, null);
 
 		cursor.moveToFirst();
@@ -102,7 +99,7 @@ public class CardsDataSource {
 	public List<Card> getAllCustomCards() {
 		List<Card> cards = new ArrayList<Card>();
 
-		Cursor cursor = database.query(DBHelper.TABLE_CARDS, allColumns,
+		Cursor cursor = db.query(DBHelper.TABLE_CARDS, allColumns,
 				DBHelper.COLUMN_CATEGORY + " = '" + Constants.CATEGORY_CUSTOM + "'", null, null, null, null);
 
 		cursor.moveToFirst();
@@ -130,6 +127,6 @@ public class CardsDataSource {
 	 * Warning! Will drop current card table.
 	 */
 	public void dropCardTable() {
-		dbHelper.dropTable(database, DBHelper.TABLE_CARDS);
+		dbHelper.dropTable(db, DBHelper.TABLE_CARDS);
 	}
 }

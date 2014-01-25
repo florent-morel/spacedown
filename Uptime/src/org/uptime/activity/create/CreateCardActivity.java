@@ -1,6 +1,7 @@
 package org.uptime.activity.create;
 
 import org.uptime.R;
+import org.uptime.UpTimeApp;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Card;
 
@@ -17,6 +18,8 @@ import android.widget.Toast;
 import database.CardsDataSource;
 
 public class CreateCardActivity extends Activity implements OnClickListener {
+	
+	private UpTimeApp app;
 
 	private Resources mResources;
 
@@ -35,6 +38,11 @@ public class CreateCardActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// reference to application object
+		app = ((UpTimeApp) getApplication());
+		
+		
 		mResources = getResources();
 		setContentView(R.layout.activity_create_card);
 		setTitle(R.string.create_card_title);
@@ -42,8 +50,7 @@ public class CreateCardActivity extends Activity implements OnClickListener {
 		this.initTexts();
 		this.initButtons();
 
-		datasource = new CardsDataSource(this);
-		datasource.open();
+		datasource = new CardsDataSource(app.getDatabase(), app.getDbHelper());
 
 		// TODO: Prefill with existing game values if any
 		int intentCardId = this.getIntent().getIntExtra(Constants.CARD_ID, -1);

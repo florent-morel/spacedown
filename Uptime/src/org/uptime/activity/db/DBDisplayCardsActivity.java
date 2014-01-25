@@ -3,6 +3,7 @@ package org.uptime.activity.db;
 import java.util.List;
 
 import org.uptime.R;
+import org.uptime.UpTimeApp;
 import org.uptime.activity.create.CreateCardActivity;
 import org.uptime.adapter.DBCardAdapter;
 import org.uptime.engine.Constants;
@@ -21,6 +22,8 @@ import android.widget.TextView;
 import database.CardsDataSource;
 
 public class DBDisplayCardsActivity extends Activity implements OnClickListener {
+	
+	private UpTimeApp app;
 
 	private Resources mResources;
 
@@ -34,11 +37,14 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		app = ((UpTimeApp) getApplication());
+		
 		setContentView(R.layout.activity_display_db_cards);
 		mResources = getResources();
 
-		datasource = new CardsDataSource(this);
-		datasource.open();
+		datasource = new CardsDataSource(app.getDatabase(), app.getDbHelper());
+		
 		this.refreshActivity();
 
 		if (dbCardList != null) {
