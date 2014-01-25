@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- NOT TRANSLATABLE -->
+    <string name="main_app_title">UpTime</string>
     <string name="app_name">Uptime</string>
+    <string name="developer">fmorel</string>
+    <string name="company">Apps</string>
+    <string name="app_build_date">2014-01-25</string>
+    <string name="app_url">none</string>
+    <string name="blog_url">none</string>
+    <string name="market_url">https://play.google.com/store/apps/details?id=org.uptime</string>
+    <string name="source_url">http://somesite</string>
+    <string name="default_text">xxx</string>
+    <string name="zero">0</string>
+    <string name="acknowledgements">\n\nAcknowledgements:\n\nMany thanks to our translators:\nMark (German),\nDavid &amp; Jordi (Spanish)</string>
+    <!-- NOT TRANSLATABLE END -->
+    
+    <string name="ver">v.</string>
+    <string name="ok">OK</string>
+    <string name="and">and</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    
     <string name="create_game">Create game</string>
     <string name="create_game_ko">Unable to start game, exiting.</string>
     <string name="replay_game">Replay game</string>
     <string name="continue_game">Continue game</string>
-    
     <string name="card_current_round">Round #: %1$d</string>
     <string name="card_team">Current team: %1$s</string>
     <string name="card_team_turn_score">Turn score: %1$d</string>
@@ -20,7 +38,6 @@
     <string name="card_found">Found</string>
     <string name="card_skip">Skip</string>
     <string name="card_end_turn">End turn</string>
-    
     <string name="score_next_round">Next Round</string>
     <string name="score_continue_round">Continue Round</string>
     <string name="score_title">Score per team</string>
@@ -28,7 +45,6 @@
     <string name="score_round_nothing">No Round yet</string>
     <string name="score_round_finished">Round %1$d just finished, next team: %2$s</string>
     <string name="score_round_active">Round %1$d still active, next team: %2$s</string>
-    
     <string name="create_title">Set your game settings</string>
     <string name="create_teams">Number of teams:</string>
     <string name="create_team_name">Team name:</string>
@@ -38,7 +54,6 @@
     <string name="button_create_team_name">Create team</string>
     <string name="dialog_create_team_confirm">Team %1$s added to game.</string>
     <string name="dialog_create_team_name_invalid">Invalid name.</string>
-    
     <string name="stats_title">Stats for team: %1$s</string>
     <string name="stats_round">Round %1$d: %2$d card(s) found</string>
     <string name="stats_card_number">%1$d</string>
@@ -47,13 +62,11 @@
     <string name="stats_end_round">Finish Round %1$d</string>
     <string name="stats_end_round_question">Finish Round %1$d?</string>
     <string name="stats_card_current_turn">No card found</string>
-    
     <string name="dialog_import_file_not_found">No file found, taking hard-coded list</string>
     <string name="dialog_overwrite_current_game">This will cancel current game</string>
     <string name="dialog_overwrite_current_game_confirm">Do you confirm?</string>
     <string name="dialog_confirm_yes">Yes</string>
     <string name="dialog_confirm_no">No</string>
-    
     <string name="dialog_cancel_card_not_found">No card was cancelled</string>
     <string name="dialog_cancel_card_current_turn">Last card cancelled</string>
     <string name="dialog_cancel_card_previous_turn">Card cancelled, back to previous turn</string>
@@ -62,13 +75,10 @@
     <string name="dialog_create_card_ok">Card has been created with id: %1$d</string>
     <string name="dialog_update_card_ok">Card %1$d has been updated</string>
     <string name="dialog_create_card_ko">Missing card information</string>
-
     <string name="menu_action_change_card">Replace card</string>
     <string name="menu_action_cancel_found_settings">Cancel previous found card</string>
-
     <string name="menu_game_options">Game options</string>
     <string name="menu_start_new_game">Start a new game</string>
-    
     <string name="create_card_title">Create a new card</string>
     <string name="create_card_name">Name to find:</string>
     <string name="create_card_name_hint">Celebrity, place, event &#8230;</string>
@@ -76,9 +86,7 @@
     <string name="create_card_category_custom">Custom</string>
     <string name="create_card_confirm">Confirm</string>
     <string name="create_card_active">Card is active</string>
-    
     <string name="import_cards">Import cards in DB</string>
-    
     <string name="db_number_cards">Number of cards in DB: %1$d</string>
     <string name="db_number_cards_inactive">Number of inactive cards in DB: %1$d</string>
     <string name="db_no_card">No card in DB</string>
@@ -87,14 +95,33 @@
     <string name="db_display_card_list">Display cards in DB</string>
     <string name="db_filter_card_active">Display active cards</string>
     <string name="db_filter_confirm">Process</string>
-    
     <string name="import_cards_keep_custom">Keep custom cards</string>
     <string name="dialog_import_cards_ok">%1$d cards imported in database</string>
     <string name="dialog_import_cards_ko">No card imported in database</string>
-    
-    
-    
     <string name="memory_card_not_available">Memory card not available</string>
     <string name="memory_card_not_writable">No write access to memory card</string>
+
+    <!-- BACKUP & RESTORE -->
+    <string name="backup_db">Backup DB</string>
+    <string name="restore_db">Restore DB</string>
+    <string name="backup_completed">Application database copied to:</string>
+    <string name="backup_error">An error occurred copying application database: %1$s</string>
+    <string name="backup_error_source_not_found">Source db file not found</string>
+    <string name="restore_error">An error occurred restoring application database</string>
+    <string name="restore_file_error">The file being opened is not an SQLite database: %1$s</string>
+    <string name="restore_db_version_conflict">The database being restored is not compatible with the current version</string>
+    <string name="restore_completed">Database restored</string>
+    <string name="source_folder_empty">The source folder is empty</string>
+    <string name="import_completed">Import completed</string>
+    <string name="export_completed">Export completed</string>
+    <string name="select_file">Select file</string>
+
+    <!-- MENU -->
+    <string name="settings">Settings</string>
+    <string name="quick_help_title">Quick help</string>
+    <string name="about">About</string>
     
+    <string name="build_date">Build date: %1$s</string>
+    <string name="about_dialog_message">Open source card game for Android.\n\nSource code:\nhttp://somesite.org</string>
+
 </resources>

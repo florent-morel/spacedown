@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 
 import org.uptime.R;
 import org.uptime.UpTimeApp;
+import org.uptime.database.CardsDataSource;
 import org.uptime.engine.cards.build.CardBuilder;
 import org.uptime.engine.game.Card;
 
@@ -18,7 +19,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
-import database.CardsDataSource;
 
 public class ImportCardsInDBActivity extends Activity implements OnClickListener {
 

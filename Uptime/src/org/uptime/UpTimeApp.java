@@ -2,6 +2,7 @@ package org.uptime;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 
+import org.uptime.database.DBHelper;
 import org.uptime.engine.Constants;
 
 import utils.AppLog;
@@ -10,13 +11,14 @@ import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Environment;
 //import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
-import database.DBHelper;
 
 public class UpTimeApp extends Application {
 
@@ -81,7 +83,7 @@ public class UpTimeApp extends Application {
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 		// set application external storage folder
-		appDir = Environment.getExternalStorageDirectory().getAbsolutePath() + Constants.SLASH + Constants.APP_NAME;
+		appDir = Environment.getExternalStorageDirectory().getAbsolutePath() + Constants.SLASH + Constants.PATH_APP_NAME;
 
 		// database helper
 		dbHelper = new DBHelper(this);
@@ -96,9 +98,9 @@ public class UpTimeApp extends Application {
 
 		setExternalStorageState();
 
-//		dataDir = Environment.getDataDirectory().getAbsolutePath() + "/org.uptime/databases";
+		dataDir = Environment.getDataDirectory().getAbsolutePath() + "/org.uptime/databases";
 		// TODO: NEW FEATURE: app database file in external memory
-		 dataDir = appDir + Constants.SLASH + Constants.PATH_DATABASE;
+//		 dataDir = appDir + Constants.SLASH + Constants.PATH_DATABASE;
 
 		// create all folders required by the application on external storage
 		if (getExternalStorageAvailable() && getExternalStorageWriteable()) {
@@ -167,6 +169,23 @@ public class UpTimeApp extends Application {
 
 	public SQLiteDatabase getDatabase() {
 		return db;
+	}
+
+	/**
+	 * Get application version name
+	 * 
+	 * @param context
+	 */
+	public static String getVersionName(Context context) {
+
+		PackageInfo packageInfo;
+		try {
+			packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			return packageInfo.versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return "";
+		}
 	}
 
 	/**

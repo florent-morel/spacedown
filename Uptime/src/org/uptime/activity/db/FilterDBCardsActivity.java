@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.uptime.R;
 import org.uptime.UpTimeApp;
+import org.uptime.database.CardsDataSource;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Card;
 
@@ -16,7 +17,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import database.CardsDataSource;
 
 public class FilterDBCardsActivity extends Activity implements OnClickListener {
 	

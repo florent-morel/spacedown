@@ -1,9 +1,9 @@
 package org.uptime;
 
+import org.uptime.database.CardsDataSource;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Game;
 
-import database.CardsDataSource;
 
 import android.content.Context;
 import android.content.res.Resources;

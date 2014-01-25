@@ -1,9 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:id="@+id/settingsMenuItem"
+        android:title="@string/settings"/>
+    <item
+        android:id="@+id/backupMenuItem"
+        android:title="@string/backup_db"/>
+    <item
+        android:id="@+id/restoreMenuItem"
+        android:title="@string/restore_db"/>
+    <item
+        android:id="@+id/quickHelp"
+        android:title="@string/quick_help_title"/>
+    <item
+        android:id="@+id/aboutMenuItem"
+        android:title="@string/about"/>
 
 </menu>

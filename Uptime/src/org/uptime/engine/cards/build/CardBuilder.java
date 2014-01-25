@@ -9,13 +9,13 @@ import java.util.StringTokenizer;
 
 import org.uptime.R;
 import org.uptime.UpTimeApp;
+import org.uptime.database.CardsDataSource;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Card;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.widget.Toast;
-import database.CardsDataSource;
 
 public class CardBuilder {
 

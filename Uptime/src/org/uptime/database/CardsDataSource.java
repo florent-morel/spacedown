@@ -1,4 +1,4 @@
-package database;
+package org.uptime.database;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,7 @@ import org.uptime.engine.Constants;
 import org.uptime.engine.game.Card;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 public class CardsDataSource {

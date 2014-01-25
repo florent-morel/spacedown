@@ -4,10 +4,10 @@ import org.uptime.GameManager;
 import org.uptime.R;
 import org.uptime.UpTimeApp;
 import org.uptime.activity.stats.ScoreActivity;
+import org.uptime.database.CardsDataSource;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Game;
 
-import database.CardsDataSource;
 
 import android.app.Activity;
 import android.content.Context;

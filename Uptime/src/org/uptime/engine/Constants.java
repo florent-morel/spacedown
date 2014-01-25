@@ -1,15 +1,19 @@
 package org.uptime.engine;
 
 public interface Constants {
-	
-	public static final String TAG = "UpTime";
 
-	public static final String APP_NAME = "UpTime";
-	
-	public static final String PATH_DATABASE = "database";
-	public static final String PATH_BACKUP = "backup";
-	public static final String PATH_LOGS = "logs";
-	public static final String PATH_DEBUG = "debug";
+	static final String TAG = "UpTime";
+
+	static final String APP_NAME = "UpTime";
+
+	static final String DATABASE_FILE = APP_NAME + ".db";
+
+	// Store as hidden files just in case
+	static final String PATH_APP_NAME = ".UpTime";
+	static final String PATH_DATABASE = "database";
+	static final String PATH_BACKUP = "backup";
+	static final String PATH_LOGS = "logs";
+	static final String PATH_DEBUG = "debug";
 
 	static final int ROUND_FIRST = 1;
 
@@ -38,6 +42,8 @@ public interface Constants {
 	static final String GTH = ">";
 
 	static final String SLASH = "/";
+
+	static final String UNDERSCORE = "_";
 
 	static final int RESULT_OK = -1;
 
@@ -85,9 +91,13 @@ public interface Constants {
 
 	static final String LEFT = "left";
 
-	static enum RunMode {DB, DEBUG, IMPORT_CSV, HARDCODE};
+	static enum RunMode {
+		DB, DEBUG, IMPORT_CSV, HARDCODE
+	};
 
-	static enum CancelCardMode {NO_FOUND_CARD, CURRENT_TURN, PREVIOUS_TURN, PREVIOUS_ROUND};
+	static enum CancelCardMode {
+		NO_FOUND_CARD, CURRENT_TURN, PREVIOUS_TURN, PREVIOUS_ROUND
+	};
 
 	static final int NUMBER_OF_CARDS = 40;
 
@@ -108,7 +118,7 @@ public interface Constants {
 	static final String CARD_ACTIVE = "CARD_ACTIVE";
 
 	static final Integer VALUE_ZERO = 0;
-	
+
 	static final Integer VALUE_ONE = 1;
 
 	static final String CATEGORY_CUSTOM = "Custom";

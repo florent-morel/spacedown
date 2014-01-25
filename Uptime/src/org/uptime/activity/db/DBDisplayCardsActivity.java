@@ -6,6 +6,7 @@ import org.uptime.R;
 import org.uptime.UpTimeApp;
 import org.uptime.activity.create.CreateCardActivity;
 import org.uptime.adapter.DBCardAdapter;
+import org.uptime.database.CardsDataSource;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Card;
 
@@ -19,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import database.CardsDataSource;
 
 public class DBDisplayCardsActivity extends Activity implements OnClickListener {
 	

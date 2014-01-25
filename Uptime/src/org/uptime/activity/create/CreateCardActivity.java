@@ -2,6 +2,7 @@ package org.uptime.activity.create;
 
 import org.uptime.R;
 import org.uptime.UpTimeApp;
+import org.uptime.database.CardsDataSource;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Card;
 
@@ -15,7 +16,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import database.CardsDataSource;
 
 public class CreateCardActivity extends Activity implements OnClickListener {
 	
