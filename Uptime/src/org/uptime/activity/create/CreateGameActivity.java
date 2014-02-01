@@ -90,7 +90,7 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 		spinnerNumberOfCards = (Spinner) findViewById(R.id.spinnerNumberOfCards);
 		ArrayAdapter<CharSequence> adapterNumberOfCards = ArrayAdapter.createFromResource(this,
 				R.array.array_number_of_cards, android.R.layout.simple_spinner_item);
-		adapterNumberOfTeams.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		adapterNumberOfCards.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerNumberOfCards.setAdapter(adapterNumberOfCards);
 	}
 

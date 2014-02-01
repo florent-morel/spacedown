@@ -38,7 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * LaCrise, a score handling application.
+ * UpTime, a card game application.
  * 
  * Copyright (C) 2014 Florent Morel.
  * 
