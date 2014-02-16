@@ -171,7 +171,7 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 	private void refreshListCards() {
 		boolean displayActiveCards = this.getIntent().getBooleanExtra(Constants.CARD_ACTIVE, Boolean.TRUE);
 		List<Card> listCards = datasource.getAllCards(displayActiveCards);
-		if (listCards != null && !listCards.isEmpty() && listCards.size() < 25) {
+		if (listCards != null && !listCards.isEmpty() && listCards.size() < 200) {
 			dbCardList = (ListView) findViewById(R.id.dbCardList);
 			DBCardAdapter dbCardAdapter = new DBCardAdapter(this, R.layout.layout_stats_card_row);
 			for (Card card : listCards) {
