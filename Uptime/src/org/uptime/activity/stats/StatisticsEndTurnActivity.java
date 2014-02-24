@@ -65,6 +65,7 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 					game.findCard(card, game.getCurrentRound().getCurrentTurn(), false);
 				}
 				
+				initButtons();
 				refreshList();
 			}
 		});
