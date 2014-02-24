@@ -13,7 +13,7 @@
     <string name="source_url">http://somesite</string>
     <string name="default_text">xxx</string>
     <string name="zero">0</string>
-    <string name="acknowledgements">\n\nAcknowledgements:\n\nMany thanks to our translators:\nMark (German),\nDavid &amp; Jordi (Spanish)</string>
+    <string name="acknowledgements">\n\nAcknowledgements:\n\nMany thanks to</string>
     <!-- NOT TRANSLATABLE END -->
     
     <string name="ver">v.</string>

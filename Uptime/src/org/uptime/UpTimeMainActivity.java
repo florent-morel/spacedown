@@ -189,12 +189,12 @@ public class UpTimeMainActivity extends Activity implements OnClickListener {
 
 		case R.id.backupMenuItem:
 
-			backupDatabase();
+			app.backupDatabase();
 			return true;
 
 		case R.id.restoreMenuItem:
 
-			restoreDatabase();
+			app.restoreDatabase(this);
 			return true;
 
 			// case R.id.scheduledRecordingMenuItem:
@@ -285,178 +285,178 @@ public class UpTimeMainActivity extends Activity implements OnClickListener {
 	/**
 	 * Copy application database to sd card
 	 */
-	private void backupDatabase() {
-
-		try {
-
-			File data = Environment.getDataDirectory();
-
-			if (app.getExternalStorageWriteable()) {
-
-				String currentDBPath = app.getDataDir() + Constants.SLASH + Constants.DATABASE_FILE;
-
-				String dateStr = (String) DateFormat.format("yyyyMMdd_kkmmss", new Date());
-
-				File currentDB = new File(data, currentDBPath);
-				File backupDB = new File(app.getAppDir() + Constants.SLASH + Constants.PATH_BACKUP + Constants.SLASH
-						+ dateStr + Constants.UNDERSCORE + Constants.DATABASE_FILE);
-
-				if (currentDB.exists()) {
-
-					FileInputStream fis = new FileInputStream(currentDB);
-					FileOutputStream fos = new FileOutputStream(backupDB);
-
-					FileChannel src = fis.getChannel();
-					FileChannel dst = fos.getChannel();
-					dst.transferFrom(src, 0, src.size());
-
-					src.close();
-					dst.close();
-					fis.close();
-					fos.close();
-
-					Toast.makeText(UpTimeMainActivity.this,
-							getString(R.string.backup_completed) + Constants.SPACE + backupDB.getPath(),
-							Toast.LENGTH_LONG).show();
-
-				} else {
-					Toast.makeText(
-							UpTimeMainActivity.this,
-							String.format(mResources.getString(R.string.backup_error),
-									mResources.getString(R.string.backup_error_source_not_found)), Toast.LENGTH_LONG)
-							.show();
-				}
-
-			}
-		}
-
-		catch (Exception e) {
-
-			Log.e(Constants.TAG, e.getMessage());
-
-			Toast.makeText(UpTimeMainActivity.this,
-					getString(R.string.backup_error) + Constants.SPACE + e.getMessage(), Toast.LENGTH_LONG).show();
-
-		}
-
-	}
+//	private void backupDatabase() {
+//
+//		try {
+//
+//			File data = Environment.getDataDirectory();
+//
+//			if (app.getExternalStorageWriteable()) {
+//
+//				String currentDBPath = app.getDataDir() + Constants.SLASH + Constants.DATABASE_FILE;
+//
+//				String dateStr = (String) DateFormat.format("yyyyMMdd_kkmmss", new Date());
+//
+//				File currentDB = new File(data, currentDBPath);
+//				File backupDB = new File(app.getAppDir() + Constants.SLASH + Constants.PATH_BACKUP + Constants.SLASH
+//						+ dateStr + Constants.UNDERSCORE + Constants.DATABASE_FILE);
+//
+//				if (currentDB.exists()) {
+//
+//					FileInputStream fis = new FileInputStream(currentDB);
+//					FileOutputStream fos = new FileOutputStream(backupDB);
+//
+//					FileChannel src = fis.getChannel();
+//					FileChannel dst = fos.getChannel();
+//					dst.transferFrom(src, 0, src.size());
+//
+//					src.close();
+//					dst.close();
+//					fis.close();
+//					fos.close();
+//
+//					Toast.makeText(UpTimeMainActivity.this,
+//							getString(R.string.backup_completed) + Constants.SPACE + backupDB.getPath(),
+//							Toast.LENGTH_LONG).show();
+//
+//				} else {
+//					Toast.makeText(
+//							UpTimeMainActivity.this,
+//							String.format(mResources.getString(R.string.backup_error),
+//									mResources.getString(R.string.backup_error_source_not_found)), Toast.LENGTH_LONG)
+//							.show();
+//				}
+//
+//			}
+//		}
+//
+//		catch (Exception e) {
+//
+//			Log.e(Constants.TAG, e.getMessage());
+//
+//			Toast.makeText(UpTimeMainActivity.this,
+//					getString(R.string.backup_error) + Constants.SPACE + e.getMessage(), Toast.LENGTH_LONG).show();
+//
+//		}
+//
+//	}
 
 	/**
 	 * Restoring database from previously saved copy
 	 */
-	private void restoreDatabase() {
-
-		// show "select a file" dialog
-		File importFolder = new File(app.getAppDir() + Constants.SLASH + Constants.PATH_BACKUP + Constants.SLASH);
-		final String importFiles[] = importFolder.list();
-
-		if (importFiles == null || importFiles.length == 0) {
-			Toast.makeText(UpTimeMainActivity.this, R.string.source_folder_empty, Toast.LENGTH_SHORT).show();
-			return;
-		}
-
-		importDatabaseFileName = importFiles[0];
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.select_file);
-		builder.setSingleChoiceItems(importFiles, 0, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int whichButton) {
-
-				mainHandler.post(restoreDatabaseRunnable);
-
-				dialog.dismiss();
-
-			}
-		});
-
-		AlertDialog alert = builder.create();
-		alert.show();
-
-	}
+//	private void restoreDatabase() {
+//
+//		// show "select a file" dialog
+//		File importFolder = new File(app.getAppDir() + Constants.SLASH + Constants.PATH_BACKUP + Constants.SLASH);
+//		final String importFiles[] = importFolder.list();
+//
+//		if (importFiles == null || importFiles.length == 0) {
+//			Toast.makeText(UpTimeMainActivity.this, R.string.source_folder_empty, Toast.LENGTH_SHORT).show();
+//			return;
+//		}
+//
+//		importDatabaseFileName = importFiles[0];
+//
+//		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//		builder.setTitle(R.string.select_file);
+//		builder.setSingleChoiceItems(importFiles, 0, new DialogInterface.OnClickListener() {
+//			@Override
+//			public void onClick(DialogInterface dialog, int whichButton) {
+//
+//				mainHandler.post(restoreDatabaseRunnable);
+//
+//				dialog.dismiss();
+//
+//			}
+//		});
+//
+//		AlertDialog alert = builder.create();
+//		alert.show();
+//
+//	}
 
 	/**
 	 * Runnable performing restoration of the application database from external
 	 * source
 	 */
-	private Runnable restoreDatabaseRunnable = new Runnable() {
-		@Override
-		public void run() {
-
-			String backupPath = app.getAppDir() + Constants.SLASH + Constants.PATH_BACKUP + Constants.SLASH;
-			try {
-				// open database in readonly mode
-				SQLiteDatabase db = SQLiteDatabase.openDatabase(backupPath + importDatabaseFileName, null,
-						SQLiteDatabase.OPEN_READONLY);
-
-				// check version compatibility
-				// only same version of the db can be restored
-				if (app.getDatabase().getVersion() != db.getVersion()) {
-					Toast.makeText(UpTimeMainActivity.this, getString(R.string.restore_db_version_conflict),
-							Toast.LENGTH_LONG).show();
-					return;
-				}
-
-				db.close();
-
-			} catch (SQLiteException e) {
-
-				Toast.makeText(UpTimeMainActivity.this,
-						String.format(mResources.getString(R.string.restore_file_error), e.getMessage()),
-						Toast.LENGTH_LONG).show();
-
-				return;
-			}
-
-			// closing current db
-			app.getDatabase().close();
-
-			try {
-
-				File data = Environment.getDataDirectory();
-
-				if (app.getExternalStorageWriteable()) {
-
-					String restoreDBPath = backupPath + importDatabaseFileName;
-
-					File restoreDB = new File(restoreDBPath);
-					// File currentDB = new File(app.getDataDir(),
-					// Constants.DATABASE_FILE);
-					File currentDB = new File(data, app.getDataDir() + Constants.SLASH + Constants.DATABASE_FILE);
-
-					FileInputStream fis = new FileInputStream(restoreDB);
-					FileOutputStream fos = new FileOutputStream(currentDB);
-
-					FileChannel src = fis.getChannel();
-					FileChannel dst = fos.getChannel();
-
-					dst.transferFrom(src, 0, src.size());
-
-					src.close();
-					dst.close();
-					fis.close();
-					fos.close();
-
-					app.setDatabase();
-
-					Toast.makeText(UpTimeMainActivity.this, getString(R.string.restore_completed), Toast.LENGTH_SHORT)
-							.show();
-
-				}
-
-			} catch (Exception e) {
-
-				Log.e(Constants.TAG, e.getMessage());
-
-				app.setDatabase();
-
-				Toast.makeText(UpTimeMainActivity.this, getString(R.string.restore_error) + ": " + e.getMessage(),
-						Toast.LENGTH_LONG).show();
-
-			}
-
-		}
-	};
+//	private Runnable restoreDatabaseRunnable = new Runnable() {
+//		@Override
+//		public void run() {
+//
+//			String backupPath = app.getAppDir() + Constants.SLASH + Constants.PATH_BACKUP + Constants.SLASH;
+//			try {
+//				// open database in readonly mode
+//				SQLiteDatabase db = SQLiteDatabase.openDatabase(backupPath + importDatabaseFileName, null,
+//						SQLiteDatabase.OPEN_READONLY);
+//
+//				// check version compatibility
+//				// only same version of the db can be restored
+//				if (app.getDatabase().getVersion() != db.getVersion()) {
+//					Toast.makeText(UpTimeMainActivity.this, getString(R.string.restore_db_version_conflict),
+//							Toast.LENGTH_LONG).show();
+//					return;
+//				}
+//
+//				db.close();
+//
+//			} catch (SQLiteException e) {
+//
+//				Toast.makeText(UpTimeMainActivity.this,
+//						String.format(mResources.getString(R.string.restore_file_error), e.getMessage()),
+//						Toast.LENGTH_LONG).show();
+//
+//				return;
+//			}
+//
+//			// closing current db
+//			app.getDatabase().close();
+//
+//			try {
+//
+//				File data = Environment.getDataDirectory();
+//
+//				if (app.getExternalStorageWriteable()) {
+//
+//					String restoreDBPath = backupPath + importDatabaseFileName;
+//
+//					File restoreDB = new File(restoreDBPath);
+//					// File currentDB = new File(app.getDataDir(),
+//					// Constants.DATABASE_FILE);
+//					File currentDB = new File(data, app.getDataDir() + Constants.SLASH + Constants.DATABASE_FILE);
+//
+//					FileInputStream fis = new FileInputStream(restoreDB);
+//					FileOutputStream fos = new FileOutputStream(currentDB);
+//
+//					FileChannel src = fis.getChannel();
+//					FileChannel dst = fos.getChannel();
+//
+//					dst.transferFrom(src, 0, src.size());
+//
+//					src.close();
+//					dst.close();
+//					fis.close();
+//					fos.close();
+//
+//					app.setDatabase();
+//
+//					Toast.makeText(UpTimeMainActivity.this, getString(R.string.restore_completed), Toast.LENGTH_SHORT)
+//							.show();
+//
+//				}
+//
+//			} catch (Exception e) {
+//
+//				Log.e(Constants.TAG, e.getMessage());
+//
+//				app.setDatabase();
+//
+//				Toast.makeText(UpTimeMainActivity.this, getString(R.string.restore_error) + ": " + e.getMessage(),
+//						Toast.LENGTH_LONG).show();
+//
+//			}
+//
+//		}
+//	};
 
 	/**
 	 * About dialog

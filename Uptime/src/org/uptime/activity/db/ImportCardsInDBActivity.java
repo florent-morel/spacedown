@@ -62,8 +62,9 @@ public class ImportCardsInDBActivity extends Activity implements OnClickListener
 	}
 
 	private void initButtons() {
-		buttonProcessRequest = (Button) findViewById(R.id.buttonConfirmFilterCard);
-		buttonProcessRequest.setOnClickListener(this);
+		// TODO need to read a CSV file
+//		buttonProcessRequest = (Button) findViewById(R.id.buttonConfirmFilterCard);
+//		buttonProcessRequest.setOnClickListener(this);
 		keepCustomCards = (CheckBox) findViewById(R.id.checkBoxKeepCustomCards);
 		keepCustomCards.setOnClickListener(this);
 	}

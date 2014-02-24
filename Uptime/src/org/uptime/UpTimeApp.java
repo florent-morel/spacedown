@@ -1,24 +1,36 @@
 package org.uptime;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.nio.channels.FileChannel;
+import java.util.Date;
 
 import org.uptime.database.DBHelper;
 import org.uptime.engine.Constants;
 
 import utils.AppLog;
 import utils.Utils;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Environment;
-//import android.os.Vibrator;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.Toast;
+//import android.os.Vibrator;
 
 /**
  * 
@@ -47,6 +59,8 @@ public class UpTimeApp extends Application {
 	 */
 	private SharedPreferences preferences;
 
+	private Resources mResources;
+
 	/**
 	 * application directory
 	 */
@@ -70,6 +84,10 @@ public class UpTimeApp extends Application {
 	private SQLiteDatabase db;
 	
 	private DBHelper dbHelper;
+
+	private String importDatabaseFileName;
+
+	private Handler mainHandler = new Handler();
 
 	// uncaught exception handler variable
 	private UncaughtExceptionHandler defaultUncaughtExceptionHandler;
@@ -101,6 +119,8 @@ public class UpTimeApp extends Application {
 
 		// accessing preferences
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+		mResources = getResources();
 
 		// set application external storage folder
 		appDir = Environment.getExternalStorageDirectory().getAbsolutePath() + Constants.SLASH + Constants.PATH_APP_NAME;
@@ -239,5 +259,182 @@ public class UpTimeApp extends Application {
 	public DBHelper getDbHelper() {
 		return dbHelper;
 	}
+
+	/**
+	 * Copy application database to sd card
+	 */
+	public void backupDatabase() {
+
+		try {
+
+			File data = Environment.getDataDirectory();
+
+			if (this.getExternalStorageWriteable()) {
+
+				String currentDBPath = this.getDataDir() + Constants.SLASH + Constants.DATABASE_FILE;
+
+				String dateStr = (String) DateFormat.format("yyyyMMdd_kkmmss", new Date());
+
+				File currentDB = new File(data, currentDBPath);
+				File backupDB = new File(this.getAppDir() + Constants.SLASH + Constants.PATH_BACKUP + Constants.SLASH
+						+ dateStr + Constants.UNDERSCORE + Constants.DATABASE_FILE);
+
+				if (currentDB.exists()) {
+
+					FileInputStream fis = new FileInputStream(currentDB);
+					FileOutputStream fos = new FileOutputStream(backupDB);
+
+					FileChannel src = fis.getChannel();
+					FileChannel dst = fos.getChannel();
+					dst.transferFrom(src, 0, src.size());
+
+					src.close();
+					dst.close();
+					fis.close();
+					fos.close();
+
+					Toast.makeText(this,
+							getString(R.string.backup_completed) + Constants.SPACE + backupDB.getPath(),
+							Toast.LENGTH_LONG).show();
+
+				} else {
+					Toast.makeText(
+							this,
+							String.format(mResources.getString(R.string.backup_error),
+									mResources.getString(R.string.backup_error_source_not_found)), Toast.LENGTH_LONG)
+							.show();
+				}
+
+			}
+		}
+
+		catch (Exception e) {
+
+			Log.e(Constants.TAG, e.getMessage());
+
+			Toast.makeText(this,
+					getString(R.string.backup_error) + Constants.SPACE + e.getMessage(), Toast.LENGTH_LONG).show();
+
+		}
+
+	}
+
+	/**
+	 * Restoring database from previously saved copy
+	 */
+	public void restoreDatabase(Activity activity) {
+
+		// show "select a file" dialog
+		File importFolder = new File(this.getAppDir() + Constants.SLASH + Constants.PATH_BACKUP + Constants.SLASH);
+		final String importFiles[] = importFolder.list();
+
+		if (importFiles == null || importFiles.length == 0) {
+			Toast.makeText(this, R.string.source_folder_empty, Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		importDatabaseFileName = importFiles[0];
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+		builder.setTitle(R.string.select_file);
+		builder.setSingleChoiceItems(importFiles, 0, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int whichButton) {
+
+				importDatabaseFileName = importFiles[whichButton];
+				mainHandler.post(restoreDatabaseRunnable);
+
+				dialog.dismiss();
+
+			}
+		});
+
+		AlertDialog alert = builder.create();
+		alert.show();
+
+	}
+
+	/**
+	 * Runnable performing restoration of the application database from external
+	 * source
+	 */
+	private Runnable restoreDatabaseRunnable = new Runnable() {
+		@Override
+		public void run() {
+
+			String backupPath = UpTimeApp.this.getAppDir() + Constants.SLASH + Constants.PATH_BACKUP + Constants.SLASH;
+			try {
+				// open database in readonly mode
+				SQLiteDatabase db = SQLiteDatabase.openDatabase(backupPath + importDatabaseFileName, null,
+						SQLiteDatabase.OPEN_READONLY);
+
+				// check version compatibility
+				// only same version of the db can be restored
+				if (UpTimeApp.this.getDatabase().getVersion() != db.getVersion()) {
+					Toast.makeText(UpTimeApp.this, getString(R.string.restore_db_version_conflict),
+							Toast.LENGTH_LONG).show();
+					return;
+				}
+
+				db.close();
+
+			} catch (SQLiteException e) {
+
+				Toast.makeText(UpTimeApp.this,
+						String.format(mResources.getString(R.string.restore_file_error), e.getMessage()),
+						Toast.LENGTH_LONG).show();
+
+				return;
+			}
+
+			// closing current db
+			UpTimeApp.this.getDatabase().close();
+
+			try {
+
+				File data = Environment.getDataDirectory();
+
+				if (UpTimeApp.this.getExternalStorageWriteable()) {
+
+					String restoreDBPath = backupPath + importDatabaseFileName;
+
+					File restoreDB = new File(restoreDBPath);
+					// File currentDB = new File(app.getDataDir(),
+					// Constants.DATABASE_FILE);
+					File currentDB = new File(data, UpTimeApp.this.getDataDir() + Constants.SLASH + Constants.DATABASE_FILE);
+
+					FileInputStream fis = new FileInputStream(restoreDB);
+					FileOutputStream fos = new FileOutputStream(currentDB);
+
+					FileChannel src = fis.getChannel();
+					FileChannel dst = fos.getChannel();
+
+					dst.transferFrom(src, 0, src.size());
+
+					src.close();
+					dst.close();
+					fis.close();
+					fos.close();
+
+					UpTimeApp.this.setDatabase();
+
+					Toast.makeText(UpTimeApp.this, getString(R.string.restore_completed),
+							Toast.LENGTH_SHORT).show();
+
+				}
+
+			} catch (Exception e) {
+
+				Log.e(Constants.TAG, e.getMessage());
+
+				UpTimeApp.this.setDatabase();
+
+				Toast.makeText(UpTimeApp.this, getString(R.string.restore_error) + ": " + e.getMessage(),
+						Toast.LENGTH_LONG).show();
+
+			}
+
+		}
+	};
 
 }
