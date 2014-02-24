@@ -14,16 +14,6 @@
         android:layout_height="wrap_content"
         android:text="@string/score_title" />
 
-    <Button
-        android:id="@+id/buttonNextRound"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textScoreTitle"
-        android:layout_below="@+id/textScoreBoard"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="133dp"
-        android:text="@string/score_next_round" />
-
     <TextView
         android:id="@+id/textScoreBoard"
         android:layout_width="wrap_content"
@@ -48,8 +38,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textScoreRemainingCards"
-        android:layout_above="@+id/buttonNewGame"
         android:layout_alignParentLeft="true" >
     </ListView>
+
+    <Button
+        android:id="@+id/buttonNextRound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textScoreTitle"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="133dp"
+        android:text="@string/score_next_round" />
 
 </RelativeLayout>
