@@ -15,6 +15,8 @@ import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +29,8 @@ import android.widget.Toast;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class CardActivity extends Activity implements OnClickListener {
 
+	private static final String TAG = CardActivity.class.getSimpleName();
+
 	private static GameManager mGameManager;
 
 	private Resources mResources;
@@ -35,6 +39,7 @@ public class CardActivity extends Activity implements OnClickListener {
 
 	private TextView mCurrentRound;
 	private TextView mCurrentTeam;
+	private TextView mTimer;
 	private TextView mTeamTurnScore;
 	private TextView mTeamRoundScore;
 	private TextView mTeamTotalScore;
@@ -44,12 +49,17 @@ public class CardActivity extends Activity implements OnClickListener {
 
 	private Button mButtonCardFound;
 	private Button mButtonCardSkip;
-	private Button mButtonEndTurn;
 
 	boolean allowCardFoundButton = true;
-	
+
+	private CountDownTimer timer;
+
 	private static MediaPlayer foundMediaPlayer;
-	private static MediaPlayer skipMediaPlayer; 
+	private static MediaPlayer skipMediaPlayer;
+	private static MediaPlayer tictacMediaPlayer;
+	private static MediaPlayer ednTurnMediaPlayer;
+
+	boolean allowTictac = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +69,45 @@ public class CardActivity extends Activity implements OnClickListener {
 
 		mGameManager = GameManager.getSingletonObject();
 		mGame = mGameManager.getGame();
-		
+
 		foundMediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.ping);
 		skipMediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.button_skip);
+		tictacMediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.tictac);
+		ednTurnMediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.beep);
 
 		this.initTexts();
 		this.setTexts();
 		this.initButtons();
+		this.initTimer();
+	}
+
+	private void initTimer() {
+		timer = new CountDownTimer(Constants.TIMER_DEFAULT, 900) {
+			@Override
+			public void onTick(long millisUntilFinished) {
+				Log.v(TAG, "CountDownTimer, millisUntilFinished=" + millisUntilFinished);
+				long roundedNumber = (millisUntilFinished + 500) / 1000;
+				Log.v(TAG, "CountDownTimer, display=" + roundedNumber);
+				mTimer.setText(String.format(mResources.getString(R.string.card_timer), roundedNumber));
+				if (allowTictac && millisUntilFinished <= Constants.TIMER_TICTAC) {
+					tictacMediaPlayer.start();
+					allowTictac = false;
+				}
+
+			}
+
+			@Override
+			public void onFinish() {
+				mTimer.setText(String.format(mResources.getString(R.string.card_timer), 0));
+				allowTictac = true;
+				ednTurnMediaPlayer.start();
+				// Timer is finished, end turn
+				// Display stats for this turn
+				Intent intent = new Intent(CardActivity.this, StatisticsEndTurnActivity.class);
+				startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS);
+			};
+		}.start();
+
 	}
 
 	@Override
@@ -76,11 +118,9 @@ public class CardActivity extends Activity implements OnClickListener {
 		inflater.inflate(R.menu.menu_card_actions, menu);
 
 		if (Constants.ROUND_FIRST != mGame.getCurrentRound().getRoundNumber()) {
-//		    MenuItem item = menu.findItem(R.id.action_change_card);
-//		    item.setEnabled(false);
-		    menu.removeItem(R.id.action_change_card);
+			menu.removeItem(R.id.action_change_card);
 		}
-		
+
 		return true;
 
 	}
@@ -105,13 +145,13 @@ public class CardActivity extends Activity implements OnClickListener {
 	 */
 	private void replaceCard() {
 		boolean cardReplaced = mGame.replaceCard();
-		
+
 		if (cardReplaced) {
-			Toast toast = Toast.makeText(this,
-					String.format(mResources.getString(R.string.dialog_card_replaced)), Toast.LENGTH_SHORT);
+			Toast toast = Toast.makeText(this, String.format(mResources.getString(R.string.dialog_card_replaced)),
+					Toast.LENGTH_SHORT);
 			toast.show();
 			// If card has been replaced, refresh the activity
-			refreshActivity();
+			refreshActivity(false);
 		}
 	}
 
@@ -141,7 +181,7 @@ public class CardActivity extends Activity implements OnClickListener {
 			}
 
 			// If card has been cancelled, refresh the activity
-			refreshActivity();
+			refreshActivity(false);
 		}
 	}
 
@@ -158,11 +198,13 @@ public class CardActivity extends Activity implements OnClickListener {
 		mTeamTotalScore = (TextView) findViewById(R.id.textCardTotalScore);
 		mRemainingCards = (TextView) findViewById(R.id.textRemainingCards);
 		mNameToFind = (TextView) findViewById(R.id.textCardNameToFind);
+		mTimer = (TextView) findViewById(R.id.textCardTimer);
 	}
 
 	private void setTexts() {
 		Round currentRound = mGame.getCurrentRound();
-		mCurrentRound.setText(String.format(mResources.getString(R.string.card_current_round), currentRound.getRoundNumber()));
+		mCurrentRound.setText(String.format(mResources.getString(R.string.card_current_round),
+				currentRound.getRoundNumber()));
 		Team currentTeam = mGame.getCurrentTeam();
 		mCurrentTeam.setText(String.format(mResources.getString(R.string.card_team), currentTeam.getName()));
 		Integer turnScore = currentRound.getTeamTurnScore(currentRound.getCurrentTurn());
@@ -171,7 +213,7 @@ public class CardActivity extends Activity implements OnClickListener {
 		mTeamRoundScore.setText(String.format(mResources.getString(R.string.card_team_round_score), roundScore));
 		Integer totalScore = mGame.getTotalScore(currentTeam);
 		mTeamTotalScore.setText(String.format(mResources.getString(R.string.card_team_total_score), totalScore));
-		
+
 		int remainingCards = mGame.getNumberCardsInPlay();
 		StringBuilder builderRemaining = new StringBuilder();
 		if (remainingCards == Constants.VALUE_ONE) {
@@ -190,55 +232,50 @@ public class CardActivity extends Activity implements OnClickListener {
 		mButtonCardSkip = (Button) findViewById(R.id.buttonSkipCard);
 		mButtonCardSkip.setOnClickListener(this);
 
-		if (Constants.ROUND_FIRST == mGame.getCurrentRound().getRoundNumber() || (mGame.getNumberCardsInPlay() == Constants.VALUE_ONE)) {
+		if (Constants.ROUND_FIRST == mGame.getCurrentRound().getRoundNumber()
+				|| (mGame.getNumberCardsInPlay() == Constants.VALUE_ONE)) {
 			mButtonCardSkip.setVisibility(View.GONE);
 		} else {
 			mButtonCardSkip.setVisibility(View.VISIBLE);
 		}
-
-		mButtonEndTurn = (Button) findViewById(R.id.buttonEndTurn);
-		mButtonEndTurn.setOnClickListener(this);
 	}
 
 	@Override
 	public void onClick(View v) {
-		
+
 		if (v.getId() == mButtonCardFound.getId()) {
 			if (allowCardFoundButton && !mGame.getCurrentCard().isFound()) {
 				// Protect from multi clicks
-//				mButtonCardFound.setEnabled(false);
+				// mButtonCardFound.setEnabled(false);
 				allowCardFoundButton = false;
 				foundMediaPlayer.start();
-				mGame.findCard();
+				mGame.findCard(mGame.getCurrentCard(), mGame.getCurrentRound().getCurrentTurn(), true);
 
 				if (mGame.getNumberCardsInPlay() == Constants.VALUE_ZERO) {
+					timer.cancel();
+					tictacMediaPlayer.stop();
 					// This was the last card in play, round will end, display
-					// stats
-					// for turn
+					// stats for turn
 					Intent intent = new Intent(this, StatisticsEndTurnActivity.class);
-					startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS_END_ROUND);
+					startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS);
 				}
-				
+
 				// Process is done, wait a bit before enabling next clicks
-//				try {
-//					Thread.sleep(1000);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-				
-				refreshActivity();
+				// try {
+				// Thread.sleep(1000);
+				// } catch (InterruptedException e) {
+				// e.printStackTrace();
+				// }
+
+				refreshActivity(false);
 				allowCardFoundButton = true;
-//				mButtonCardFound.setEnabled(true);
+				// mButtonCardFound.setEnabled(true);
 			}
 
 		} else if (v.getId() == mButtonCardSkip.getId()) {
 			skipMediaPlayer.start();
 			mGame.skipCard();
-			refreshActivity();
-		} else if (v.getId() == mButtonEndTurn.getId()) {
-			// Display stats for this turn
-			Intent intent = new Intent(this, StatisticsEndTurnActivity.class);
-			startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS);
+			refreshActivity(false);
 		}
 
 	}
@@ -246,28 +283,28 @@ public class CardActivity extends Activity implements OnClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == Constants.ACTIVITY_TURN_STATS) {
 			// Stats for this turn is done, end turn
-			mGame.endTurn();
-			refreshActivity();
-		}
-		if (requestCode == Constants.ACTIVITY_TURN_STATS_END_ROUND) {
-			// This round is done
-			mGame.endRound();
-			refreshActivity();
+			if (mGame.getNumberCardsInPlay() == Constants.VALUE_ZERO) {
+				mGame.endRound();
+			} else {
+				mGame.endTurn();
+			}
+			refreshActivity(true);
 		}
 	}
 
 	/**
 	 * Refresh the activity.
 	 * 
-	 * @param descending
+	 * @param initTimer
 	 */
-	private void refreshActivity() {
+	private void refreshActivity(boolean initTimer) {
 		if (!mGame.isGameOver() && mGame.isRoundActive()) {
 			this.setTexts();
 			this.initButtons();
+			if (initTimer) {
+				this.initTimer();
+			}
 		} else {
-//			Intent intent = new Intent(this, ScoreActivity.class);
-//			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 			finish();
 		}
 	}

@@ -1,6 +1,6 @@
 package org.uptime.activity.stats;
 
-import java.util.List;
+import java.util.Set;
 
 import org.uptime.GameManager;
 import org.uptime.R;
@@ -19,6 +19,8 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,20 +53,21 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 		initButtons();
 		initTexts();
 
-		// mStatsCardsList.setOnItemClickListener(new OnItemClickListener() {
-		// public void onItemClick(AdapterView<?> parent, View view,
-		// int position, long id) {
-		// if (mGameManager.getGame().isGameOver()) {
-		// // Prevent from creating next turn
-		// // StringBuilder message = new StringBuilder();
-		// // buildGameOverMessage(null, null, message);
-		// // // Create the dialog
-		// // createAlert(message.toString());
-		// } else {
-		// // playNextTurn();
-		// }
-		// }
-		// });
+		mStatsCardsEndTurnList.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Card card = (Card) parent.getItemAtPosition(position);
+				
+				if (card.isFound()) {
+					card.setFound(Boolean.FALSE);
+					game.removeFoundCard(card, game.getCurrentRound().getCurrentTurn());
+				} else {
+					card.setFound(Boolean.TRUE);
+					game.findCard(card, game.getCurrentRound().getCurrentTurn(), false);
+				}
+				
+				refreshList();
+			}
+		});
 
 	}
 
@@ -105,7 +108,7 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 		if (team != null) {
 			Round round = game.getCurrentRound();
 			Turn turn = round.getCurrentTurn();
-			List<Card> listCards = turn.getTurnListFoundCards();
+			Set<Card> listCards = turn.getTurnListCards();
 			if (listCards != null && !listCards.isEmpty()) {
 				for (Card card : listCards) {
 					mTurnCardAdapter.addItem(card);

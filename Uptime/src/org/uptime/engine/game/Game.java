@@ -48,14 +48,14 @@ public class Game {
 		super();
 
 		datasource = data;
-		
+
 		cardBuilder = new CardBuilder(resources, context, datasource);
 
 		mDiscardedCardsInDB = new ArrayList<Card>();
 
 		initTeams(numberOfTeams);
 		initCards(runMode, numberOfCards);
-		
+
 		initRounds();
 	}
 
@@ -125,6 +125,7 @@ public class Game {
 			} else {
 				mCurrentCard = currentCard;
 			}
+			this.getCurrentRound().getCurrentTurn().addCardToTurn(mCurrentCard);
 		}
 
 		return mCurrentCard;
@@ -177,6 +178,7 @@ public class Game {
 	}
 
 	public void endTurn() {
+
 		skippedCardsBackInGame();
 
 		mCurrentRound.saveCurrentTurn(mCurrentTeam);
@@ -211,7 +213,7 @@ public class Game {
 		mCurrentCard = null;
 		mCurrentRound.saveCurrentTurn(mCurrentTeam);
 		mCurrentRound.setRoundActive(Boolean.FALSE);
-		
+
 		if (Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
 			// Update database with list of discarded cards
 			if (mDiscardedCardsInDB != null && !mDiscardedCardsInDB.isEmpty()) {
@@ -223,17 +225,17 @@ public class Game {
 				mDiscardedCardsInDB.clear();
 			}
 		}
-		
+
 		if (Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
 			this.setGameOver(Boolean.TRUE);
 
 		}
 	}
 
-	private void addCardToTeamScore() {
-		mCurrentCard.setFound(Boolean.TRUE);
+	private void addCardToTeamScore(Card card, Turn currentTurn) {
+		card.setFound(Boolean.TRUE);
 		// Remove the card from the list of cards yet to be found
-		mCardsCurrentlyInPlay.remove(this.getCurrentCard());
+		mCardsCurrentlyInPlay.remove(card);
 
 		// If no more cards in play, check if some cards have been skipped and
 		// put them back in the game.
@@ -241,7 +243,7 @@ public class Game {
 			skippedCardsBackInGame();
 		}
 
-		mCurrentRound.getCurrentTurn().addFoundCardToTurn(mCurrentCard);
+		currentTurn.addFoundCardToTurn(card);
 	}
 
 	public void setGameOver(boolean mIsGameOver) {
@@ -279,9 +281,18 @@ public class Game {
 		return mCurrentTeam;
 	}
 
-	public void findCard() {
-		this.addCardToTeamScore();
-		this.getNextCardToPlay(this.getCurrentCard(), false);
+	public void findCard(Card card, Turn currentTurn, boolean getNextCard) {
+		this.addCardToTeamScore(card, currentTurn);
+		if (getNextCard) {
+			this.getNextCardToPlay(card, false);
+		}
+	}
+
+	public void removeFoundCard(Card card, Turn currentTurn) {
+		card.setFound(Boolean.FALSE);
+		// Remove the card from the list of cards yet to be found
+		mCardsCurrentlyInPlay.add(0, card);
+		currentTurn.getTurnListFoundCards().remove(card);
 	}
 
 	/**
@@ -440,7 +451,8 @@ public class Game {
 		// Remove current card from list of cards in play and put it in the list
 		// of skipped cards
 		mCardsCurrentlyInPlay.remove(this.getCurrentCard());
-		this.getCurrentRound().getCurrentTurn().addSkippedCardToTurn(this.getCurrentCard());
+		Turn currentTurn = this.getCurrentRound().getCurrentTurn();
+		currentTurn.addSkippedCardToTurn(this.getCurrentCard());
 
 		// If no more cards in play, check if some cards have been skipped and
 		// put them back in the game.

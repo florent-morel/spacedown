@@ -9,6 +9,7 @@ import org.uptime.engine.game.Card;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,12 @@ public class TurnCardAdapter extends ArrayAdapter<Card> {
 
 		Card card = mItems.get(position);
 
+		if (card.isFound()) {
+			v.setBackgroundColor(Color.GREEN);
+		} else {
+			v.setBackgroundColor(Color.RED);
+		}
+		
 		TextView cardNumber = (TextView) v.findViewById(R.id.cardId);
 		cardNumber.setText(String.format(mResources.getString(R.string.stats_card_number), position + 1));
 

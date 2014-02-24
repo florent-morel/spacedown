@@ -27,10 +27,18 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/textCardTurnScore"
+            android:id="@+id/textCardTimer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textCardTeam"
+            android:text="@string/card_timer"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textCardTurnScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textCardTimer"
             android:text="@string/card_team_turn_score" />
 
         <TextView
@@ -81,15 +89,6 @@
             android:layout_marginLeft="70dp"
             android:layout_toRightOf="@+id/buttonFoundCard"
             android:text="@string/card_skip" />
-
-        <Button
-            android:id="@+id/buttonEndTurn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/buttonFoundCard"
-            android:layout_below="@+id/buttonFoundCard"
-            android:layout_marginTop="67dp"
-            android:text="@string/card_end_turn" />
     </RelativeLayout>
 
 </ScrollView>

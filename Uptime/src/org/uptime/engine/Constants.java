@@ -122,4 +122,8 @@ public interface Constants {
 	static final Integer VALUE_ONE = 1;
 
 	static final String CATEGORY_CUSTOM = "Custom";
+
+	static final long TIMER_DEFAULT = 6000;
+
+	static final long TIMER_TICTAC = 5000;
 }

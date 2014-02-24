@@ -30,6 +30,7 @@
     <string name="continue_game">Continue game</string>
     <string name="card_current_round">Round #: %1$d</string>
     <string name="card_team">Current team: %1$s</string>
+    <string name="card_timer">Remaining time: %1$d</string>
     <string name="card_team_turn_score">Turn score: %1$d</string>
     <string name="card_team_round_score">Round score: %1$d</string>
     <string name="card_team_total_score">Total score: %1$d</string>
