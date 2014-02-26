@@ -2,10 +2,10 @@ package org.uptime.activity.create;
 
 import org.uptime.R;
 import org.uptime.UpTimeApp;
-import org.uptime.database.Player;
 import org.uptime.database.PlayersDataSource;
 import org.uptime.database.UpTimeContentProvider;
 import org.uptime.database.UpTimeContentProvider.Schema;
+import org.uptime.engine.game.Player;
 
 import android.app.Activity;
 import android.content.ContentResolver;

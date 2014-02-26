@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.uptime.database.UpTimeContentProvider.Schema;
+import org.uptime.engine.game.Player;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;

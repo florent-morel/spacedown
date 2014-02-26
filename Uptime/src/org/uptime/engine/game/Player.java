@@ -1,4 +1,4 @@
-package org.uptime.database;
+package org.uptime.engine.game;
 
 import org.uptime.database.UpTimeContentProvider.Schema;
 

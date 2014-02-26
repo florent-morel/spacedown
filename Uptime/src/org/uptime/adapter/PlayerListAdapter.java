@@ -2,7 +2,7 @@ package org.uptime.adapter;
 
 import org.uptime.R;
 import org.uptime.UpTimeApp;
-import org.uptime.database.Player;
+import org.uptime.engine.game.Player;
 
 import android.content.Context;
 import android.content.res.Resources;
