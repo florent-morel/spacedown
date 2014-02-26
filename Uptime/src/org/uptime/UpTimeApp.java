@@ -6,9 +6,13 @@ import java.io.FileOutputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.channels.FileChannel;
 import java.util.Date;
+import java.util.List;
 
+import org.uptime.database.CardsDataSource;
 import org.uptime.database.DBHelper;
+import org.uptime.database.UpTimeContentProvider.Schema;
 import org.uptime.engine.Constants;
+import org.uptime.engine.game.Card;
 
 import utils.AppLog;
 import utils.Utils;
@@ -131,6 +135,7 @@ public class UpTimeApp extends Application {
 		// SQLiteDatabase
 		try {
 			db = dbHelper.getWritableDatabase();
+//			dropColumn();
 		} catch (SQLiteException e) {
 			Toast.makeText(this, R.string.memory_card_not_available, Toast.LENGTH_SHORT).show();
 			android.os.Process.killProcess(android.os.Process.myPid());
@@ -149,29 +154,32 @@ public class UpTimeApp extends Application {
 			Toast.makeText(this, R.string.memory_card_not_available, Toast.LENGTH_SHORT).show();
 		}
 
-		// display density
-		// density = getContext().getResources().getDisplayMetrics().density;
-
-		// adding famous waypoints only once
-		// if (!getPreferences().contains("famous_waypoints")) {
-		//
-		// Waypoints.insertFamousWaypoints(db);
-		//
-		// // switch flag of famous locations added to true
-		// SharedPreferences.Editor editor = getPreferences().edit();
-		// editor.putInt("famous_waypoints", 1);
-		// editor.commit();
-		//
-		// }
-
-		// reference to vibrator service
-		// this.vibrator = (Vibrator)
-		// getSystemService(Context.VIBRATOR_SERVICE);
-
-		// AppLog.d(this,
-		// "=================== app: onCreate ===================");
-
 	}
+	
+//	private void dropColumn() {
+//		CardsDataSource ds = new CardsDataSource(getApplicationContext());
+//	    db.execSQL(DBHelper.SQL_CREATE_TABLE_PLAYERS);
+//		
+//		List<Card> inactiveCards = ds.getAllCardsOld(db, false);
+//	    String tableName = Schema.TABLE_CARDS;
+//	    
+//	    db.execSQL("ALTER TABLE " + tableName + " RENAME TO " + tableName + "_old;");
+//
+//	    // Creating the table on its new format (no redundant columns)
+//	    db.execSQL(DBHelper.SQL_CREATE_TABLE_CARDS);
+//
+//	    String columns = Schema.COL_ID + ","
+//	    		+ Schema.COL_NAME;
+//	    
+//	    // Populating the table with the data
+//	    db.execSQL("INSERT INTO " + tableName + "(" + columns + ") SELECT "
+//	            + columns + " FROM " + tableName + "_old;");
+	    // Update inactive cards
+//	    for (Card card : inactiveCards) {
+//			ds.updateCard(card);
+//		}
+//	    db.execSQL("DROP TABLE " + tableName + "_old;");
+//	}
 
 	/**
 	 * Checking if external storage is available and writable

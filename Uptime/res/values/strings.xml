@@ -21,6 +21,8 @@
     <string name="and">and</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="save">Save</string>
+    <string name="confirm">Do you confirm?</string>
     
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
@@ -133,5 +135,19 @@
     <string name="menu_action_update_card">Modify card</string>
     <string name="db_cancel_card_question">Card will be deleted</string>
     
+
+    <!-- PLAYER -->
+    <string name="display_player_menu">Player list</string>
+    <string name="create_player_name">Name</string>
+    <string name="create_player_name_hint">Player name</string>
+    <string name="create_player_active">Active</string>
+    <string name="player_item_status">Active</string>
+    <string name="player_list">List of players</string>
+    <string name="player_empty">No player stored.</string>
+    <string name="player_list_new_hint">To create a new player click below</string>
+    <string name="player_list_new_button">Create new player</string>
+    <string name="player_list_contextmenu_details">Details</string>
+    <string name="player_list_contextmenu_delete">Delete</string>
+    <string name="player_list_delete_dialog_title">Player will be deleted</string>
 
 </resources>

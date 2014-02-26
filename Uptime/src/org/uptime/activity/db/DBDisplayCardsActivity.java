@@ -10,8 +10,9 @@ import org.uptime.database.CardsDataSource;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Card;
 
-import utils.BlockingConfirmDialog;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 	private Resources mResources;
 
 	private ListView dbCardList;
+	
 	private TextView numberOfCards;
 
 	private CardsDataSource datasource;
@@ -49,7 +51,7 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 		setContentView(R.layout.activity_display_db_cards);
 		mResources = getResources();
 
-		datasource = new CardsDataSource(app.getDatabase(), app.getDbHelper());
+		datasource = new CardsDataSource(app.getApplicationContext());
 
 		this.refreshActivity();
 
@@ -94,40 +96,33 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 			startActivityForResult(intent, Constants.CARD_UPDATE);
 			return true;
 		case R.id.action_delete_card:
-			if (warnCancel()) {
-				datasource.deleteCard(card);
-				this.refreshActivity();
-			}
+			this.warnCancel();
+			this.refreshActivity();
 			return true;
 		default:
 			return super.onContextItemSelected(item);
 		}
 	}
 
-	private boolean warnCancel() {
-		// boolean aa = false;
-		// BlockingConfirmDialog dialog = new BlockingConfirmDialog(this);
-		// aa = dialog.confirm("title", "mookom");
+	private void warnCancel() {
 
-		return true;
-		// AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		// builder.setMessage(String.format(mResources.getString(R.string.db_cancel_card_question)));
-		// builder.setCancelable(false)
-		// .setPositiveButton(String.format(mResources.getString(R.string.dialog_confirm_yes)),
-		// new DialogInterface.OnClickListener() {
-		// public void onClick(DialogInterface dialog, int id) {
-		// confirmDelete = true;
-		// }
-		// })
-		// .setNegativeButton(String.format(mResources.getString(R.string.dialog_confirm_no)),
-		// new DialogInterface.OnClickListener() {
-		// public void onClick(DialogInterface dialog, int id) {
-		// confirmDelete = false;
-		// dialog.cancel();
-		// }
-		// });
-		// AlertDialog alert = builder.create();
-		// alert.show();
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(String.format(mResources.getString(R.string.db_cancel_card_question)));
+		builder.setCancelable(false)
+				.setPositiveButton(String.format(mResources.getString(R.string.dialog_confirm_yes)),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								datasource.deleteCard(id);
+							}
+						})
+				.setNegativeButton(String.format(mResources.getString(R.string.dialog_confirm_no)),
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.cancel();
+							}
+						});
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 
 	@Override
@@ -171,7 +166,7 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 	private void refreshListCards() {
 		boolean displayActiveCards = this.getIntent().getBooleanExtra(Constants.CARD_ACTIVE, Boolean.TRUE);
 		List<Card> listCards = datasource.getAllCards(displayActiveCards);
-		if (listCards != null && !listCards.isEmpty() && listCards.size() < 200) {
+		if (listCards != null && !listCards.isEmpty() && listCards.size() < Constants.MAX_CARDS_LIST) {
 			dbCardList = (ListView) findViewById(R.id.dbCardList);
 			DBCardAdapter dbCardAdapter = new DBCardAdapter(this, R.layout.layout_stats_card_row);
 			for (Card card : listCards) {
@@ -183,7 +178,7 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 			numberOfCards.setText(String.format(mResources.getString(R.string.db_number_cards), listCards.size()));
 		} else {
 			numberOfCards.setText(String.format(mResources.getString(R.string.db_no_card)));
-			if (dbCardList!= null) {
+			if (dbCardList != null) {
 				dbCardList.setVisibility(View.GONE);
 			}
 		}

@@ -3,89 +3,133 @@ package org.uptime.database;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.uptime.database.UpTimeContentProvider.Schema;
 import org.uptime.engine.Constants;
 import org.uptime.engine.game.Card;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.util.Log;
 
 public class CardsDataSource {
 
-	// Database fields
-	private SQLiteDatabase db;
-	private DBHelper dbHelper;
-	private String[] allColumns = { DBHelper.COLUMN_ID, DBHelper.COLUMN_NAME, DBHelper.COLUMN_CATEGORY,
-			DBHelper.COLUMN_URL, DBHelper.COLUMN_ACTIVE };
+	private static final String TAG = CardsDataSource.class.getSimpleName();
 
-	public CardsDataSource(SQLiteDatabase database, DBHelper databaseHelper) {
-		dbHelper = databaseHelper;
-		db = database;
-	}
+	/**
+	 * ContentResolver to interact with content provider
+	 */
+	private ContentResolver contentResolver;
 
-	public void close() {
-		dbHelper.close();
+	/**
+	 * Constructor.
+	 * 
+	 * @param c
+	 *            Application context.
+	 */
+	public CardsDataSource(Context c) {
+		contentResolver = c.getContentResolver();
 	}
 
 	public List<Card> addCards(List<Card> cardList) {
 		List<Card> addedCards = new ArrayList<Card>();
 		if (cardList != null && !cardList.isEmpty()) {
 			for (Card card : cardList) {
-				addedCards.add(this.createCard(card));
+				addedCards.add(this.getCard(this.createCard(card)));
 			}
 		}
 		return addedCards;
 	}
 
-	public Card createCard(Card card) {
+	public long createCard(Card card) {
+		// Create entry in CARDS table
 		ContentValues values = new ContentValues();
-		values.put(DBHelper.COLUMN_NAME, card.getNameToFind());
-		values.put(DBHelper.COLUMN_CATEGORY, card.getCategory());
-		values.put(DBHelper.COLUMN_URL, card.getUrl());
-		values.put(DBHelper.COLUMN_ACTIVE, Boolean.valueOf(card.isActiveInDB()).toString());
+		values.put(Schema.COL_NAME, card.getNameToFind());
+		values.put(Schema.COL_CATEGORY, card.getCategory());
+		values.put(Schema.COL_URL, card.getUrl());
+		values.put(Schema.COL_ACTIVE, card.isActiveInDB());
+		values.put(Schema.COL_DESCRIPTION, card.getDescription());
 
-		long insertId = db.insert(DBHelper.TABLE_CARDS, null, values);
-		Card newCard = getCard(insertId);
-		return newCard;
+		Uri cardUri = contentResolver.insert(UpTimeContentProvider.CONTENT_URI_CARDS, values);
+		long cardId = ContentUris.parseId(cardUri);
+		return cardId;
 	}
 
-	public Card updateCard(Card card) {
-		ContentValues values = new ContentValues();
-		values.put(DBHelper.COLUMN_NAME, card.getNameToFind());
-		values.put(DBHelper.COLUMN_CATEGORY, card.getCategory());
-		values.put(DBHelper.COLUMN_URL, card.getUrl());
-		values.put(DBHelper.COLUMN_ACTIVE, Boolean.valueOf(card.isActiveInDB()).toString());
+	public long updateCard(Card card) {
+		long id = -1;
+		if (card != null) {
+			id = card.getId();
+			ContentValues values = new ContentValues();
+			values.put(Schema.COL_NAME, card.getNameToFind());
+			values.put(Schema.COL_CATEGORY, card.getCategory());
+			values.put(Schema.COL_URL, card.getUrl());
+			values.put(Schema.COL_ACTIVE, card.isActiveInDB());
+			values.put(Schema.COL_DESCRIPTION, card.getDescription());
 
-		Integer id = card.getId();
-		db.update(DBHelper.TABLE_CARDS, values, DBHelper.COLUMN_ID + "=" + id, null);
-		Card newCard = getCard(id);
-		return newCard;
+			Uri cardUri = ContentUris
+					.withAppendedId(UpTimeContentProvider.CONTENT_URI_CARDS, card.getId());
+			contentResolver.update(cardUri, values, null, null);
+		}
+		return id;
+	
 	}
 
-	public Card getCard(long insertId) {
-		Cursor cursor = db.query(DBHelper.TABLE_CARDS, allColumns, DBHelper.COLUMN_ID + " = " + insertId, null,
-				null, null, null);
-		cursor.moveToFirst();
-		Card card = cursorToCard(cursor);
-		cursor.close();
+	public Card getCard(long cardId) {
+		Card card = null;
+		Uri cardUri = ContentUris.withAppendedId(UpTimeContentProvider.CONTENT_URI_CARDS, cardId);
+		Cursor cursor = contentResolver.query(cardUri, null, null, null, null);
+		if (cursor.moveToFirst()) {
+			card = Card.build(cursor, contentResolver);
+		}
 		return card;
 	}
 
 	public void deleteCard(Card card) {
-		long id = card.getId();
-		System.out.println("Card deleted with id: " + id);
-		db.delete(DBHelper.TABLE_CARDS, DBHelper.COLUMN_ID + " = " + id, null);
+		this.deleteCard(card.getId());
+	}
+
+	public void deleteCard(long cardId) {
+		Log.v(TAG, "Deleting Card with id '" + cardId);
+		contentResolver.delete(ContentUris.withAppendedId(UpTimeContentProvider.CONTENT_URI_CARDS, cardId),
+				null, null);
 	}
 
 	public List<Card> getAllCards(Boolean isActive) {
 		List<Card> cards = new ArrayList<Card>();
 
-		Cursor cursor = db.query(DBHelper.TABLE_CARDS, allColumns,
-				DBHelper.COLUMN_ACTIVE + " = '" + isActive.toString() + "'", null, null, null, null);
+		int active = Schema.VAL_INACTIVE;
+		if (isActive) {
+			active = Schema.VAL_ACTIVE;
+		}
+		
+		Cursor cursor = contentResolver.query(UpTimeContentProvider.CONTENT_URI_CARDS, null,
+				Schema.COL_ACTIVE + " = " + active, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			Card card = cursorToCard(cursor);
+			Card card = Card.build(cursor, contentResolver);
+			cards.add(card);
+			cursor.moveToNext();
+		}
+		// make sure to close the cursor
+		cursor.close();
+		return cards;
+	}
+
+	@Deprecated
+	public List<Card> getAllCardsOld(SQLiteDatabase db, Boolean isActive) {
+		List<Card> cards = new ArrayList<Card>();
+
+		Cursor cursor = db.query(Schema.TABLE_CARDS+ "_old", null,
+				Schema.COL_ACTIVE + " = '" + isActive.toString() + "'", null, null, null, null);
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Card card = Card.buildOld(cursor, contentResolver);
 			cards.add(card);
 			cursor.moveToNext();
 		}
@@ -97,12 +141,12 @@ public class CardsDataSource {
 	public List<Card> getAllCustomCards() {
 		List<Card> cards = new ArrayList<Card>();
 
-		Cursor cursor = db.query(DBHelper.TABLE_CARDS, allColumns,
-				DBHelper.COLUMN_CATEGORY + " = '" + Constants.CATEGORY_CUSTOM + "'", null, null, null, null);
-
+		Cursor cursor = contentResolver.query(UpTimeContentProvider.CONTENT_URI_CARDS, null,
+				Schema.COL_CATEGORY + " = '" + Constants.CATEGORY_CUSTOM + "'", null, null);
+		
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			Card card = cursorToCard(cursor);
+			Card card = Card.build(cursor, contentResolver);
 			cards.add(card);
 			cursor.moveToNext();
 		}
@@ -111,20 +155,4 @@ public class CardsDataSource {
 		return cards;
 	}
 
-	private Card cursorToCard(Cursor cursor) {
-		Card card = new Card();
-		card.setId(cursor.getInt(0));
-		card.setNameToFind(cursor.getString(1));
-		card.setCategory(cursor.getString(2));
-		card.setUrl(cursor.getString(3));
-		card.setActiveInDB(Boolean.valueOf(cursor.getString(4)));
-		return card;
-	}
-
-	/**
-	 * Warning! Will drop current card table.
-	 */
-	public void dropCardTable() {
-		dbHelper.dropTable(db, DBHelper.TABLE_CARDS);
-	}
 }

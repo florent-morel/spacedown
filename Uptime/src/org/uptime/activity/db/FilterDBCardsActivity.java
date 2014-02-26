@@ -65,7 +65,7 @@ public class FilterDBCardsActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_filter_db_card);
 		setTitle(R.string.create_card_title);
 
-		datasource = new CardsDataSource(app.getDatabase(), app.getDbHelper());
+		datasource = new CardsDataSource(app.getApplicationContext());
 
 		this.refreshActivity();
 
@@ -129,7 +129,6 @@ public class FilterDBCardsActivity extends Activity implements OnClickListener {
 	}
 
 	private void initCardTexts() {
-		datasource = new CardsDataSource(app.getDatabase(), app.getDbHelper());
 		numberOfActiveCards = (TextView) findViewById(R.id.textFilterDbDisplayActiveCards);
 		numberOfInactiveCards = (TextView) findViewById(R.id.textFilterDbDisplayInactiveCards);
 

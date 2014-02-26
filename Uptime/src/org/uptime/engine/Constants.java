@@ -100,6 +100,8 @@ public interface Constants {
 	};
 
 	static final int NUMBER_OF_CARDS = 40;
+	
+	static final int MAX_CARDS_LIST = 1000;
 
 	static final String DASH = "--";
 

@@ -1,7 +1,5 @@
 package org.uptime.activity;
 
-import java.io.IOException;
-
 import org.uptime.GameManager;
 import org.uptime.R;
 import org.uptime.activity.stats.StatisticsEndTurnActivity;

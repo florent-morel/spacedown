@@ -1,5 +1,6 @@
 package org.uptime.database;
 
+import org.uptime.database.UpTimeContentProvider.Schema;
 import org.uptime.engine.Constants;
 
 import android.content.Context;
@@ -9,24 +10,41 @@ import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
 
+	private static final int DATABASE_VERSION = 1;
+
 	/**
 	 * Singleton instance.
 	 */
 	private static DBHelper sInstance;
+	
+	private static final String CREATE_TABLE = "CREATE TABLE ";
 
-	public static final String TABLE_CARDS = "cards";
-	public static final String COLUMN_ID = "_id";
-	public static final String COLUMN_NAME = "name";
-	public static final String COLUMN_CATEGORY = "category";
-	public static final String COLUMN_URL = "url";
-	public static final String COLUMN_ACTIVE = "active";
+	private static final String DROP_TABLE_IF_EXISTS = "DROP TABLE IF EXISTS ";
 
-	private static final int DATABASE_VERSION = 1;
+	/**
+	 * SQL for creating table CARDS
+	 * @since 1
+	 */
+	public static final String SQL_CREATE_TABLE_CARDS = ""
+		+ CREATE_TABLE + Schema.TABLE_CARDS + " ("
+		+ Schema.COL_ID + " integer primary key autoincrement,"
+		+ Schema.COL_NAME + " text,"
+		+ Schema.COL_CATEGORY + " text,"
+		+ Schema.COL_URL + " text,"
+		+ Schema.COL_ACTIVE + " integer not null default 1,"
+		+ Schema.COL_DESCRIPTION + " text"
+		+ ")";
 
-	// Database creation sql statement
-	private static final String DATABASE_CREATE = "create table " + TABLE_CARDS + "(" + COLUMN_ID
-			+ " integer primary key autoincrement, " + COLUMN_NAME + " text not null, " + COLUMN_CATEGORY + " text, "
-			+ COLUMN_URL + " text, " + COLUMN_ACTIVE + " text" + ");";
+	/**
+	 * SQL for creating table CARDS
+	 * @since 1
+	 */
+	public static final String SQL_CREATE_TABLE_PLAYERS = ""
+		+ CREATE_TABLE + Schema.TABLE_PLAYERS + " ("
+		+ Schema.COL_ID + " integer primary key autoincrement,"
+		+ Schema.COL_NAME + " text,"
+		+ Schema.COL_ACTIVE + " integer not null default 0"
+		+ ")";
 
 	public static DBHelper getInstance(Context context) {
 
@@ -44,20 +62,24 @@ public class DBHelper extends SQLiteOpenHelper {
 	}
 
 	@Override
-	public void onCreate(SQLiteDatabase database) {
-		database.execSQL(DATABASE_CREATE);
+	public void onCreate(SQLiteDatabase db) {
+		db.execSQL(DROP_TABLE_IF_EXISTS + Schema.TABLE_CARDS);
+		db.execSQL(SQL_CREATE_TABLE_CARDS);
+		db.execSQL(DROP_TABLE_IF_EXISTS + Schema.TABLE_PLAYERS);
+		db.execSQL(SQL_CREATE_TABLE_PLAYERS);
+	
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		Log.w(DBHelper.class.getName(), "Upgrading database from version " + oldVersion + " to " + newVersion
 				+ ", which will destroy all old data");
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_CARDS);
+		db.execSQL(DROP_TABLE_IF_EXISTS + Schema.TABLE_CARDS);
 		onCreate(db);
 	}
 
 	public void dropTable(SQLiteDatabase db, String table) {
-		db.execSQL("DROP TABLE IF EXISTS " + table);
+		db.execSQL(DROP_TABLE_IF_EXISTS + table);
 		onCreate(db);
 	}
 

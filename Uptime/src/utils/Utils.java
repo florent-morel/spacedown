@@ -1,16 +1,6 @@
 package utils;
 
 import java.io.File;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.Locale;
-
-import android.app.Activity;
-import android.content.Context;
-import android.location.Location;
 
 
 public class Utils {

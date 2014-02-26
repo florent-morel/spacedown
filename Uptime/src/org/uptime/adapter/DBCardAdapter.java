@@ -65,7 +65,7 @@ public class DBCardAdapter extends ArrayAdapter<Card> {
 
 	private void buildFirstLine(View v, Card card) {
 		TextView cardId = (TextView) v.findViewById(R.id.cardId);
-		cardId.setText(card.getId().toString());
+		cardId.setText(String.valueOf(card.getId()));
 		TextView nameToFind = (TextView) v.findViewById(R.id.nameToFind);
 		StringBuilder firstLineBuilder = new StringBuilder();
 		firstLineBuilder.append(card.getNameToFind());

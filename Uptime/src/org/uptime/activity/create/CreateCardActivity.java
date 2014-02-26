@@ -50,10 +50,10 @@ public class CreateCardActivity extends Activity implements OnClickListener {
 		this.initTexts();
 		this.initButtons();
 
-		datasource = new CardsDataSource(app.getDatabase(), app.getDbHelper());
+		datasource = new CardsDataSource(app.getApplicationContext());
 
-		// TODO: Prefill with existing game values if any
-		int intentCardId = this.getIntent().getIntExtra(Constants.CARD_ID, -1);
+		// Prefill with existing card values if any
+		long intentCardId = this.getIntent().getLongExtra(Constants.CARD_ID, -1);
 		if (intentCardId > -1) {
 			cardToUpdate = datasource.getCard(intentCardId);
 			if (cardToUpdate != null) {
@@ -86,23 +86,21 @@ public class CreateCardActivity extends Activity implements OnClickListener {
 			if (nameToFind != null && !nameToFind.isEmpty()) {
 				// Create the card and store in DB
 				Card cardToPutInDb = null;
-				Card newCard = null;
 				String message = null;
 				boolean isActive = activeCard.isChecked();
 				if (cardToUpdate == null) {
-					this.createCard();
 					cardToPutInDb = new Card();
 					cardToPutInDb.setNameToFind(nameToFind);
 					cardToPutInDb.setCategory(category);
 					cardToPutInDb.setActiveInDB(isActive);
-					newCard = datasource.createCard(cardToPutInDb);
-					message = String.format(mResources.getString(R.string.dialog_create_card_ok), newCard.getId());
+					long newCardId = datasource.createCard(cardToPutInDb);
+					message = String.format(mResources.getString(R.string.dialog_create_card_ok), newCardId);
 				} else {
 					cardToUpdate.setNameToFind(nameToFind);
 					cardToUpdate.setCategory(category);
 					cardToUpdate.setActiveInDB(isActive);
-					newCard = datasource.updateCard(cardToUpdate);
-					message = String.format(mResources.getString(R.string.dialog_update_card_ok), newCard.getId());
+					long newCardId = datasource.updateCard(cardToUpdate);
+					message = String.format(mResources.getString(R.string.dialog_update_card_ok), newCardId);
 				}
 
 				Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
@@ -115,11 +113,6 @@ public class CreateCardActivity extends Activity implements OnClickListener {
 			}
 
 		}
-	}
-
-	private void createCard() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

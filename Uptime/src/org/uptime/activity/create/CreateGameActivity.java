@@ -153,7 +153,7 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 		String numberOfCards = spinnerNumberOfCards.getSelectedItem().toString();
 
 		mGameManager.startNewGame(runMode, Integer.valueOf(numberOfTeams), Integer.valueOf(numberOfCards), mResources,
-				context, new CardsDataSource(app.getDatabase(), app.getDbHelper()));
+				context, new CardsDataSource(app.getApplicationContext()));
 		mGame = mGameManager.getGame();
 		Intent intent = new Intent(this, ScoreActivity.class);
 		startActivityForResult(intent, Constants.GAME_NEW);
