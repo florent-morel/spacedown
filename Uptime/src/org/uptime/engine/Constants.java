@@ -107,6 +107,8 @@ public interface Constants {
 
 	static final int ACTIVITY_TURN_STATS = 132456;
 
+	static final int ACTIVITY_NEXT_PLAYER = 145654;
+
 	static final int ACTIVITY_TURN_STATS_END_ROUND = 45564;
 
 	static final int ACTIVITY_CARDACTIVITY_NEXT_ROUND = 543564;

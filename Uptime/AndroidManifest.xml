@@ -40,6 +40,10 @@
             android:label="@string/app_name" >
         </activity>
         <activity
+            android:name="org.uptime.activity.NextPlayerActivity"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name="org.uptime.activity.stats.ScoreActivity"
             android:label="@string/app_name" >
         </activity>

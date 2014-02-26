@@ -6,7 +6,7 @@
     <string name="app_name">Uptime</string>
     <string name="developer">fmorel</string>
     <string name="company">Apps</string>
-    <string name="app_build_date">2014-01-25</string>
+    <string name="app_build_date">2014&#8211;01&#8211;25</string>
     <string name="app_url">none</string>
     <string name="blog_url">none</string>
     <string name="market_url">https://play.google.com/store/apps/details?id=org.uptime</string>
@@ -23,6 +23,7 @@
     <string name="no">No</string>
     <string name="save">Save</string>
     <string name="confirm">Do you confirm?</string>
+    <string name="next">Next</string>
     
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
@@ -150,4 +151,7 @@
     <string name="player_list_contextmenu_delete">Delete</string>
     <string name="player_list_delete_dialog_title">Player will be deleted</string>
 
+    <!-- NEXT PLAYER / TEAM -->
+    <string name="next_player_name">Next Team: %1$s</string>
+    
 </resources>

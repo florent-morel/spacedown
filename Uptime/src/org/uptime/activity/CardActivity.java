@@ -253,7 +253,8 @@ public class CardActivity extends Activity implements OnClickListener {
 
 				if (mGame.getNumberCardsInPlay() == Constants.VALUE_ZERO) {
 					timer.cancel();
-//					tictacMediaPlayer.stop(); TODO tictacMediaPlayer.play() does not work with this
+					// tictacMediaPlayer.stop(); TODO tictacMediaPlayer.play()
+					// does not work with this
 					// This was the last card in play, round will end, display
 					// stats for turn
 					Intent intent = new Intent(this, StatisticsEndTurnActivity.class);
@@ -288,6 +289,15 @@ public class CardActivity extends Activity implements OnClickListener {
 			} else {
 				mGame.endTurn();
 			}
+
+			if (!mGame.isGameOver() && mGame.isRoundActive()) {
+				Intent intent = new Intent(this, NextPlayerActivity.class);
+				startActivityForResult(intent, Constants.ACTIVITY_NEXT_PLAYER);
+			} else {
+				refreshActivity(true);		
+			}
+
+		} else if (requestCode == Constants.ACTIVITY_NEXT_PLAYER) {
 			refreshActivity(true);
 		}
 	}

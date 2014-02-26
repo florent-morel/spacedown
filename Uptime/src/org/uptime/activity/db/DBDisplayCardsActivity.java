@@ -40,8 +40,6 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 
 	private CardsDataSource datasource;
 
-	private boolean confirmDelete = false;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

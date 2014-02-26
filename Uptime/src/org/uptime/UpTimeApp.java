@@ -6,13 +6,9 @@ import java.io.FileOutputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.channels.FileChannel;
 import java.util.Date;
-import java.util.List;
 
-import org.uptime.database.CardsDataSource;
 import org.uptime.database.DBHelper;
-import org.uptime.database.UpTimeContentProvider.Schema;
 import org.uptime.engine.Constants;
-import org.uptime.engine.game.Card;
 
 import utils.AppLog;
 import utils.Utils;
