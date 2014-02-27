@@ -35,10 +35,12 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 	private Resources mResources;
 
 	private ListView dbCardList;
-	
+
 	private TextView numberOfCards;
 
 	private CardsDataSource datasource;
+
+	private long selectedCardId = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,15 +89,15 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		Card card = (Card) dbCardList.getAdapter().getItem(info.position);
+		selectedCardId = card.getId();
 		switch (item.getItemId()) {
 		case R.id.action_update_card:
 			Intent intent = new Intent(this, CreateCardActivity.class);
-			intent.putExtra(Constants.CARD_ID, card.getId());
+			intent.putExtra(Constants.CARD_ID, selectedCardId);
 			startActivityForResult(intent, Constants.CARD_UPDATE);
 			return true;
 		case R.id.action_delete_card:
 			this.warnCancel();
-			this.refreshActivity();
 			return true;
 		default:
 			return super.onContextItemSelected(item);
@@ -110,8 +112,10 @@ public class DBDisplayCardsActivity extends Activity implements OnClickListener 
 				.setPositiveButton(String.format(mResources.getString(R.string.dialog_confirm_yes)),
 						new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int id) {
-								datasource.deleteCard(id);
+								datasource.deleteCard(selectedCardId);
+								DBDisplayCardsActivity.this.refreshActivity();
 							}
+							
 						})
 				.setNegativeButton(String.format(mResources.getString(R.string.dialog_confirm_no)),
 						new DialogInterface.OnClickListener() {

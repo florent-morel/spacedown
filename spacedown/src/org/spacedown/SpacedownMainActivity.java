@@ -146,12 +146,6 @@ public class SpacedownMainActivity extends Activity implements OnClickListener {
 		// Handle item selection
 		switch (item.getItemId()) {
 
-		// case R.id.compassMenuItem:
-		//
-		// startActivity(new Intent(this, CompassActivity.class));
-		//
-		// return true;
-
 		case R.id.aboutMenuItem:
 
 			this.showAboutDialog();
@@ -179,11 +173,6 @@ public class SpacedownMainActivity extends Activity implements OnClickListener {
 
 			app.restoreDatabase(this);
 			return true;
-
-			// case R.id.scheduledRecordingMenuItem:
-			//
-			// this.startStopScheduledTrackRecording();
-			// return true;
 
 		default:
 

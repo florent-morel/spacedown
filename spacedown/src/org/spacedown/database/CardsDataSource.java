@@ -51,7 +51,11 @@ public class CardsDataSource {
 		values.put(Schema.COL_NAME, card.getNameToFind());
 		values.put(Schema.COL_CATEGORY, card.getCategory());
 		values.put(Schema.COL_URL, card.getUrl());
-		values.put(Schema.COL_ACTIVE, card.isActiveInDB());
+		int active = Schema.VAL_INACTIVE;
+		if (card.isActiveInDB()) {
+			active = Schema.VAL_ACTIVE;
+		}
+		values.put(Schema.COL_ACTIVE, active);
 		values.put(Schema.COL_DESCRIPTION, card.getDescription());
 
 		Uri cardUri = contentResolver.insert(SpacedownContentProvider.CONTENT_URI_CARDS, values);
@@ -67,7 +71,11 @@ public class CardsDataSource {
 			values.put(Schema.COL_NAME, card.getNameToFind());
 			values.put(Schema.COL_CATEGORY, card.getCategory());
 			values.put(Schema.COL_URL, card.getUrl());
-			values.put(Schema.COL_ACTIVE, card.isActiveInDB());
+			int active = Schema.VAL_INACTIVE;
+			if (card.isActiveInDB()) {
+				active = Schema.VAL_ACTIVE;
+			}
+			values.put(Schema.COL_ACTIVE, active);
 			values.put(Schema.COL_DESCRIPTION, card.getDescription());
 
 			Uri cardUri = ContentUris
