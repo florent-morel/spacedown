@@ -127,7 +127,9 @@ public interface Constants {
 
 	static final String CATEGORY_CUSTOM = "Custom";
 
-	static final long TIMER_DEFAULT = 6000;
+	static final String TIMER_DEFAULT = "6";
 
 	static final long TIMER_TICTAC = 5000;
+
+	static final long ONE_SECOND = 1000;
 }

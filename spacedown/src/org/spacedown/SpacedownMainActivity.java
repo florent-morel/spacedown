@@ -1,7 +1,7 @@
 package org.spacedown;
 
-import org.spacedown.R;
 import org.spacedown.activity.ListPlayer;
+import org.spacedown.activity.PreferencesActivity;
 import org.spacedown.activity.create.CreateCardActivity;
 import org.spacedown.activity.create.CreateGameActivity;
 import org.spacedown.activity.db.FilterDBCardsActivity;
@@ -50,11 +50,6 @@ import android.widget.TextView;
  */
 public class SpacedownMainActivity extends Activity implements OnClickListener {
 
-	/**
-	 * Reference to Application object
-	 */
-	private SpacedownApp app;
-
 	private Resources mResources;
 
 	private Button mButtonNewGame;
@@ -68,9 +63,6 @@ public class SpacedownMainActivity extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		// reference to application object
-		app = ((SpacedownApp) getApplication());
 
 		mResources = getResources();
 
@@ -88,44 +80,7 @@ public class SpacedownMainActivity extends Activity implements OnClickListener {
 		mButtonImportCardsInDB = (Button) findViewById(R.id.buttonImportCards);
 		mButtonImportCardsInDB.setOnClickListener(this);
 
-		// mButtonQuickGame = (Button) findViewById(R.id.buttonNewGame);
-		// mButtonQuickGame.setOnClickListener(this);
-
-		// mGameManager = GameManager.getSingletonObject();
 	}
-
-	private void buildMenu(Menu menu, boolean isOnCreate) {
-		if (isOnCreate) {
-			// menu.add(0, Constants.GAME_NEW, 0, R.string.menu_new);
-			// menu.add(0, Constants.NEW_GAME_QUICK, 1,
-			// R.string.menu_new_quick);
-		}
-
-		// if (!mGameManager.getGame().getPlayerList().isEmpty()) {
-		// // A game is ongoing, add menu to continue
-		// if (menu.findItem(Constants.GAME_CONTINUE) == null) {
-		// menu.add(0, Constants.GAME_CONTINUE, 2, R.string.menu_continue);
-		// }
-		// } else {
-		// if (menu.findItem(Constants.GAME_CONTINUE) != null) {
-		// menu.removeItem(Constants.GAME_CONTINUE);
-		// }
-		// }
-	}
-
-	@Override
-	public boolean onMenuOpened(int featureId, Menu menu) {
-		super.onMenuOpened(featureId, menu);
-		buildMenu(menu, false);
-		return true;
-	}
-
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// super.onCreateOptionsMenu(menu);
-	// buildMenu(menu, true);
-	// return true;
-	// }
 
 	/**
 	 * onCreateOptionsMenu handler
@@ -147,33 +102,17 @@ public class SpacedownMainActivity extends Activity implements OnClickListener {
 		switch (item.getItemId()) {
 
 		case R.id.aboutMenuItem:
-
 			this.showAboutDialog();
-
-			return true;
-
-		case R.id.displayPlayerList:
-
-			 startActivity(new Intent(this, ListPlayer.class));
-
 			return true;
 
 		case R.id.quickHelp:
-
 			// showQuickHelp();
-
 			return true;
 
-		case R.id.backupMenuItem:
-
-			app.backupDatabase();
+		case R.id.settingsMenuItem:
+			 startActivity(new Intent(this, PreferencesActivity.class));
 			return true;
-
-		case R.id.restoreMenuItem:
-
-			app.restoreDatabase(this);
-			return true;
-
+			
 		default:
 
 			return super.onOptionsItemSelected(item);
@@ -182,59 +121,10 @@ public class SpacedownMainActivity extends Activity implements OnClickListener {
 
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		// StringBuilder message = new StringBuilder();
-		// Turn playedTurn = null;
-		// Player player = mGameManager.getCurrentPlayer();
-		// if (player != null) {
-		// playedTurn = player.getCurrentTurn();
-		//
-		switch (resultCode) {
-		case RESULT_OK:
-			break;
-		case Constants.RESULT_ROUND_END:
-			// displayScores();
-			break;
-		case Constants.RESULT_GAME_OVER:
-			// buildGameOverMessage(player, playedTurn, message);
-			break;
-
-		default:
-			// TODO Something went wrong
-			break;
-		}
-		//
-		// // In any case, build the zero, score and next player messages
-		// this.buildZeroMessage(player, message);
-		// this.buildScoreMessage(player, message);
-		//
-		// if (!mGameManager.getGame().isGameOver()) {
-		// StringBuilder nextMessage = new StringBuilder();
-		// this.buildNextPlayerMessage(nextMessage);
-		//
-		// Toast toast = Toast.makeText(this, nextMessage.toString(),
-		// Toast.LENGTH_LONG);
-		// toast.show();
-		// }
-		//
-		// // Create the dialog
-		// createAlert(message.toString());
-		// }
-		//
-		// refreshList();
-	}
-
 	private void launchNewGame() {
 		Intent intent = new Intent(this, CreateGameActivity.class);
 		startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 	}
-
-	// private void displayScores() {
-	// Intent intent = new Intent(this, ScoreActivity.class);
-	// startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
-	// }
 
 	@Override
 	public void onClick(View v) {

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- TIMER -->
+    <string name="prefs_timer_val_key">timer_value</string>
+    <string name="prefs_timer_val_dialog_title">Set value</string>
+    <string name="prefs_timer_val_summary">%1s\' per turn.</string>
+    <string name="prefs_timer_val_title">Timer value</string>
+
+    <!-- BACKUP -->
+    <string name="prefs_backup_directory_key">backup.directory</string>
+    <string name="prefs_backup">Backup</string>
+    <string name="prefs_restore">Restore</string>
+    <string name="prefs_backup_summary">Modify backup and restore settings</string>
+    <string name="prefs_backup_title">Backup and restore settings</string>
+    <string name="prefs_backup_directory_title">Select backup directory</string>
+    <string name="prefs_backup_directory_dialog_title">Select backup directory</string>
+    <string name="prefs_backup_directory_summary">Directory where backups are stored on the device</string>
+    <string name="prefs_backup_directory_default">/.Spacedown/backup</string>
+
+    <!-- PLAYER LIST -->
+    <string name="prefs_player_list">Player list</string>
+</resources>

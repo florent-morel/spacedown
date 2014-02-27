@@ -11,11 +11,13 @@ import org.spacedown.engine.game.Team;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -82,13 +84,17 @@ public class CardActivity extends Activity implements OnClickListener {
 	}
 
 	private void initTimer() {
-		timer = new CountDownTimer(Constants.TIMER_DEFAULT, 900) {
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		Integer timerInt = Integer.valueOf(prefs.getString(mResources.getString(R.string.prefs_timer_val_key),
+				Constants.TIMER_DEFAULT));
+		long timerValue = timerInt * Constants.ONE_SECOND;
+		timer = new CountDownTimer(timerValue, Constants.ONE_SECOND) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				Log.v(TAG, "CountDownTimer, millisUntilFinished=" + millisUntilFinished);
-				long roundedNumber = (millisUntilFinished + 500) / 1000;
-				Log.v(TAG, "CountDownTimer, display=" + roundedNumber);
-				mTimer.setText(String.format(mResources.getString(R.string.card_timer), roundedNumber));
+				long roundedNumber = (millisUntilFinished + 500) / Constants.ONE_SECOND;
+				Log.v(TAG, "CountDownTimer, display=" + (roundedNumber - 1));
+				mTimer.setText(String.format(mResources.getString(R.string.card_timer), roundedNumber - 1));
 				if (allowTictac && millisUntilFinished <= Constants.TIMER_TICTAC) {
 					tictacMediaPlayer.start();
 					allowTictac = false;
@@ -294,7 +300,7 @@ public class CardActivity extends Activity implements OnClickListener {
 				Intent intent = new Intent(this, NextPlayerActivity.class);
 				startActivityForResult(intent, Constants.ACTIVITY_NEXT_PLAYER);
 			} else {
-				refreshActivity(true);		
+				refreshActivity(true);
 			}
 
 		} else if (requestCode == Constants.ACTIVITY_NEXT_PLAYER) {

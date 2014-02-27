@@ -5,16 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.StringTokenizer;
 
-import org.spacedown.database.CardsDataSource;
 import org.spacedown.database.DBHelper;
-import org.spacedown.database.SpacedownContentProvider.Schema;
 import org.spacedown.engine.Constants;
-import org.spacedown.engine.game.Card;
 
 import utils.AppLog;
 import utils.Utils;
@@ -28,7 +22,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Environment;
@@ -160,67 +153,67 @@ public class SpacedownApp extends Application {
 
 	}
 
-	private void dropColumn() {
-		CardsDataSource ds = new CardsDataSource(getApplicationContext());
-
-		// List<Card> inactiveCards = ds.getAllCardsOld(db, false);
-		String tableName = Schema.TABLE_CARDS;
-		Cursor query = db.query(tableName, null, null, null, null, null, null);
-
-		query.moveToFirst();
-//		StringBuilder builder = new StringBuilder();
-		List<String> listIds = new ArrayList<String>();
-		String ids = "18,43,56,76,81,115,131,149,175,189,193,199,202,203,205,237,261,266,267,270,272,276,285,292,319,321,325,344,348,370,382,386,388,396,425,435,436,437,438,447,458,469,487,527,536,542,570,582,589,593,599,609,611,613,620,640,643,666,674,682,691,752,760,797,809,829,833,844,855,926,935,941,955,956,957,990,997,999,1003";
-
-		StringTokenizer st = new StringTokenizer(ids, ",");
-		while (st.hasMoreTokens()) {
-			listIds.add(st.nextToken());
-		}
-
-		List<Card> inactiveCards = new ArrayList<Card>();
-		while (!query.isAfterLast()) {
-			Card card = Card.build(query, getContentResolver());
-			if (listIds.contains(String.valueOf(card.getId()))) {
-				card.setActiveInDB(false);
-			} else {
-				card.setActiveInDB(true);
-			}
-			inactiveCards.add(card);
-			query.moveToNext();
-		}
-
-//		db.execSQL("ALTER TABLE " + tableName + " RENAME TO " + tableName + "_old;");
-
-		// Creating the table on its new format (no redundant columns)
-//		db.execSQL(DBHelper.SQL_CREATE_TABLE_CARDS);
-
-		// db.execSQL("alter table "+tableName+" add column "+Schema.COL_DESCRIPTION+" text;");
-
-//		String columns = Schema.COL_ID + "," + Schema.COL_NAME;
-
-//		Log.v(tableName, card.toString());
-		// query = db.query(tableName + "_old", null, null, null, null, null,
-		// null);
-		//
-		// query.moveToFirst();
-		// builder = new StringBuilder();
-		//
-		// while (!query.isAfterLast()) {
-		// builder.append(query.getString(1));
-		// query.moveToNext();
-		// }
-		//
-		// Log.v(tableName + "_old", builder.toString());
-
-		// Populating the table with the data
-		// db.execSQL("INSERT INTO " + tableName + "(" + columns + ") SELECT " +
-		// columns + " FROM " + tableName + "_old;");
-		// Update inactive cards
-		for (Card card : inactiveCards) {
-			ds.updateCard(card);
-		}
-		// db.execSQL("DROP TABLE " + tableName + "_old;");
-	}
+//	private void dropColumn() {
+//		CardsDataSource ds = new CardsDataSource(getApplicationContext());
+//
+//		// List<Card> inactiveCards = ds.getAllCardsOld(db, false);
+//		String tableName = Schema.TABLE_CARDS;
+//		Cursor query = db.query(tableName, null, null, null, null, null, null);
+//
+//		query.moveToFirst();
+////		StringBuilder builder = new StringBuilder();
+//		List<String> listIds = new ArrayList<String>();
+//		String ids = "18,43,56,76,81,115,131,149,175,189,193,199,202,203,205,237,261,266,267,270,272,276,285,292,319,321,325,344,348,370,382,386,388,396,425,435,436,437,438,447,458,469,487,527,536,542,570,582,589,593,599,609,611,613,620,640,643,666,674,682,691,752,760,797,809,829,833,844,855,926,935,941,955,956,957,990,997,999,1003";
+//
+//		StringTokenizer st = new StringTokenizer(ids, ",");
+//		while (st.hasMoreTokens()) {
+//			listIds.add(st.nextToken());
+//		}
+//
+//		List<Card> inactiveCards = new ArrayList<Card>();
+//		while (!query.isAfterLast()) {
+//			Card card = Card.build(query, getContentResolver());
+//			if (listIds.contains(String.valueOf(card.getId()))) {
+//				card.setActiveInDB(false);
+//			} else {
+//				card.setActiveInDB(true);
+//			}
+//			inactiveCards.add(card);
+//			query.moveToNext();
+//		}
+//
+////		db.execSQL("ALTER TABLE " + tableName + " RENAME TO " + tableName + "_old;");
+//
+//		// Creating the table on its new format (no redundant columns)
+////		db.execSQL(DBHelper.SQL_CREATE_TABLE_CARDS);
+//
+//		// db.execSQL("alter table "+tableName+" add column "+Schema.COL_DESCRIPTION+" text;");
+//
+////		String columns = Schema.COL_ID + "," + Schema.COL_NAME;
+//
+////		Log.v(tableName, card.toString());
+//		// query = db.query(tableName + "_old", null, null, null, null, null,
+//		// null);
+//		//
+//		// query.moveToFirst();
+//		// builder = new StringBuilder();
+//		//
+//		// while (!query.isAfterLast()) {
+//		// builder.append(query.getString(1));
+//		// query.moveToNext();
+//		// }
+//		//
+//		// Log.v(tableName + "_old", builder.toString());
+//
+//		// Populating the table with the data
+//		// db.execSQL("INSERT INTO " + tableName + "(" + columns + ") SELECT " +
+//		// columns + " FROM " + tableName + "_old;");
+//		// Update inactive cards
+//		for (Card card : inactiveCards) {
+//			ds.updateCard(card);
+//		}
+//		// db.execSQL("DROP TABLE " + tableName + "_old;");
+//	}
 
 	/**
 	 * Checking if external storage is available and writable
