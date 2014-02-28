@@ -6,8 +6,5 @@
     <item
         android:id="@+id/quickHelp"
         android:title="@string/quick_help_title"/>
-    <item
-        android:id="@+id/aboutMenuItem"
-        android:title="@string/about"/>
 
 </menu>

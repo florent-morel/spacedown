@@ -20,4 +20,7 @@
 
     <!-- PLAYER LIST -->
     <string name="prefs_player_list">Player list</string>
+
+    <!-- ABOUT -->
+    <string name="prefs_about_key">about_key</string>
 </resources>

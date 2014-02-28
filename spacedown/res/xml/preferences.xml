@@ -10,6 +10,7 @@
         android:summary="@string/prefs_timer_val_summary"
         android:title="@string/prefs_timer_val_title" >
     </ListPreference>
+
     <PreferenceScreen
         android:summary="@string/prefs_backup_summary"
         android:title="@string/prefs_backup_title" >
@@ -21,13 +22,14 @@
                 android:summary="@string/prefs_backup_directory_summary"
                 android:title="@string/prefs_backup_directory_title" >
             </EditTextPreference>
+
             <Preference
-                android:title="Perform backup"
-                android:key="@string/prefs_backup" >
+                android:key="@string/prefs_backup"
+                android:title="Perform backup" >
             </Preference>
             <Preference
-                android:title="Restore"
-                android:key="@string/prefs_restore" >
+                android:key="@string/prefs_restore"
+                android:title="Restore" >
             </Preference>
         </PreferenceCategory>
     </PreferenceScreen>
@@ -36,4 +38,9 @@
         <intent android:action="org.spacedown.activity.ListPlayer" />
     </Preference>
     
+    <Preference
+        android:key="@string/prefs_about_key"
+        android:title="@string/about" >
+    </Preference>
+
 </PreferenceScreen>

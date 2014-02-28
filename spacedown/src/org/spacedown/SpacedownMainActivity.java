@@ -27,7 +27,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 /**
- * spacedown, a card game application.
+ * Spacedown, a card game application.
  * 
  * Copyright (C) 2014 Florent Morel.
  * 
@@ -43,14 +43,12 @@ import android.widget.TextView;
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>.
  * 
- * LaCrise home activity.
+ * Spacedown home activity.
  * 
  * @author florent
  * 
  */
 public class SpacedownMainActivity extends Activity implements OnClickListener {
-
-	private Resources mResources;
 
 	private Button mButtonNewGame;
 	private Button mButtonCreateCard;
@@ -63,8 +61,6 @@ public class SpacedownMainActivity extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		mResources = getResources();
 
 		setContentView(R.layout.activity_main);
 
@@ -101,10 +97,6 @@ public class SpacedownMainActivity extends Activity implements OnClickListener {
 		// Handle item selection
 		switch (item.getItemId()) {
 
-		case R.id.aboutMenuItem:
-			this.showAboutDialog();
-			return true;
-
 		case R.id.quickHelp:
 			// showQuickHelp();
 			return true;
@@ -114,11 +106,9 @@ public class SpacedownMainActivity extends Activity implements OnClickListener {
 			return true;
 			
 		default:
-
 			return super.onOptionsItemSelected(item);
 
 		}
-
 	}
 
 	private void launchNewGame() {
@@ -141,52 +131,6 @@ public class SpacedownMainActivity extends Activity implements OnClickListener {
 			Intent intent = new Intent(this, ImportCardsInDBActivity.class);
 			startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 		}
-
-	}
-
-	/**
-	 * About dialog
-	 */
-	private void showAboutDialog() {
-
-		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-		View layout = inflater.inflate(R.layout.about_dialog, null);
-
-		TextView buildDate = (TextView) layout.findViewById(R.id.build_date);
-		buildDate.setText(String.format(mResources.getString(R.string.build_date),
-				mResources.getString(R.string.app_build_date)));
-
-		TextView versionView = (TextView) layout.findViewById(R.id.version);
-		versionView.setText(getString(R.string.main_app_title) + Constants.SPACE + getString(R.string.ver)
-				+ SpacedownApp.getVersionName(this));
-
-		TextView messageView = (TextView) layout.findViewById(R.id.message);
-
-		String aboutStr = getString(R.string.about_dialog_message);
-		// adding links to "about" text
-		final SpannableString s = new SpannableString(aboutStr);
-		Linkify.addLinks(s, Linkify.ALL);
-
-		messageView.setText(s + getString(R.string.acknowledgements));
-
-		messageView.setMovementMethod(LinkMovementMethod.getInstance());
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.about);
-		// builder.setIcon(R.drawable.icon);
-		builder.setView(layout);
-
-		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.dismiss();
-			}
-		});
-
-		builder.setCancelable(true);
-
-		AlertDialog alert = builder.create();
-		alert.show();
 
 	}
 
