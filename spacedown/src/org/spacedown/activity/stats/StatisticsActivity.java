@@ -130,7 +130,7 @@ public class StatisticsActivity extends Activity {
 
 	private TurnCardAdapter buildCardAdapter(Team team, Round round) {
 
-		TurnCardAdapter turnCardAdapter = new TurnCardAdapter(this, R.layout.layout_stats_card_row);
+		TurnCardAdapter turnCardAdapter = new TurnCardAdapter(this, R.layout.layout_stats_card_row, false);
 
 		List<Turn> turnList = round.getSavedTurnMap().get(team);
 		if (turnList != null) {

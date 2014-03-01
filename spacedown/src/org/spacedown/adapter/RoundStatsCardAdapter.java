@@ -101,7 +101,7 @@ public class RoundStatsCardAdapter extends PagerAdapter {
 
 	private TurnCardAdapter buildCardAdapter(Team team, Round round) {
 
-		TurnCardAdapter turnCardAdapter = new TurnCardAdapter(mActivity, R.layout.layout_stats_card_row);
+		TurnCardAdapter turnCardAdapter = new TurnCardAdapter(mActivity, R.layout.layout_stats_card_row, false);
 
 		List<Turn> turnList = round.getSavedTurnMap().get(team);
 		if (turnList != null) {

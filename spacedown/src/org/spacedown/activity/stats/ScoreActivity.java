@@ -70,8 +70,8 @@ public class ScoreActivity extends Activity implements OnClickListener {
 
 		mScoreTeamList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent intent = new Intent(parent.getContext(), StatisticsActivity.class);
-//				Intent intent = new Intent(parent.getContext(), RoundStatisticsActivity.class);
+//				Intent intent = new Intent(parent.getContext(), StatisticsActivity.class);
+				Intent intent = new Intent(parent.getContext(), ScreenSlidePagerActivity.class);
 				intent.putExtra(Constants.STATS_TEAM, mGame.getTeamList().get(position).getId());
 				startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 			}

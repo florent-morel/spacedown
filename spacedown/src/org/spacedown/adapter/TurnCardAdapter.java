@@ -24,10 +24,12 @@ public class TurnCardAdapter extends ArrayAdapter<Card> {
 
 	public LayoutInflater mInflater;
 
-	public TurnCardAdapter(Context context, int textViewResourceId) {
+	private boolean colorCards;
+
+	public TurnCardAdapter(Context context, int textViewResourceId, boolean applyColors) {
 		super(context, textViewResourceId);
 		this.mResources = context.getResources();
-
+		this.colorCards = applyColors;
 		this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
@@ -61,12 +63,14 @@ public class TurnCardAdapter extends ArrayAdapter<Card> {
 
 		Card card = mItems.get(position);
 
-		if (card.isFound()) {
-			v.setBackgroundColor(Color.GREEN);
-		} else {
-			v.setBackgroundColor(Color.RED);
+		if (colorCards) {
+			if (card.isFound()) {
+				v.setBackgroundColor(Color.GREEN);
+			} else {
+				v.setBackgroundColor(Color.RED);
+			}
 		}
-		
+
 		TextView cardNumber = (TextView) v.findViewById(R.id.cardId);
 		cardNumber.setText(String.format(mResources.getString(R.string.stats_card_number), position + 1));
 

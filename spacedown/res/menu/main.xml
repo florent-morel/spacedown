@@ -7,4 +7,8 @@
         android:id="@+id/quickHelp"
         android:title="@string/quick_help_title"/>
 
+    <item
+        android:id="@+id/testMenuItem"
+        android:title="test"/>
+
 </menu>

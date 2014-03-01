@@ -104,7 +104,7 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 		setTitle(String.format(mResources.getString(R.string.stats_title), team.getName()));
 
 		mStatsCardsEndTurnList = (ListView) findViewById(R.id.statsCardEndTurnList);
-		mTurnCardAdapter = new TurnCardAdapter(this, R.layout.layout_stats_card_row);
+		mTurnCardAdapter = new TurnCardAdapter(this, R.layout.layout_stats_card_row, true);
 
 		if (team != null) {
 			Round round = game.getCurrentRound();
