@@ -25,12 +25,9 @@ public class CardBuilder {
 
 	public CardBuilder(Resources mResources, Context context, CardsDataSource data) {
 		super();
-		
 		datasource = data;
-		
 		this.mResources = mResources;
 		this.context = context;
-
 	}
 
 	public List<Card> buildAvailableCards(Constants.RunMode runMode, Integer numberOfCards) {
@@ -43,11 +40,6 @@ public class CardBuilder {
 		if (Constants.RunMode.IMPORT_CSV.equals(runMode)) {
 			cardList = importCardsFromCSV();
 		}
-
-		// Fallback to hard-coded list in case import from CSV did not work
-//		if (cardList == null || Constants.RunMode.HARDCODE.equals(runMode)) {
-//			cardList = importHardCodedListToDB(true);
-//		}
 
 		// Last chance: take debug cards
 		if (cardList == null || Constants.RunMode.DEBUG.equals(runMode)) {

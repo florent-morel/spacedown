@@ -83,15 +83,6 @@ public class Game {
 				Team team = new Team(i + 1, Character.toString((char) (i + 65)));
 				mTeamList.add(team);
 			}
-		} else {
-			Team team = new Team(1, "AA");
-			mTeamList.add(team);
-			team = new Team(2, "BB");
-			mTeamList.add(team);
-			team = new Team(3, "CC");
-			mTeamList.add(team);
-			team = new Team(4, "DD");
-			mTeamList.add(team);
 		}
 	}
 

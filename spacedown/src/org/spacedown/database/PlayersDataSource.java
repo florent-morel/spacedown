@@ -23,25 +23,9 @@ public class PlayersDataSource {
 	 */
 	private ContentResolver contentResolver;
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param c
-	 *            Application context.
-	 */
 	public PlayersDataSource(Context c) {
 		contentResolver = c.getContentResolver();
 	}
-
-//	public List<Card> addCards(List<Card> cardList) {
-//		List<Card> addedCards = new ArrayList<Card>();
-//		if (cardList != null && !cardList.isEmpty()) {
-//			for (Card card : cardList) {
-//				addedCards.add(this.getCard(this.createCard(card)));
-//			}
-//		}
-//		return addedCards;
-//	}
 
 	public long createPlayer(Player player) {
 		// Create entry in PLAYERS table

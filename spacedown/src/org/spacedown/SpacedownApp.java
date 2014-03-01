@@ -141,8 +141,6 @@ public class SpacedownApp extends Application {
 		setExternalStorageState();
 
 		dataDir = Environment.getDataDirectory().getAbsolutePath() + "/org.spacedown/databases";
-		// TODO: NEW FEATURE: app database file in external memory
-		// dataDir = appDir + Constants.SLASH + Constants.PATH_DATABASE;
 
 		// create all folders required by the application on external storage
 		if (getExternalStorageAvailable() && getExternalStorageWriteable()) {

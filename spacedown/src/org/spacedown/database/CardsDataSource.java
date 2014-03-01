@@ -12,7 +12,6 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
@@ -25,12 +24,6 @@ public class CardsDataSource {
 	 */
 	private ContentResolver contentResolver;
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param c
-	 *            Application context.
-	 */
 	public CardsDataSource(Context c) {
 		contentResolver = c.getContentResolver();
 	}

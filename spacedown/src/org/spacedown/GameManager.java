@@ -11,7 +11,7 @@ import android.content.res.Resources;
 /**
  * Singleton handling the game instance.
  * 
- * Starts a new game, sorts players by rank, computes a turn score...
+ * Starts a new game.
  * 
  * @author florent
  * 
