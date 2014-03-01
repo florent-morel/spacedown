@@ -42,6 +42,10 @@ public class RoundStatisticsActivity extends FragmentActivity {
 		mResources = getResources();
 		mGameManager = GameManager.getSingletonObject();
 		game = mGameManager.getGame();
+		
+
+//	    ActionBar actionBar = getSupportActionBar();
+//	    actionBar.setDisplayHomeAsUpEnabled(true);
 
 		int team = this.getIntent().getIntExtra(Constants.STATS_TEAM, 0);
 		setTitle(String.format(mResources.getString(R.string.stats_title), game.getTeam(team).getName()));
