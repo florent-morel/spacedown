@@ -2,52 +2,98 @@ package org.spacedown.activity.stats;
 
 import org.spacedown.GameManager;
 import org.spacedown.R;
-import org.spacedown.adapter.RoundStatsCardAdapter;
 import org.spacedown.engine.Constants;
 import org.spacedown.engine.game.Game;
-import org.spacedown.engine.game.Team;
 
-import android.app.Activity;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
-public class RoundStatisticsActivity extends Activity {
+public class RoundStatisticsActivity extends FragmentActivity {
 
+	private Resources mResources;
+
+	/**
+	 * The number of pages (wizard steps) to show in this demo.
+	 */
+	private static final int NUM_PAGES = 3;
 	private static GameManager mGameManager;
-
 	private Game game;
+	/**
+	 * The pager widget, which handles animation and allows swiping horizontally
+	 * to access previous and next wizard steps.
+	 */
+	private ViewPager mPager;
 
-	private Team team;
+	/**
+	 * The pager adapter, which provides the pages to the view pager widget.
+	 */
+	private PagerAdapter mPagerAdapter;
 
-	private ViewPager statsPager;
-	private RoundStatsCardAdapter roundStatsAdapter;
-
-	/** Called when the activity is first created. */
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_stats_round);
+		setContentView(R.layout.activity_screen_slide);
+		mResources = getResources();
 		mGameManager = GameManager.getSingletonObject();
 		game = mGameManager.getGame();
 
-		team = game.getTeam(this.getIntent().getIntExtra(Constants.STATS_TEAM, 0));
+		int team = this.getIntent().getIntExtra(Constants.STATS_TEAM, 0);
+		setTitle(String.format(mResources.getString(R.string.stats_title), game.getTeam(team).getName()));
 
-		roundStatsAdapter = new RoundStatsCardAdapter(this);
-		statsPager = (ViewPager) findViewById(R.id.stats_round_pager);
-		statsPager.setAdapter(roundStatsAdapter);
-		statsPager.setCurrentItem(Constants.VALUE_ZERO);
-
-		// If you are asking how one could implements a carousel (infinite
-		// loop), then that would involve manipulating the PagerAdapter to
-		// return a x+1 for getCount() and getItem(int position) to perform a
-		// modulus operation on the ‘position’ parameter to determine the
-		// correct Fragment index in the member variable ‘List fragments’ e.g:
-		//
-		// int i = position % fragments.size();
-
+		// Instantiate a ViewPager and a PagerAdapter.
+		mPager = (ViewPager) findViewById(R.id.pager);
+		mPagerAdapter = new ScreenSlidePagerAdapter(team, getSupportFragmentManager());
+		mPager.setAdapter(mPagerAdapter);
 	}
 
-	public Team getTeam() {
-		return team;
+	@Override
+	public void onBackPressed() {
+		if (mPager.getCurrentItem() == 0) {
+			// If the user is currently looking at the first step, allow the
+			// system to handle the
+			// Back button. This calls finish() on this activity and pops the
+			// back stack.
+			super.onBackPressed();
+		} else {
+			// Otherwise, select the previous step.
+			mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+		}
+	}
+
+	/**
+	 * A simple pager adapter that represents 5 ScreenSlidePageFragment objects,
+	 * in sequence.
+	 */
+	private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+
+		private int teamId;
+
+		public ScreenSlidePagerAdapter(int team, FragmentManager fm) {
+			super(fm);
+			this.teamId = team;
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			ScreenSlidePageFragment screenSlidePageFragment = new ScreenSlidePageFragment();
+			Bundle bundle = new Bundle();
+			bundle.putInt(Constants.STATS_ROUND, position);
+
+			bundle.putInt(Constants.STATS_TEAM, teamId);
+
+			screenSlidePageFragment.setArguments(bundle);
+			return screenSlidePageFragment;
+		}
+
+		@Override
+		public int getCount() {
+			return NUM_PAGES;
+		}
 	}
 }

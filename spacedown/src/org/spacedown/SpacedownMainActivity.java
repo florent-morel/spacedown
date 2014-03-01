@@ -6,7 +6,7 @@ import org.spacedown.activity.create.CreateCardActivity;
 import org.spacedown.activity.create.CreateGameActivity;
 import org.spacedown.activity.db.FilterDBCardsActivity;
 import org.spacedown.activity.db.ImportCardsInDBActivity;
-import org.spacedown.activity.stats.ScreenSlidePagerActivity;
+import org.spacedown.activity.stats.RoundStatisticsActivity;
 import org.spacedown.engine.Constants;
 
 import android.app.Activity;
@@ -106,10 +106,6 @@ public class SpacedownMainActivity extends Activity implements OnClickListener {
 			 startActivity(new Intent(this, PreferencesActivity.class));
 			return true;
 
-		case R.id.testMenuItem:
-			 startActivity(new Intent(this, ScreenSlidePagerActivity.class));
-			return true;
-			
 		default:
 			return super.onOptionsItemSelected(item);
 

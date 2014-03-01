@@ -21,6 +21,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
+@Deprecated
 public class StatisticsActivity extends Activity {
 
 	private static GameManager mGameManager;

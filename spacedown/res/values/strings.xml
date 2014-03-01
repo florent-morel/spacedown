@@ -94,6 +94,10 @@
     <string name="create_card_category_custom">Custom</string>
     <string name="create_card_confirm">Confirm</string>
     <string name="create_card_active">Card is active</string>
+    
+    
+    <!-- DATABASE -->
+    
     <string name="import_cards">Import cards in DB</string>
     <string name="db_number_cards">Number of cards in DB: %1$d</string>
     <string name="db_number_cards_inactive">Number of inactive cards in DB: %1$d</string>

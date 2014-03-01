@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.spacedown.GameManager;
 import org.spacedown.R;
-import org.spacedown.activity.stats.RoundStatisticsActivity;
+import org.spacedown.activity.stats.RoundStatisticsActivityOld;
 import org.spacedown.engine.game.Card;
 import org.spacedown.engine.game.Round;
 import org.spacedown.engine.game.Team;
@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+@Deprecated
 public class RoundStatsCardAdapter extends PagerAdapter {
 
 	private Context mContext;
@@ -38,11 +39,11 @@ public class RoundStatsCardAdapter extends PagerAdapter {
 
 	private View mView;
 
-	private RoundStatisticsActivity mActivity;
+	private RoundStatisticsActivityOld mActivity;
 
 	// private final Context context;
 
-	public RoundStatsCardAdapter(RoundStatisticsActivity activity) {
+	public RoundStatsCardAdapter(RoundStatisticsActivityOld activity) {
 		super();
 		mActivity = activity;
 		mContext = activity.getBaseContext();

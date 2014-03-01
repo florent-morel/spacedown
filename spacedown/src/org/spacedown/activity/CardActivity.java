@@ -55,6 +55,7 @@ public class CardActivity extends Activity implements OnClickListener {
 	boolean allowCardFoundButton = true;
 
 	private CountDownTimer timer;
+	private long remainingTimer = -1;
 
 	private static MediaPlayer foundMediaPlayer;
 	private static MediaPlayer skipMediaPlayer;
@@ -80,17 +81,35 @@ public class CardActivity extends Activity implements OnClickListener {
 		this.initTexts();
 		this.setTexts();
 		this.initButtons();
-		this.initTimer();
+		this.initTimer(-1);
 	}
 
-	private void initTimer() {
-		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		Integer timerInt = Integer.valueOf(prefs.getString(mResources.getString(R.string.prefs_timer_val_key),
-				Constants.TIMER_DEFAULT));
-		long timerValue = timerInt * Constants.ONE_SECOND;
+	@Override
+	protected void onPause() {
+		super.onPause();
+		timer.cancel();
+		tictacMediaPlayer.stop();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		timer.cancel();
+		initTimer(remainingTimer);
+		tictacMediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.tictac);
+	}
+
+	private void initTimer(long timerValue) {
+		if (timerValue < 0) {
+			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			Integer timerInt = Integer.valueOf(prefs.getString(mResources.getString(R.string.prefs_timer_val_key),
+					Constants.TIMER_DEFAULT));
+			timerValue = timerInt * Constants.ONE_SECOND;
+		}
 		timer = new CountDownTimer(timerValue, Constants.ONE_SECOND) {
 			@Override
 			public void onTick(long millisUntilFinished) {
+				remainingTimer = millisUntilFinished;
 				Log.v(TAG, "CountDownTimer, millisUntilFinished=" + millisUntilFinished);
 				long roundedNumber = (millisUntilFinished + 500) / Constants.ONE_SECOND;
 				Log.v(TAG, "CountDownTimer, display=" + (roundedNumber - 1));
@@ -104,10 +123,10 @@ public class CardActivity extends Activity implements OnClickListener {
 
 			@Override
 			public void onFinish() {
+				// Timer is finished, end turn
 				mTimer.setText(String.format(mResources.getString(R.string.card_timer), 0));
 				allowTictac = true;
 				ednTurnMediaPlayer.start();
-				// Timer is finished, end turn
 				// Display stats for this turn
 				Intent intent = new Intent(CardActivity.this, StatisticsEndTurnActivity.class);
 				startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS);
@@ -259,7 +278,7 @@ public class CardActivity extends Activity implements OnClickListener {
 
 				if (mGame.getNumberCardsInPlay() == Constants.VALUE_ZERO) {
 					timer.cancel();
-					// tictacMediaPlayer.stop(); TODO tictacMediaPlayer.play()
+					tictacMediaPlayer.stop();
 					// does not work with this
 					// This was the last card in play, round will end, display
 					// stats for turn
@@ -290,6 +309,8 @@ public class CardActivity extends Activity implements OnClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == Constants.ACTIVITY_TURN_STATS) {
 			// Stats for this turn is done, end turn
+			remainingTimer = -1;
+			timer.cancel();
 			if (mGame.getNumberCardsInPlay() == Constants.VALUE_ZERO) {
 				mGame.endRound();
 			} else {
@@ -319,7 +340,7 @@ public class CardActivity extends Activity implements OnClickListener {
 			this.initButtons();
 			if (initTimer) {
 				allowTictac = true;
-				this.initTimer();
+				this.initTimer(-1);
 			}
 		} else {
 			finish();
