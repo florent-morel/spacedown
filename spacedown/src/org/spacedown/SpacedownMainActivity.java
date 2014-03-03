@@ -1,31 +1,21 @@
 package org.spacedown;
 
-import org.spacedown.activity.ListPlayer;
 import org.spacedown.activity.PreferencesActivity;
 import org.spacedown.activity.create.CreateCardActivity;
 import org.spacedown.activity.create.CreateGameActivity;
 import org.spacedown.activity.db.FilterDBCardsActivity;
 import org.spacedown.activity.db.ImportCardsInDBActivity;
-import org.spacedown.activity.stats.RoundStatisticsActivity;
 import org.spacedown.engine.Constants;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
 
 /**
  * Spacedown, a card game application.
