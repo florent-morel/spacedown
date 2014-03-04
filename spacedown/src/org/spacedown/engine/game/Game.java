@@ -205,8 +205,8 @@ public class Game {
 		mCurrentRound.saveCurrentTurn(mCurrentTeam);
 		mCurrentRound.setRoundActive(Boolean.FALSE);
 
-		if (Constants.ROUND_THIRD == mCurrentRound.getRoundNumber()) {
-			// Update database with list of discarded cards
+		if (Constants.ROUND_FIRST == mCurrentRound.getRoundNumber()) {
+			// Update database with list of discarded cards after first round.
 			if (mDiscardedCardsInDB != null && !mDiscardedCardsInDB.isEmpty()) {
 				for (Card discardedCard : mDiscardedCardsInDB) {
 					discardedCard.setActiveInDB(Boolean.FALSE);

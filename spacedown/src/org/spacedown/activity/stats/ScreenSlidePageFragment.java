@@ -53,8 +53,8 @@ public class ScreenSlidePageFragment extends Fragment {
 
 		Bundle bundle = this.getArguments();
 		
-		int int1 = bundle.getInt(Constants.STATS_TEAM, 0);
-		this.team = game.getTeam(int1);
+		int teamId = bundle.getInt(Constants.STATS_TEAM, 0);
+		this.team = game.getTeam(teamId);
 
 		roundNumber = bundle.getInt(Constants.STATS_ROUND, 0);
 
