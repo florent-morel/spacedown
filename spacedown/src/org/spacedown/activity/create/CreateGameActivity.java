@@ -4,10 +4,10 @@ import org.spacedown.GameManager;
 import org.spacedown.R;
 import org.spacedown.SpacedownApp;
 import org.spacedown.activity.stats.ScoreActivity;
+import org.spacedown.activity.stats.ScoreActivityNew;
 import org.spacedown.database.CardsDataSource;
 import org.spacedown.engine.Constants;
 import org.spacedown.engine.game.Game;
-
 
 import android.app.Activity;
 import android.content.Context;
@@ -155,7 +155,7 @@ public class CreateGameActivity extends Activity implements OnClickListener {
 		mGameManager.startNewGame(runMode, Integer.valueOf(numberOfTeams), Integer.valueOf(numberOfCards), mResources,
 				context, new CardsDataSource(app.getApplicationContext()));
 		mGame = mGameManager.getGame();
-		Intent intent = new Intent(this, ScoreActivity.class);
+		Intent intent = new Intent(this, ScoreActivityNew.class);
 		startActivityForResult(intent, Constants.GAME_NEW);
 	}
 

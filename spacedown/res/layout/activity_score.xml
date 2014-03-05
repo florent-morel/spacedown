@@ -12,7 +12,7 @@
         android:id="@+id/textScoreTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/score_title" />
+        android:text="@string/score_round_tab_title" />
 
     <TextView
         android:id="@+id/textScoreBoard"
