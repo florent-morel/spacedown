@@ -42,13 +42,15 @@
     <string name="card_found">Found</string>
     <string name="card_skip">Skip</string>
     <string name="card_end_turn">End turn</string>
+    
     <string name="score_next_round">Next Round</string>
     <string name="score_continue_round">Continue Round</string>
-    <string name="score_title">Score per team</string>
+    <string name="score_title">Score board</string>
     <string name="score_round_text">Team score</string>
     <string name="score_round_nothing">No Round yet</string>
     <string name="score_round_finished">Round %1$d just finished, next team: %2$s</string>
     <string name="score_round_active">Round %1$d still active, next team: %2$s</string>
+    
     <string name="create_title">Set your game settings</string>
     <string name="create_teams">Number of teams:</string>
     <string name="create_team_name">Team name:</string>

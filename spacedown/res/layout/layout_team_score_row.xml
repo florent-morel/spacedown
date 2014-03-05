@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dip"
+        android:text="id"
         android:textAppearance="?android:attr/textAppearanceLarge" >
     </TextView>
 
@@ -19,23 +20,27 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dip"
         android:layout_toRightOf="@+id/cardId"
+        android:text="Round1"
         android:textAppearance="?android:attr/textAppearanceLarge" >
     </TextView>
-    
+
     <TextView
         android:id="@+id/Round2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dip"
         android:layout_toRightOf="@+id/Round1"
+        android:text="Round2"
         android:textAppearance="?android:attr/textAppearanceLarge" >
     </TextView>
+
     <TextView
         android:id="@+id/Round3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dip"
         android:layout_toRightOf="@+id/Round2"
+        android:text="Round3"
         android:textAppearance="?android:attr/textAppearanceLarge" >
     </TextView>
 
@@ -45,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="2dip"
         android:layout_toRightOf="@+id/Round3"
+        android:text="totalScore"
         android:textAppearance="?android:attr/textAppearanceLarge" >
     </TextView>
 

@@ -24,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -42,11 +43,13 @@ public class ScoreActivity extends Activity implements OnClickListener {
 
 	private ListView mScoreTeamList;
 
+	private GridView gridView;
+
 	private ScoreTeamAdapter mScoreTeamAdapter;
 
 	private Button mButtonNextRound;
-//	private Button mButtonNewGame;
-//	private Button mButtonReplayGame;
+	// private Button mButtonNewGame;
+	// private Button mButtonReplayGame;
 
 	TableLayout scoreTable;
 
@@ -58,10 +61,11 @@ public class ScoreActivity extends Activity implements OnClickListener {
 
 		mGameManager = GameManager.getSingletonObject();
 		mGame = mGameManager.getGame();
-		
+
 		if (mGame.getCardListForGame() == null || mGame.getCardListForGame().isEmpty()) {
 			// No cards available for the game, display message and exit
-			Toast toast = Toast.makeText(this, String.format(mResources.getString(R.string.create_game_ko)), Toast.LENGTH_LONG);
+			Toast toast = Toast.makeText(this, String.format(mResources.getString(R.string.create_game_ko)),
+					Toast.LENGTH_LONG);
 			toast.show();
 			finish();
 		}
@@ -70,7 +74,8 @@ public class ScoreActivity extends Activity implements OnClickListener {
 
 		mScoreTeamList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//				Intent intent = new Intent(parent.getContext(), StatisticsActivity.class);
+				// Intent intent = new Intent(parent.getContext(),
+				// StatisticsActivity.class);
 				Intent intent = new Intent(parent.getContext(), RoundStatisticsActivity.class);
 				intent.putExtra(Constants.STATS_TEAM, mGame.getTeamList().get(position).getId());
 				startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
@@ -91,11 +96,11 @@ public class ScoreActivity extends Activity implements OnClickListener {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.menu_score_actions, menu);
 
-//		if (!mGame.isGameOver()) {
-//		    menu.removeItem(R.id.action_new_game);
-//		    menu.removeItem(R.id.action_replay_game);
-//		}
-//		
+		// if (!mGame.isGameOver()) {
+		// menu.removeItem(R.id.action_new_game);
+		// menu.removeItem(R.id.action_replay_game);
+		// }
+		//
 		return true;
 	}
 
@@ -125,20 +130,20 @@ public class ScoreActivity extends Activity implements OnClickListener {
 			mScoreTeam.setText(String.format(mResources.getString(R.string.score_round_nothing)));
 		} else {
 			if (currentRound.isRoundActive()) {
-				mScoreTeam.setText(String.format(mResources.getString(R.string.score_round_active), currentRound
-						.getRoundNumber(), mGame.getCurrentTeam().getName()));
+				mScoreTeam.setText(String.format(mResources.getString(R.string.score_round_active),
+						currentRound.getRoundNumber(), mGame.getCurrentTeam().getName()));
 			} else {
-				mScoreTeam.setText(String.format(mResources.getString(R.string.score_round_finished), currentRound
-						.getRoundNumber(), mGame.getNextTeamToPlay().getName()));
+				mScoreTeam.setText(String.format(mResources.getString(R.string.score_round_finished),
+						currentRound.getRoundNumber(), mGame.getNextTeamToPlay().getName()));
 			}
 		}
-		
-		
+
 		int remainingCards = mGame.getNumberCardsInPlay();
 		StringBuilder builderRemaining = new StringBuilder();
 		if (remainingCards == Constants.VALUE_ZERO) {
 			// No more card to play => we'll start next round
-			builderRemaining.append(String.format(mResources.getString(R.string.card_remaining), mGame.getCardListForGame().size()));
+			builderRemaining.append(String.format(mResources.getString(R.string.card_remaining), mGame
+					.getCardListForGame().size()));
 		} else if (remainingCards == 1) {
 			builderRemaining.append(String.format(mResources.getString(R.string.card_remaining_last)));
 		} else {
@@ -180,6 +185,7 @@ public class ScoreActivity extends Activity implements OnClickListener {
 	}
 
 	private void initListScore() {
+//		gridView = (GridView) findViewById(R.id.gridView1);
 		mScoreTeamList = (ListView) findViewById(R.id.scoreTeamScoreList);
 		mScoreTeamAdapter = new ScoreTeamAdapter(this, R.layout.layout_team_score_row);
 		List<Team> teamList = mGame.getTeamList();

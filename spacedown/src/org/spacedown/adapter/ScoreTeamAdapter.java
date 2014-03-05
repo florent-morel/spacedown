@@ -75,6 +75,12 @@ public class ScoreTeamAdapter extends ArrayAdapter<Team> {
 
 	}
 
+	/**
+	 * TODO needs refactor.
+	 * 
+	 * @param v
+	 * @param team
+	 */
 	private void buildScore(View v, Team team) {
 		TextView round1 = (TextView) v.findViewById(R.id.Round1);
 		round1.setText(Constants.DASH);
