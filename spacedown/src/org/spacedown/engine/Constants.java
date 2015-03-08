@@ -83,5 +83,7 @@ public interface Constants {
 
 	static final long TIMER_TICTAC = 5000;
 
+	static final long TIMER_BEFORE_NEXT_PLAYER = 3;
+
 	static final long ONE_SECOND = 1000;
 }
