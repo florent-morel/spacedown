@@ -14,9 +14,11 @@ import org.spacedown.engine.game.Turn;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -155,5 +157,6 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 			finish();
 		}
 	}
+
 
 }

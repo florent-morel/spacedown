@@ -15,10 +15,12 @@ import org.spacedown.engine.game.Round;
 import org.spacedown.engine.game.Team;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -72,11 +74,9 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 
 				for (Entry<Integer, TableRow> entry : teamRowSet) {
 					if (v.getId() == entry.getValue().getId()) {
-						Intent intent = new Intent(this,
-								RoundStatisticsActivity.class);
+						Intent intent = new Intent(this, RoundStatisticsActivity.class);
 						intent.putExtra(Constants.STATS_TEAM, entry.getKey());
-						startActivityForResult(intent,
-								Constants.ACTIVITY_LAUNCH);
+						startActivityForResult(intent, Constants.ACTIVITY_LAUNCH);
 					}
 				}
 			}
@@ -96,67 +96,12 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 
 		tableScore = (TableLayout) findViewById(R.id.tabScore);
 		tableScore.removeAllViews();
-
 		tableScore.setStretchAllColumns(true);
 		tableScore.setShrinkAllColumns(true);
 
-		TableRow rowTitle = new TableRow(this);
-		rowTitle.setGravity(Gravity.CENTER_HORIZONTAL);
-
-		TableRow rowLabels = new TableRow(this);
-
 		// title column/row
-		TextView title = new TextView(this);
-		title.setText(mResources.getString(R.string.score_round_tab_title));
-
-		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-		title.setGravity(Gravity.CENTER);
-		title.setTypeface(Typeface.SERIF, Typeface.BOLD);
-
-		TableRow.LayoutParams params = new TableRow.LayoutParams();
-		params.span = 6;
-
-		rowTitle.addView(title, params);
-
-		// labels row
-		TextView teamLabel = new TextView(this);
-		teamLabel.setText(mResources.getString(R.string.score_round_tab_team));
-		teamLabel.setTypeface(Typeface.DEFAULT_BOLD);
-		teamLabel.setGravity(Gravity.CENTER_HORIZONTAL);
-
-		TextView round1Label = new TextView(this);
-		round1Label.setText(mResources
-				.getString(R.string.score_round_tab_round1));
-		round1Label.setTypeface(Typeface.DEFAULT_BOLD);
-		round1Label.setGravity(Gravity.CENTER_HORIZONTAL);
-
-		TextView round2Label = new TextView(this);
-		round2Label.setText(mResources
-				.getString(R.string.score_round_tab_round2));
-		round2Label.setTypeface(Typeface.DEFAULT_BOLD);
-		round2Label.setGravity(Gravity.CENTER_HORIZONTAL);
-
-		TextView round3Label = new TextView(this);
-		round3Label.setText(mResources
-				.getString(R.string.score_round_tab_round3));
-		round3Label.setTypeface(Typeface.DEFAULT_BOLD);
-		round3Label.setGravity(Gravity.CENTER_HORIZONTAL);
-
-		TextView totalLabel = new TextView(this);
-		totalLabel
-				.setText(mResources.getString(R.string.score_round_tab_total));
-		totalLabel.setTypeface(Typeface.DEFAULT_BOLD);
-		totalLabel.setGravity(Gravity.CENTER_HORIZONTAL);
-
-		// rowDayLabels.addView(empty);
-		rowLabels.addView(teamLabel);
-		rowLabels.addView(round1Label);
-		rowLabels.addView(round2Label);
-		rowLabels.addView(round3Label);
-		rowLabels.addView(totalLabel);
-
-		tableScore.addView(rowTitle);
-		tableScore.addView(rowLabels);
+		tableScore.addView(buildRowTitle());
+		tableScore.addView(buildRowLabel());
 
 		// Team row
 		List<Team> teamList = mGame.getTeamList();
@@ -164,6 +109,7 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 
 			TextView teamName = new TextView(this);
 			teamName.setText(team.getName());
+			teamName.setHeight(36);
 			teamName.setTypeface(Typeface.SERIF, Typeface.BOLD);
 
 			TextView scoreRound1 = new TextView(this);
@@ -182,17 +128,14 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 
 			if (!roundList.isEmpty()) {
 				// build first round
-				scoreRound1.setText(roundList.get(0).getTeamRoundScore(team)
-						.toString());
+				scoreRound1.setText(roundList.get(0).getTeamRoundScore(team).toString());
 				if (roundList.size() > 1) {
 					// build second round
-					scoreRound2.setText(roundList.get(1)
-							.getTeamRoundScore(team).toString());
+					scoreRound2.setText(roundList.get(1).getTeamRoundScore(team).toString());
 				}
 				if (roundList.size() > 2) {
 					// build third round
-					scoreRound3.setText(roundList.get(2)
-							.getTeamRoundScore(team).toString());
+					scoreRound3.setText(roundList.get(2).getTeamRoundScore(team).toString());
 				}
 			}
 
@@ -209,6 +152,7 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 			scoreTotal.setGravity(Gravity.CENTER_HORIZONTAL);
 
 			TableRow rowTeam = new TableRow(this);
+			rowTeam.setId(123456 + team.getId());
 			rowTeam.addView(teamName);
 			rowTeam.addView(scoreRound1);
 			rowTeam.addView(scoreRound2);
@@ -218,10 +162,68 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 			rowTeam.setClickable(Boolean.TRUE);
 			rowTeam.setOnClickListener(this);
 
-			tableScore.addView(rowTeam, new TableRow.LayoutParams(
-					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			tableScore
+					.addView(rowTeam, new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			mapTeamRow.put(team.getId(), rowTeam);
 		}
+	}
+
+	private View buildRowTitle() {
+		TableRow rowTitle = new TableRow(this);
+		rowTitle.setGravity(Gravity.CENTER_HORIZONTAL);
+		TextView title = new TextView(this);
+		title.setText(mResources.getString(R.string.score_round_tab_title));
+
+		title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+		title.setGravity(Gravity.CENTER);
+		title.setTypeface(Typeface.SERIF, Typeface.BOLD);
+
+		TableRow.LayoutParams params = new TableRow.LayoutParams();
+		params.span = 6;
+
+		rowTitle.addView(title, params);
+
+		return rowTitle;
+	}
+
+	private View buildRowLabel() {
+
+		TableRow rowLabels = new TableRow(this);
+
+		// labels row
+		TextView teamLabel = new TextView(this);
+		teamLabel.setText(mResources.getString(R.string.score_round_tab_team));
+		teamLabel.setTypeface(Typeface.DEFAULT_BOLD);
+		teamLabel.setGravity(Gravity.CENTER_HORIZONTAL);
+
+		TextView round1Label = new TextView(this);
+		round1Label.setText(mResources.getString(R.string.score_round_tab_round1));
+		round1Label.setTypeface(Typeface.DEFAULT_BOLD);
+		round1Label.setGravity(Gravity.CENTER_HORIZONTAL);
+
+		TextView round2Label = new TextView(this);
+		round2Label.setText(mResources.getString(R.string.score_round_tab_round2));
+		round2Label.setTypeface(Typeface.DEFAULT_BOLD);
+		round2Label.setGravity(Gravity.CENTER_HORIZONTAL);
+
+		TextView round3Label = new TextView(this);
+		round3Label.setText(mResources.getString(R.string.score_round_tab_round3));
+		round3Label.setTypeface(Typeface.DEFAULT_BOLD);
+		round3Label.setGravity(Gravity.CENTER_HORIZONTAL);
+
+		TextView totalLabel = new TextView(this);
+		totalLabel.setText(mResources.getString(R.string.score_round_tab_total));
+		totalLabel.setTypeface(Typeface.DEFAULT_BOLD);
+		totalLabel.setGravity(Gravity.CENTER_HORIZONTAL);
+
+		// rowDayLabels.addView(empty);
+		rowLabels.addView(teamLabel);
+		rowLabels.addView(round1Label);
+		rowLabels.addView(round2Label);
+		rowLabels.addView(round3Label);
+		rowLabels.addView(totalLabel);
+
+		return rowLabels;
 	}
 
 	private void initButtons() {
@@ -231,8 +233,7 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 		Round currentRound = mGame.getCurrentRound();
 
 		if (currentRound != null && currentRound.isRoundActive()) {
-			mButtonNextRound.setText(String.format(mResources
-					.getString(R.string.score_continue_round)));
+			mButtonNextRound.setText(String.format(mResources.getString(R.string.score_continue_round)));
 		}
 
 		if (mGame.isGameOver()) {
@@ -251,7 +252,7 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 			mGame.startNextRound();
 		}
 		Intent intent = new Intent(this, CardActivity.class);
-		startActivityForResult(intent,
-				Constants.ACTIVITY_CARDACTIVITY_NEXT_ROUND);
+		startActivityForResult(intent, Constants.ACTIVITY_CARDACTIVITY_NEXT_ROUND);
 	}
+
 }
