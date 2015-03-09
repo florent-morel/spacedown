@@ -60,7 +60,7 @@ public class CardActivity extends Activity implements OnClickListener {
 	private static MediaPlayer foundMediaPlayer;
 	private static MediaPlayer skipMediaPlayer;
 	private static MediaPlayer tictacMediaPlayer;
-	private static MediaPlayer ednTurnMediaPlayer;
+	private static MediaPlayer endTurnMediaPlayer;
 
 	boolean allowTictac = true;
 
@@ -76,7 +76,7 @@ public class CardActivity extends Activity implements OnClickListener {
 		foundMediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.ping);
 		skipMediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.button_skip);
 		tictacMediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.tictac);
-		ednTurnMediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.beep);
+		endTurnMediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.beep);
 
 		this.initTexts();
 		this.setTexts();
@@ -126,7 +126,7 @@ public class CardActivity extends Activity implements OnClickListener {
 				// Timer is finished, end turn
 				mTimer.setText(String.format(mResources.getString(R.string.card_timer), 0));
 				allowTictac = true;
-				ednTurnMediaPlayer.start();
+				endTurnMediaPlayer.start();
 				// Display stats for this turn
 				Intent intent = new Intent(CardActivity.this, StatisticsEndTurnActivity.class);
 				startActivityForResult(intent, Constants.ACTIVITY_TURN_STATS);
@@ -256,9 +256,8 @@ public class CardActivity extends Activity implements OnClickListener {
 
 		mButtonCardSkip = (Button) findViewById(R.id.buttonSkipCard);
 		mButtonCardSkip.setOnClickListener(this);
-
-		if (Constants.ROUND_FIRST == mGame.getCurrentRound().getRoundNumber()
-				|| (mGame.getNumberCardsInPlay() == Constants.VALUE_ONE)) {
+		
+		if (mGame.getNumberCardsInPlay() == Constants.VALUE_ONE) {
 			mButtonCardSkip.setVisibility(View.GONE);
 		} else {
 			mButtonCardSkip.setVisibility(View.VISIBLE);
@@ -300,8 +299,13 @@ public class CardActivity extends Activity implements OnClickListener {
 
 		} else if (v.getId() == mButtonCardSkip.getId()) {
 			skipMediaPlayer.start();
-			mGame.skipCard();
-			refreshActivity(false);
+			if (Constants.ROUND_FIRST == mGame.getCurrentRound().getRoundNumber()) {
+				// During round 1, skip button is used to replace card
+				replaceCard();
+			} else {
+				mGame.skipCard();
+				refreshActivity(false);
+			}
 		}
 
 	}
