@@ -257,7 +257,8 @@ public class CardActivity extends Activity implements OnClickListener {
 		mButtonCardSkip = (Button) findViewById(R.id.buttonSkipCard);
 		mButtonCardSkip.setOnClickListener(this);
 		
-		if (mGame.getNumberCardsInPlay() == Constants.VALUE_ONE) {
+		if (Constants.ROUND_FIRST != mGame.getCurrentRound().getRoundNumber()
+				&& mGame.getNumberCardsInPlay() == Constants.VALUE_ONE) {
 			mButtonCardSkip.setVisibility(View.GONE);
 		} else {
 			mButtonCardSkip.setVisibility(View.VISIBLE);

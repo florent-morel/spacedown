@@ -15,17 +15,19 @@ import org.spacedown.engine.game.Round;
 import org.spacedown.engine.game.Team;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
@@ -33,7 +35,11 @@ import android.widget.TextView;
 
 public class ScoreActivityNew extends Activity implements OnClickListener {
 
+	private static final String TAG = ScoreActivityNew.class.getSimpleName();
+
 	private static GameManager mGameManager;
+
+	private Context baseContext;
 
 	private Resources mResources;
 
@@ -45,16 +51,20 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 
 	private Map<Integer, TableRow> mapTeamRow;
 
+	private TextView countDownNextPlayer;
+	private ProgressBar mProgress;
+	private int progressBarStatus = 0;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mResources = getResources();
 
+		baseContext = this.getBaseContext();
+
 		mGameManager = GameManager.getSingletonObject();
 		mGame = mGameManager.getGame();
 		setContentView(R.layout.activity_score_new);
-
-		// this.refreshActivity();
 	}
 
 	@Override
@@ -86,8 +96,16 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 
 	private void refreshActivity() {
 		this.initTableScore();
-		// this.initTexts();
+		this.initTexts();
 		this.initButtons();
+	}
+
+	private void initTexts() {
+		mProgress = (ProgressBar) findViewById(R.id.progressBar);
+		mProgress.setVisibility(View.GONE);
+
+		countDownNextPlayer = (TextView) findViewById(R.id.countDownNextPlayer);
+		countDownNextPlayer.setVisibility(View.GONE);
 	}
 
 	private void initTableScore() {
@@ -251,8 +269,36 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 			// if back button was pressed)
 			mGame.startNextRound();
 		}
-		Intent intent = new Intent(this, CardActivity.class);
-		startActivityForResult(intent, Constants.ACTIVITY_CARDACTIVITY_NEXT_ROUND);
+		countDownBeforeNextPlayer();
+	}
+
+	private void countDownBeforeNextPlayer() {
+		countDownNextPlayer.setVisibility(View.VISIBLE);
+		mProgress.setVisibility(View.VISIBLE);
+		mProgress.setProgress(progressBarStatus);
+
+		long timer = Constants.TIMER_BEFORE_NEXT_PLAYER * 1000; // 3 seconds
+																// before next
+																// player starts
+
+		/** CountDownTimer starts with 2 minutes and every onTick is 1 second */
+		CountDownTimer cdt = new CountDownTimer(timer, Constants.ONE_SECOND) {
+
+			public void onTick(long millisUntilFinished) {
+				Log.v(TAG, "CountDownTimer, millisUntilFinished=" + millisUntilFinished);
+				long roundedNumber = (millisUntilFinished + 500) / Constants.ONE_SECOND;
+				Log.v(TAG, "CountDownTimer, display=" + (roundedNumber - 1));
+				countDownNextPlayer
+						.setText(String.format(mResources.getString(R.string.card_timer), roundedNumber - 1));
+			}
+
+			@Override
+			public void onFinish() {
+				// Launch next turn
+				Intent intent = new Intent(baseContext, CardActivity.class);
+				startActivityForResult(intent, Constants.ACTIVITY_CARDACTIVITY_NEXT_ROUND);
+			}
+		}.start();
 	}
 
 }

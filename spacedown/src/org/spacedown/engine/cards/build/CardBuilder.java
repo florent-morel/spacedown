@@ -3,6 +3,7 @@ package org.spacedown.engine.cards.build;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -99,6 +100,9 @@ public class CardBuilder {
 		if (initialList != null && !initialList.isEmpty()) {
 			int size = initialList.size();
 
+			// Let's shuffle the initial list
+			Collections.shuffle(initialList);
+			
 			Random randomGenerator = new Random();
 			int idx = 0;
 			List<Integer> randomIndexList = new ArrayList<Integer>();
