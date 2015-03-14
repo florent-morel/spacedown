@@ -528,6 +528,8 @@ public class Game {
 			// Remove current card from list of cards in play and cards for game
 			mCardListForGame.remove(mCurrentCard);
 			mCardsCurrentlyInPlay.remove(mCurrentCard);
+			mCurrentRound.getCurrentTurn().removeCardFromTurn(mCurrentCard);
+			
 			// Add the discarded card to the appropriate list for further
 			// process
 			mDiscardedCardsInDB.add(mCurrentCard);

@@ -67,6 +67,9 @@ public class SpacedownMainActivity extends Activity implements OnClickListener {
 
 		mButtonImportCardsInDB = (Button) findViewById(R.id.buttonImportCards);
 		mButtonImportCardsInDB.setOnClickListener(this);
+		
+		// TODO Remove when implemented
+		mButtonImportCardsInDB.setVisibility(View.GONE);
 
 	}
 
