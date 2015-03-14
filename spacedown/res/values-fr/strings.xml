@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- NOT TRANSLATABLE -->
+    <string name="main_app_title">Spacedown</string>
+    <string name="app_name">Spacedown</string>
+    <string name="developer">fmorel</string>
+    <string name="company">Apps</string>
+    <string name="app_build_date">2014&#8211;01&#8211;25</string>
+    <string name="app_url">none</string>
+    <string name="blog_url">none</string>
+    <string name="market_url">https://play.google.com/store/apps/details?id=org.spacedown</string>
+    <string name="source_url">http://somesite</string>
+    <string name="default_text">xxx</string>
+    <string name="zero">0</string>
+    <string name="acknowledgements">\n\nAcknowledgements:\n\nMany thanks to</string>
+    <!-- NOT TRANSLATABLE END -->
+    
+    <string name="ver">v.</string>
+    <string name="ok">OK</string>
+    <string name="and">et</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="save">Sauver</string>
+    <string name="confirm">Confirmer ?</string>
+    <string name="next">Prochain</string>
+    
+    <string name="action_settings">Paramètres</string>
+    <string name="create_game">Nouveau jeu</string>
+    <string name="create_game_ko">Erreur lors du lancement de la partie.</string>
+    <string name="replay_game">Rejouer</string>
+    <string name="continue_game">Continuer la partie</string>
+    <string name="card_current_round">Round # : %1$d</string>
+    <string name="card_team">Equipe courante : %1$s</string>
+    <string name="card_timer">Temps restant : %1$d</string>
+    <string name="card_team_turn_score">Score du tour : %1$d</string>
+    <string name="card_team_round_score">Score du round : %1$d</string>
+    <string name="card_team_total_score">Score total : %1$d</string>
+    <string name="card_remaining">Cartes restantes : %1$d</string>
+    <string name="card_remaining_last">Dernière carte !</string>
+    <string name="card_found">Trouver</string>
+    <string name="card_skip">Passer</string>
+    <string name="card_end_turn">Fin du tour</string>
+    
+    <!-- SCORE BOARD -->
+    <string name="score_next_round">Prochain round</string>
+    <string name="score_continue_round">Continuer le round</string>
+    <string name="score_round_text">Score de l\'équipe</string>
+    <string name="score_round_nothing">Aucun round</string>
+    <string name="score_round_finished">Round %1$d est terminé, prochaine équipe : %2$s</string>
+    <string name="score_round_active">Round %1$d actif, prochaine équipe : %2$s</string>
+    
+    <string name="score_round_tab_title">Tableau des scores</string>
+    <string name="score_round_tab_team">Equipe</string>
+    <string name="score_round_tab_round1">Round 1</string>
+    <string name="score_round_tab_round2">Round 2</string>
+    <string name="score_round_tab_round3">Round 3</string>
+    <string name="score_round_tab_total">Total</string>
+    
+    <string name="create_title">Paramètres de jeu</string>
+    <string name="create_teams">Nombre d\'équipes :</string>
+    <string name="create_team_name">Nom de l\'équipe :</string>
+    <string name="create_number_of_cards">Nombre de cartes :</string>
+    <string name="create_game_debug_mode">Debug mode</string>
+    <string name="create_game_import_cards">Importer des cartes</string>
+    <string name="button_create_team_name">Créer une équipe</string>
+    <string name="dialog_create_team_confirm">Equipe %1$s ajoutée à la partie.</string>
+    <string name="dialog_create_team_name_invalid">Nom invalide.</string>
+    <string name="stats_title">Stats de l\'équipe : %1$s</string>
+    <string name="stats_round">Round %1$d: %2$d carte(s) trouvée(s)</string>
+    <string name="stats_card_number">%1$d</string>
+    <string name="stats_next_turn">Prochaine équipe : %1$s</string>
+    <string name="stats_next_turn_question">Fin du tour (Prochaine équipe : %1$s)?</string>
+    <string name="stats_end_round">Finir Round %1$d</string>
+    <string name="stats_end_round_question">Finir Round %1$d?</string>
+    <string name="stats_card_current_turn">Aucune carte trouvée</string>
+
+    <!-- DIALOGS -->
+    <string name="dialog_import_file_not_found">Aucun fichier trouvé, liste hard-codée</string>
+    <string name="dialog_overwrite_current_game">Cela va annuler la partie en cours</string>
+    <string name="dialog_overwrite_current_game_confirm">Confirmer ?</string>
+    <string name="dialog_confirm_yes">Oui</string>
+    <string name="dialog_confirm_no">Non</string>
+    <string name="dialog_cancel_card_not_found">Aucune carte annulée</string>
+    <string name="dialog_cancel_card_current_turn">Dernière carte annulée</string>
+    <string name="dialog_cancel_card_previous_turn">Carte annulée, retour au tour précédent</string>
+    <string name="dialog_cancel_card_previous_round">Carte annulée, retour au round précédent</string>
+    <string name="dialog_card_replaced">Carte remplacée</string>
+    <string name="dialog_create_card_ok">Carte créée avec l\'id : %1$d</string>
+    <string name="dialog_update_card_ok">Carte %1$d mise à jour</string>
+    <string name="dialog_create_card_ko">Information manquante</string>
+    <string name="menu_action_change_card">Remplacer la carte</string>
+    <string name="menu_action_cancel_found_settings">Annuler dernière carte trouvée</string>
+    <string name="menu_game_options">Options de la partie</string>
+    <string name="menu_start_new_game">Commencer une nouvelle partie</string>
+
+    <!-- CREATE CARD -->
+    <string name="create_card_title">Créer une nouvelle carte</string>
+    <string name="create_card_name">Nom à trouver :</string>
+    <string name="create_card_name_hint">Célébrité, lieu, évènement &#8230;</string>
+    <string name="create_card_category">Catégorie :</string>
+    <string name="create_card_category_custom">Custom</string>
+    <string name="create_card_confirm">Confirmer</string>
+    <string name="create_card_active">Carte active</string>
+    
+    
+    <!-- DATABASE -->
+    
+    <string name="import_cards">Importer des cartes dans la DB</string>
+    <string name="db_number_cards">Nombre de cartes en DB : %1$d</string>
+    <string name="db_number_cards_inactive">Nomber de cartes inactives en DB : %1$d</string>
+    <string name="db_no_card">Aucune carte en DB</string>
+    <string name="db_no_active_card">Aucune carte active en DB</string>
+    <string name="db_no_inactive_card">Aucune carte inactive en DB</string>
+    <string name="db_display_card_list">Afficher cartes en DB</string>
+    <string name="db_filter_card_active">Afficher cartes actives</string>
+    <string name="db_filter_confirm">Confirmer</string>
+    <string name="import_cards_keep_custom">Conserver cartes custom</string>
+    <string name="dialog_import_cards_ok">%1$d cartes importées en DB</string>
+    <string name="dialog_import_cards_ko">Aucune card importée en DB</string>
+    <string name="memory_card_not_available">Card mémoire non disponible</string>
+    <string name="memory_card_not_writable">Pas d\'accès en écriture à la carte mémoire</string>
+
+    <!-- BACKUP & RESTORE -->
+    <string name="backup_db">Sauveger la DB</string>
+    <string name="restore_db">Restaurer la DB</string>
+    <string name="backup_completed">DB copiée vers :</string>
+    <string name="backup_error">Une erreur est survenue lors de la sauvegarde de la DB : %1$s</string>
+    <string name="backup_error_source_not_found">Fichier source non trouvé</string>
+    <string name="restore_error">Une erreur est survenue lors de la restauration de la DB</string>
+    <string name="restore_file_error">Le fichier ouvert n\'est pas une DB SQLite : %1$s</string>
+    <string name="restore_db_version_conflict">La DB restaurée n\'est pas compatible avec la version courante</string>
+    <string name="restore_completed">DB restaurée</string>
+    <string name="source_folder_empty">Le dossier source est vide</string>
+    <string name="import_completed">Import terminé</string>
+    <string name="export_completed">Export terminé</string>
+    <string name="select_file">Selectionner le fichier</string>
+
+    <!-- MENU -->
+    <string name="settings">Paramètres</string>
+    <string name="quick_help_title">Aide rapide</string>
+    <string name="about">A propos</string>
+    
+    <string name="build_date">Date de build : %1$s</string>
+    <string name="about_dialog_message">Jeu de carte open source pour Android.\n\nSource code:\nhttp://somesite.org</string>
+    
+    <string name="menu_action_delete_card">Supprimer carte</string>
+    <string name="menu_action_update_card">Modifier carte</string>
+    <string name="db_cancel_card_question">La carte va être supprimée</string>
+    
+
+    <!-- PLAYER -->
+    <string name="display_player_menu">List de joueurs</string>
+    <string name="create_player_name">Nom</string>
+    <string name="create_player_name_hint">Nom du joueur</string>
+    <string name="create_player_active">Actif</string>
+    <string name="player_item_status">Actif</string>
+    <string name="player_list">Liste de joueurs</string>
+    <string name="player_empty">Aucun joueur stocké.</string>
+    <string name="player_list_new_hint">Pour créer un nouveau joueur, cliquer ci-dessous</string>
+    <string name="player_list_new_button">Créer nouveau joueur</string>
+    <string name="player_list_contextmenu_details">Détails</string>
+    <string name="player_list_contextmenu_delete">Supprimer</string>
+    <string name="player_list_delete_dialog_title">Le joueur va être supprimé</string>
+
+    <!-- NEXT PLAYER / TEAM -->
+    <string name="next_player_name">Prochaine équipe : %1$s</string>
+    
+    
+</resources>
