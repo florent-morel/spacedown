@@ -55,7 +55,6 @@ public class CardActivity extends Activity implements OnClickListener {
 	boolean allowCardFoundButton = true;
 
 	private CountDownTimer timer;
-	private long remainingTimer = -1;
 
 	private static MediaPlayer foundMediaPlayer;
 	private static MediaPlayer skipMediaPlayer;
@@ -95,21 +94,30 @@ public class CardActivity extends Activity implements OnClickListener {
 	protected void onResume() {
 		super.onResume();
 		timer.cancel();
-		initTimer(remainingTimer);
+		initTimer(mGame.getRemainingTimer());
 		tictacMediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.tictac);
 	}
 
+	/**
+	 * Initialize the turn timer.
+	 * 
+	 * 
+	 * @param timerValue
+	 */
 	private void initTimer(long timerValue) {
 		if (timerValue < 0) {
 			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			Integer timerInt = Integer.valueOf(prefs.getString(mResources.getString(R.string.prefs_timer_val_key),
 					Constants.TIMER_DEFAULT));
 			timerValue = timerInt * Constants.ONE_SECOND;
+			Log.v(TAG,
+					"initTimer, getting timer value --" + timerInt + "-- from __"
+							+ mResources.getString(R.string.prefs_timer_val_key) + "__");
 		}
 		timer = new CountDownTimer(timerValue, Constants.ONE_SECOND) {
 			@Override
 			public void onTick(long millisUntilFinished) {
-				remainingTimer = millisUntilFinished;
+				mGame.setRemainingTimer(millisUntilFinished);
 				Log.v(TAG, "CountDownTimer, millisUntilFinished=" + millisUntilFinished);
 				long roundedNumber = (millisUntilFinished + 500) / Constants.ONE_SECOND;
 				Log.v(TAG, "CountDownTimer, display=" + (roundedNumber - 1));
@@ -256,7 +264,7 @@ public class CardActivity extends Activity implements OnClickListener {
 
 		mButtonCardSkip = (Button) findViewById(R.id.buttonSkipCard);
 		mButtonCardSkip.setOnClickListener(this);
-		
+
 		if (Constants.ROUND_FIRST != mGame.getCurrentRound().getRoundNumber()
 				&& mGame.getNumberCardsInPlay() == Constants.VALUE_ONE) {
 			mButtonCardSkip.setVisibility(View.GONE);
@@ -314,7 +322,7 @@ public class CardActivity extends Activity implements OnClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == Constants.ACTIVITY_TURN_STATS) {
 			// Stats for this turn is done, end turn
-			remainingTimer = -1;
+			mGame.setRemainingTimer(-1);
 			timer.cancel();
 			if (mGame.getNumberCardsInPlay() == Constants.VALUE_ZERO) {
 				mGame.endRound();

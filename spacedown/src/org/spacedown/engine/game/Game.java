@@ -38,6 +38,8 @@ public class Game {
 	private boolean mIsGameOver = false;
 
 	private CardsDataSource datasource;
+	
+	private long remainingTimer = -1;
 
 	public Game() {
 		super();
@@ -570,4 +572,14 @@ public class Game {
 
 		return numberCards;
 	}
+
+	public long getRemainingTimer() {
+		return remainingTimer;
+	}
+
+	public void setRemainingTimer(long remainingTimer) {
+		this.remainingTimer = remainingTimer;
+	}
+	
+	
 }
