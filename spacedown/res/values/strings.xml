@@ -121,6 +121,10 @@
     <string name="dialog_import_cards_ko">No card imported in database</string>
     <string name="memory_card_not_available">Memory card not available</string>
     <string name="memory_card_not_writable">No write access to memory card</string>
+    
+    <!-- WIKIMEDIA -->
+    <string name="import_cards_wiki">Import cards From Wikipedia</string>
+    <string name="wiki_page_content">Wikipedia page content</string>
 
     <!-- BACKUP & RESTORE -->
     <string name="backup_db">Backup DB</string>
