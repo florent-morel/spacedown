@@ -1,5 +1,6 @@
 package org.spacedown.activity.stats;
 
+import java.util.List;
 import java.util.Set;
 
 import org.spacedown.GameManager;
@@ -14,11 +15,9 @@ import org.spacedown.engine.game.Turn;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -59,12 +58,18 @@ public class StatisticsEndTurnActivity extends Activity implements OnClickListen
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Card card = (Card) parent.getItemAtPosition(position);
 				
+				Turn currentTurn = game.getCurrentRound().getCurrentTurn();
 				if (card.isFound()) {
-					card.setFound(Boolean.FALSE);
-					game.removeFoundCard(card, game.getCurrentRound().getCurrentTurn());
+					game.removeFoundCard(card, currentTurn);
 				} else {
-					card.setFound(Boolean.TRUE);
-					game.findCard(card, game.getCurrentRound().getCurrentTurn(), false);
+					// If not found, it might come from the skipped list, remove it
+					List<Card> turnListSkippedCards = currentTurn.getTurnListSkippedCards();
+					if (turnListSkippedCards != null && !turnListSkippedCards.isEmpty()
+							&& turnListSkippedCards.contains(card)) {
+						currentTurn.removeCardFromSkipped(card);
+					}
+					
+					game.findCard(card, currentTurn, false);
 				}
 				
 				initButtons();

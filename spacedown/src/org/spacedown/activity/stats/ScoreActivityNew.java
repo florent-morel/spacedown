@@ -21,7 +21,6 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -95,6 +94,10 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 	}
 
 	private void refreshActivity() {
+		if (mGame == null) {
+			mGameManager = GameManager.getSingletonObject();
+			mGame = mGameManager.getGame();
+		}
 		this.initTableScore();
 		this.initTexts();
 		this.initButtons();
@@ -285,9 +288,7 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 		CountDownTimer cdt = new CountDownTimer(timer, Constants.ONE_SECOND) {
 
 			public void onTick(long millisUntilFinished) {
-				Log.v(TAG, "CountDownTimer, millisUntilFinished=" + millisUntilFinished);
 				long roundedNumber = (millisUntilFinished + 500) / Constants.ONE_SECOND;
-				Log.v(TAG, "CountDownTimer, display=" + (roundedNumber - 1));
 				countDownNextPlayer
 						.setText(String.format(mResources.getString(R.string.card_timer), roundedNumber - 1));
 			}

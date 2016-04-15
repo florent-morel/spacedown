@@ -55,4 +55,8 @@ public class Turn {
 		mListCards.remove(card);
 	}
 
+	public void removeCardFromSkipped(Card card) {
+		mListSkippedCards.remove(card);
+	}
+
 }

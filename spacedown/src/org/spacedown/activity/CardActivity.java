@@ -110,17 +110,12 @@ public class CardActivity extends Activity implements OnClickListener {
 			Integer timerInt = Integer.valueOf(prefs.getString(mResources.getString(R.string.prefs_timer_val_key),
 					Constants.TIMER_DEFAULT));
 			timerValue = timerInt * Constants.ONE_SECOND;
-			Log.v(TAG,
-					"initTimer, getting timer value --" + timerInt + "-- from __"
-							+ mResources.getString(R.string.prefs_timer_val_key) + "__");
 		}
 		timer = new CountDownTimer(timerValue, Constants.ONE_SECOND) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				mGame.setRemainingTimer(millisUntilFinished);
-				Log.v(TAG, "CountDownTimer, millisUntilFinished=" + millisUntilFinished);
 				long roundedNumber = (millisUntilFinished + 500) / Constants.ONE_SECOND;
-				Log.v(TAG, "CountDownTimer, display=" + (roundedNumber - 1));
 				mTimer.setText(String.format(mResources.getString(R.string.card_timer), roundedNumber - 1));
 				if (allowTictac && millisUntilFinished <= Constants.TIMER_TICTAC) {
 					tictacMediaPlayer.start();

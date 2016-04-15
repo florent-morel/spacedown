@@ -9,7 +9,6 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,8 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class NextPlayerActivity extends Activity implements OnClickListener {
-
-	private static final String TAG = NextPlayerActivity.class.getSimpleName();
 
 	private static GameManager mGameManager;
 
@@ -86,9 +83,7 @@ public class NextPlayerActivity extends Activity implements OnClickListener {
 		CountDownTimer cdt = new CountDownTimer(timer, Constants.ONE_SECOND) {
 
 			public void onTick(long millisUntilFinished) {
-				Log.v(TAG, "CountDownTimer, millisUntilFinished=" + millisUntilFinished);
 				long roundedNumber = (millisUntilFinished + 500) / Constants.ONE_SECOND;
-				Log.v(TAG, "CountDownTimer, display=" + (roundedNumber - 1));
 				countDownNextPlayer.setText(String.format(mResources.getString(R.string.card_timer), roundedNumber - 1));
 			}
 

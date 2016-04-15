@@ -12,8 +12,11 @@ import org.spacedown.engine.cards.build.CardBuilder;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 
 public class Game {
+	
+	private static final String TAG = Game.class.getSimpleName();
 
 	private CardBuilder cardBuilder;
 
@@ -149,6 +152,20 @@ public class Game {
 
 		// Don't consider this card if it has already been found.
 		if (nextCard.isFound()) {
+			Log.v(TAG, "Next computed card is already found: " + nextCard.getNameToFind());
+			Log.v(TAG, "Current card given in parameter: " + currentCard);
+			Log.v(TAG, "Current card in game object: " + this.getCurrentCard());
+			Log.v(TAG, "Cards in play: " + this.getCardsInPlay());
+			Log.v(TAG, "Turn list cards: " + this.getCurrentRound().getCurrentTurn().getTurnListCards());
+			Log.v(TAG, "Turn found cards: " + this.getCurrentRound().getCurrentTurn().getTurnListFoundCards());
+			Log.v(TAG, "Turn skipped cards: " + this.getCurrentRound().getCurrentTurn().getTurnListSkippedCards());
+
+			// Try to find in which team list it has been found
+			Log.v(TAG, "List of found cards per team: " + this.getCurrentRound().getSavedTurnMap());
+
+			// Ugly workaround: set current card as not found
+			nextCard.setFound(Boolean.FALSE);
+
 			nextCard = computeNextCard(cardList, nextCard, nextId + 1);
 		}
 		return nextCard;
