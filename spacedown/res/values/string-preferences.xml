@@ -10,7 +10,7 @@
     <!-- CARD LAST PLAYED -->
     <string name="prefs_allowed_time_val_key">allowed_time_value</string>
     <string name="prefs_allowed_time_val_dialog_title">Set value</string>
-    <string name="prefs_allowed_time_val_summary">%1s\' between 2 games.</string>
+    <string name="prefs_allowed_time_val_summary">%1s between 2 games.</string>
     <string name="prefs_allowed_time_val_title">Time since card is played</string>
 
     <!-- BACKUP -->

@@ -94,6 +94,7 @@
     <string name="menu_action_cancel_found_settings">Cancel previous found card</string>
     <string name="menu_game_options">Game options</string>
     <string name="menu_start_new_game">Start a new game</string>
+    <string name="dialog_create_game_ko_not_enough_cards">Not enough cards are available, please check your settings.</string>
 
     <!-- CREATE CARD -->
     <string name="create_card_title">Create a new card</string>

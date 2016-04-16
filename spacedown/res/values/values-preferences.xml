@@ -14,12 +14,14 @@
     </string-array>
 
     <string-array name="allowed_time_val_labels">
+        <item>None</item>
         <item>12 hours</item>
         <item>24 hours</item>
         <item>48 hours</item>
         <item>72 hours</item>
     </string-array>
     <string-array name="allowed_time_val_values">
+        <item>0</item>
         <item>43200</item>
         <item>86400</item>
         <item>172800</item>

@@ -257,7 +257,7 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 			mButtonNextRound.setText(String.format(mResources.getString(R.string.score_continue_round)));
 		}
 
-		if (mGame.isGameOver()) {
+		if (mGame.isGameOver() || mGame.getCardsInPlay() == null || mGame.getCardsInPlay().isEmpty()) {
 			mButtonNextRound.setVisibility(View.GONE);
 		} else {
 			mButtonNextRound.setVisibility(View.VISIBLE);

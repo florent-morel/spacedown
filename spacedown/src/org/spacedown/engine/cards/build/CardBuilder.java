@@ -2,7 +2,6 @@ package org.spacedown.engine.cards.build;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -120,7 +119,17 @@ public class CardBuilder {
 			
 			Random randomGenerator = new Random();
 			List<Integer> randomIndexList = new ArrayList<Integer>();
+			// Used to protect FC in case of to few cards are available
+			int iteration = 0;
 			while (randomList.size() < numberOfCards) {
+				iteration++;
+				if (iteration > numberOfCards * 10) {
+					Toast toast = Toast.makeText(context,
+							String.format(mResources.getString(R.string.dialog_create_game_ko_not_enough_cards)), Toast.LENGTH_LONG);
+					toast.show();
+					randomList.clear();
+					break;
+				}
 				int randomInt = randomGenerator.nextInt(initialListSize);
 				if (!randomIndexList.contains(randomInt)) {
 					randomIndexList.add(randomInt);
