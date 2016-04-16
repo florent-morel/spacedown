@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,9 @@ public class CardActivity extends Activity implements OnClickListener {
 
 	private Button mButtonCardFound;
 	private Button mButtonCardSkip;
+	
+
+    private ProgressBar bar;
 
 	boolean allowCardFoundButton = true;
 
@@ -110,13 +114,16 @@ public class CardActivity extends Activity implements OnClickListener {
 			Integer timerInt = Integer.valueOf(prefs.getString(mResources.getString(R.string.prefs_timer_val_key),
 					Constants.TIMER_DEFAULT));
 			timerValue = timerInt * Constants.ONE_SECOND;
+			bar.setMax(timerInt);
+			bar.setIndeterminate(false);
 		}
 		timer = new CountDownTimer(timerValue, Constants.ONE_SECOND) {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				mGame.setRemainingTimer(millisUntilFinished);
-				long roundedNumber = (millisUntilFinished + 500) / Constants.ONE_SECOND;
-				mTimer.setText(String.format(mResources.getString(R.string.card_timer), roundedNumber - 1));
+				long roundedNumber = (millisUntilFinished + 500) / Constants.ONE_SECOND - 1;
+				mTimer.setText(String.format(mResources.getString(R.string.card_timer), roundedNumber));
+				bar.setProgress((int) Math.round(roundedNumber));
 				if (allowTictac && millisUntilFinished <= Constants.TIMER_TICTAC) {
 					tictacMediaPlayer.start();
 					allowTictac = false;
@@ -227,6 +234,7 @@ public class CardActivity extends Activity implements OnClickListener {
 		mRemainingCards = (TextView) findViewById(R.id.textRemainingCards);
 		mNameToFind = (TextView) findViewById(R.id.textCardNameToFind);
 		mTimer = (TextView) findViewById(R.id.textCardTimer);
+		bar = (ProgressBar) findViewById(R.id.progressBarTimer);
 	}
 
 	private void setTexts() {

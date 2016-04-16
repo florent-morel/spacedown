@@ -34,11 +34,20 @@
             android:text="@string/card_timer"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
+        <ProgressBar
+            android:id="@+id/progressBarTimer"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textCardTimer"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true" />
+
         <TextView
             android:id="@+id/textCardTurnScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textCardTimer"
+            android:layout_below="@+id/progressBarTimer"
             android:text="@string/card_team_turn_score" />
 
         <TextView
@@ -68,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="150dp"
+            android:layout_below="@+id/textRemainingCards"
             android:text="Name To Find"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -91,6 +100,7 @@
             android:layout_marginLeft="70dp"
             android:layout_toRightOf="@+id/buttonFoundCard"
             android:text="@string/card_skip" />
+
     </RelativeLayout>
 
 </ScrollView>
