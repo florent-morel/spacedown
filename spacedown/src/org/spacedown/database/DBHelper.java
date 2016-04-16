@@ -82,5 +82,5 @@ public class DBHelper extends SQLiteOpenHelper {
 		db.execSQL(DROP_TABLE_IF_EXISTS + table);
 		onCreate(db);
 	}
-
+	
 }
