@@ -13,6 +13,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -126,6 +130,7 @@ public class CardActivity extends Activity implements OnClickListener {
 				bar.setProgress((int) Math.round(roundedNumber));
 				if (allowTictac && millisUntilFinished <= Constants.TIMER_TICTAC) {
 					tictacMediaPlayer.start();
+//					bar.getProgressDrawable().setColorFilter(Color.YELLOW, PorterDuff.Mode.OVERLAY);
 					allowTictac = false;
 				}
 
@@ -233,6 +238,7 @@ public class CardActivity extends Activity implements OnClickListener {
 		mTeamTotalScore = (TextView) findViewById(R.id.textCardTotalScore);
 		mRemainingCards = (TextView) findViewById(R.id.textRemainingCards);
 		mNameToFind = (TextView) findViewById(R.id.textCardNameToFind);
+		mNameToFind.setTypeface(null, Typeface.BOLD);
 		mTimer = (TextView) findViewById(R.id.textCardTimer);
 		bar = (ProgressBar) findViewById(R.id.progressBarTimer);
 	}
