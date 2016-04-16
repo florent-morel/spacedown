@@ -7,6 +7,7 @@ import org.spacedown.engine.game.Game;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -54,6 +55,7 @@ public class NextPlayerActivity extends Activity implements OnClickListener {
 
 	private void initTexts() {
 		nextTeam = (TextView) findViewById(R.id.nextPlayerNameText);
+		nextTeam.setTypeface(null, Typeface.BOLD);
 
 		if (game.getNumberCardsInPlay() == Constants.VALUE_ZERO) {
 			nextTeam.setText(String.format(mResources.getString(R.string.stats_end_round), game.getCurrentRound()
@@ -64,6 +66,7 @@ public class NextPlayerActivity extends Activity implements OnClickListener {
 		}
 
 		countDownNextPlayer = (TextView) findViewById(R.id.countDownNextPlayer);
+		countDownNextPlayer.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -75,6 +78,7 @@ public class NextPlayerActivity extends Activity implements OnClickListener {
 
 	private void countDownBeforeNextPlayer() {
 		mProgress.setVisibility(View.VISIBLE);
+		countDownNextPlayer.setVisibility(View.VISIBLE);
 		mProgress.setProgress(progressBarStatus);
 
 		long timer = Constants.TIMER_BEFORE_NEXT_PLAYER * 1000; // 3 seconds before next player starts

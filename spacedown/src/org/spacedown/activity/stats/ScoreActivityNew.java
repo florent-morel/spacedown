@@ -257,7 +257,7 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 			mButtonNextRound.setText(String.format(mResources.getString(R.string.score_continue_round)));
 		}
 
-		if (mGame.isGameOver() || mGame.getCardsInPlay() == null || mGame.getCardsInPlay().isEmpty()) {
+		if (mGame.isGameOver() || mGame.getCardListForGame() == null || mGame.getCardListForGame().isEmpty()) {
 			mButtonNextRound.setVisibility(View.GONE);
 		} else {
 			mButtonNextRound.setVisibility(View.VISIBLE);
@@ -279,10 +279,9 @@ public class ScoreActivityNew extends Activity implements OnClickListener {
 		countDownNextPlayer.setVisibility(View.VISIBLE);
 		mProgress.setVisibility(View.VISIBLE);
 		mProgress.setProgress(progressBarStatus);
-
-		long timer = Constants.TIMER_BEFORE_NEXT_PLAYER * 1000; // 3 seconds
-																// before next
-																// player starts
+		
+		// 3 seconds before next player starts
+		long timer = Constants.TIMER_BEFORE_NEXT_PLAYER * Constants.ONE_SECOND; 
 
 		/** CountDownTimer starts with 2 minutes and every onTick is 1 second */
 		CountDownTimer cdt = new CountDownTimer(timer, Constants.ONE_SECOND) {
