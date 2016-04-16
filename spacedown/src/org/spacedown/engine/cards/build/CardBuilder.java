@@ -113,19 +113,17 @@ public class CardBuilder {
 
 		// Get numberOfCards cards out of the initial list
 		if (initialList != null && !initialList.isEmpty()) {
-			int size = initialList.size();
+			int initialListSize = initialList.size();
 
 			// Let's shuffle the initial list
 			Collections.shuffle(initialList);
 			
 			Random randomGenerator = new Random();
-			int idx = 0;
 			List<Integer> randomIndexList = new ArrayList<Integer>();
-			while (idx < numberOfCards) {
-				int randomInt = randomGenerator.nextInt(size);
+			while (randomList.size() < numberOfCards) {
+				int randomInt = randomGenerator.nextInt(initialListSize);
 				if (!randomIndexList.contains(randomInt)) {
 					randomIndexList.add(randomInt);
-					idx++;
 					Card newCard = initialList.get(randomInt);
 					if (checkCardCanBePlayed(newCard, currentTimeInMillis, allowedTimeInt)) {
 						randomList.add(newCard);
