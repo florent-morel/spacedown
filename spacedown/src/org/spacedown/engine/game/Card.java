@@ -23,6 +23,8 @@ public class Card {
 	private String description;
 
 	private boolean isFound;
+	
+	private Integer lastPlayed = 0;
 
 	public Card() {
 		super();
