@@ -81,6 +81,9 @@ public interface Constants {
 
 	static final String TIMER_DEFAULT = "6";
 
+	// By default cards should not have been played in the last 12 hours
+	static final String ALLOWED_CARD_LAST_PLAYED_DEFAULT = "43200";
+
 	static final long TIMER_TICTAC = 5000;
 
 	static final long TIMER_BEFORE_NEXT_PLAYER = 3;

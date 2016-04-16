@@ -32,7 +32,8 @@ public class DBHelper extends SQLiteOpenHelper {
 		+ Schema.COL_CATEGORY + " text,"
 		+ Schema.COL_URL + " text,"
 		+ Schema.COL_ACTIVE + " integer not null default 1,"
-		+ Schema.COL_DESCRIPTION + " text"
+		+ Schema.COL_DESCRIPTION + " text,"
+		+ Schema.COL_LAST_PLAYED + " int"
 		+ ")";
 
 	/**

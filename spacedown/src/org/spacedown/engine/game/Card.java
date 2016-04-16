@@ -24,7 +24,7 @@ public class Card {
 
 	private boolean isFound;
 	
-	private Integer lastPlayed = 0;
+	private long lastPlayed = 0;
 
 	public Card() {
 		super();
@@ -93,6 +93,14 @@ public class Card {
 		this.active = isActiveInDB;
 	}
 
+	public long getLastPlayed() {
+		return lastPlayed;
+	}
+
+	public void setLastPlayed(long lastPlayed) {
+		this.lastPlayed = lastPlayed;
+	}
+
 	public static Card build(Cursor cursor, ContentResolver contentResolver) {
 		Card out = new Card();
 
@@ -107,6 +115,11 @@ public class Card {
 		out.active = Schema.VAL_ACTIVE == cursor.getInt(cursor.getColumnIndex(Schema.COL_ACTIVE));
 		
 		out.description = cursor.getString(cursor.getColumnIndex(Schema.COL_DESCRIPTION));
+		
+		String lastPlayedString = cursor.getString(cursor.getColumnIndex(Schema.COL_LAST_PLAYED));
+		if (lastPlayedString != null) {
+			out.lastPlayed = Long.valueOf(lastPlayedString).longValue();
+		}
 
 		return out;
 	}
@@ -114,7 +127,7 @@ public class Card {
 	@Override
 	public String toString() {
 		return "Card [id=" + id + ", active=" + active + ", nameToFind=" + nameToFind + ", category=" + category
-				+ ", url=" + url + ", description=" + description + ", isFound=" + isFound + "]";
+				+ ", url=" + url + ", description=" + description + ", isFound=" + isFound + ", lastPlayed=" + lastPlayed + "]";
 	}
 
 }

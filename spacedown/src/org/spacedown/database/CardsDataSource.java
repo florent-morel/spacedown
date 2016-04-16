@@ -50,6 +50,7 @@ public class CardsDataSource {
 		}
 		values.put(Schema.COL_ACTIVE, active);
 		values.put(Schema.COL_DESCRIPTION, card.getDescription());
+		values.put(Schema.COL_LAST_PLAYED, card.getLastPlayed());
 
 		Uri cardUri = contentResolver.insert(SpacedownContentProvider.CONTENT_URI_CARDS, values);
 		long cardId = ContentUris.parseId(cardUri);
@@ -70,6 +71,7 @@ public class CardsDataSource {
 			}
 			values.put(Schema.COL_ACTIVE, active);
 			values.put(Schema.COL_DESCRIPTION, card.getDescription());
+			values.put(Schema.COL_LAST_PLAYED, card.getLastPlayed());
 
 			Uri cardUri = ContentUris
 					.withAppendedId(SpacedownContentProvider.CONTENT_URI_CARDS, card.getId());

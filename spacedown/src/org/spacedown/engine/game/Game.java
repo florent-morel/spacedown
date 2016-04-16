@@ -225,6 +225,13 @@ public class Game {
 		mCurrentRound.setRoundActive(Boolean.FALSE);
 
 		if (Constants.ROUND_FIRST == mCurrentRound.getRoundNumber()) {
+			// Update database to store last played time.
+			if (mCardListForGame != null && !mCardListForGame.isEmpty()) {
+				for (Card cardInGame : mCardListForGame) {
+					datasource.updateCard(cardInGame);
+				}
+			}
+			
 			// Update database with list of discarded cards after first round.
 			if (mDiscardedCardsInDB != null && !mDiscardedCardsInDB.isEmpty()) {
 				for (Card discardedCard : mDiscardedCardsInDB) {

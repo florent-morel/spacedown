@@ -8,6 +8,7 @@ import java.nio.channels.FileChannel;
 import java.util.Date;
 
 import org.spacedown.database.DBHelper;
+import org.spacedown.database.SpacedownContentProvider.Schema;
 import org.spacedown.engine.Constants;
 
 import utils.AppLog;
@@ -149,6 +150,8 @@ public class SpacedownApp extends Application {
 			Toast.makeText(this, R.string.memory_card_not_available, Toast.LENGTH_SHORT).show();
 		}
 
+		
+//		migrateCardsToNewDatabase();
 	}
 
 //	private void dropColumn() {
@@ -478,4 +481,10 @@ public class SpacedownApp extends Application {
 		}
 	};
 
+	
+	public void migrateCardsToNewDatabase() {
+		String tableName = Schema.TABLE_CARDS;
+		db.execSQL("alter table " + tableName + " add column " + Schema.COL_LAST_PLAYED + " text;");
+	}
+	
 }

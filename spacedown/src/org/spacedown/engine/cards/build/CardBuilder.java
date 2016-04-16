@@ -2,8 +2,13 @@ package org.spacedown.engine.cards.build;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
 
@@ -13,10 +18,15 @@ import org.spacedown.engine.Constants;
 import org.spacedown.engine.game.Card;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 public class CardBuilder {
+	
+	private static final String TAG = CardBuilder.class.getSimpleName();
 
 	private Resources mResources;
 
@@ -95,6 +105,11 @@ public class CardBuilder {
 	 */
 	private List<Card> getRandomCards(List<Card> initialList, int numberOfCards) {
 		List<Card> randomList = new ArrayList<Card>();
+		
+		// Get current time in millis
+		 Calendar calendar =  GregorianCalendar.getInstance();
+		 long currentTimeInMillis = calendar.getTimeInMillis();
+		 Integer allowedTimeInt = fetchAllowedTimeSinceLastPlayed();
 
 		// Get numberOfCards cards out of the initial list
 		if (initialList != null && !initialList.isEmpty()) {
@@ -112,7 +127,9 @@ public class CardBuilder {
 					randomIndexList.add(randomInt);
 					idx++;
 					Card newCard = initialList.get(randomInt);
-					randomList.add(newCard);
+					if (checkCardCanBePlayed(newCard, currentTimeInMillis, allowedTimeInt)) {
+						randomList.add(newCard);
+					}
 				}
 			}
 
@@ -120,6 +137,50 @@ public class CardBuilder {
 
 		return randomList;
 
+	}
+
+	private Integer fetchAllowedTimeSinceLastPlayed() {
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);	
+		Integer allowedTimeInt = Integer.valueOf(prefs.getString(mResources.getString(R.string.prefs_allowed_time_val_key),
+		Constants.ALLOWED_CARD_LAST_PLAYED_DEFAULT));
+		return allowedTimeInt;
+	}
+
+	/**
+	 * Check if card is allowed to be played
+	 * 
+	 * 
+	 * @param newCard
+	 * @param currentTimeInMillis 
+	 * @param allowedTimeInt 
+	 * @return
+	 */
+	private boolean checkCardCanBePlayed(Card newCard, long currentTimeInMillis, Integer allowedTimeInt) {
+		boolean cardAllowed = false;
+		String format = "yyyy-MM-dd HH:mm:ss";
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+
+		// Get time allowed since last played
+		// Compute time since last played
+		long lastPlayed = newCard.getLastPlayed();
+
+		// Log.v(TAG, "currentTimeInMillis: " + currentTimeInMillis);
+		// Log.v(TAG, "lastPlayed: " + lastPlayed);
+
+		// If time since last played is ok, allow card
+		long timeSinceLastPlayed = currentTimeInMillis - lastPlayed;
+		// Log.v(TAG, "timeSinceLastPlayed: " + timeSinceLastPlayed);
+		// Log.v(TAG, "allowedTimeInt * 1000: " + allowedTimeInt * 1000);
+
+		if (timeSinceLastPlayed > allowedTimeInt * 1000) {
+			cardAllowed = true;
+			newCard.setLastPlayed(currentTimeInMillis);
+		} else {
+			Date date = new Date(lastPlayed);
+			Log.v(TAG,
+					"Card " + newCard.getNameToFind() + " not allowed because already played on: " + sdf.format(date));
+		}
+		return cardAllowed;
 	}
 
 	/**
@@ -135,12 +196,18 @@ public class CardBuilder {
 		// Get numberOfCards cards out of the initial list
 		if (availableCardList != null && !availableCardList.isEmpty()
 				&& !cardsInPlayList.containsAll(availableCardList)) {
+
+			// Get current time in millis
+			Calendar calendar = GregorianCalendar.getInstance();
+			long currentTimeInMillis = calendar.getTimeInMillis();
+			Integer allowedTimeInt = fetchAllowedTimeSinceLastPlayed();
+			 
 			int size = availableCardList.size();
 			Random randomGenerator = new Random();
 			while (randomCard == null) {
 				int randomInt = randomGenerator.nextInt(size);
 				Card newCard = availableCardList.get(randomInt);
-				if (!cardsInPlayList.contains(newCard)) {
+				if (!cardsInPlayList.contains(newCard) && checkCardCanBePlayed(newCard, currentTimeInMillis, allowedTimeInt)) {
 					randomCard = newCard;
 				}
 			}

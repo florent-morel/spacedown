@@ -285,6 +285,7 @@ public class SpacedownContentProvider extends ContentProvider {
 		public static final String COL_ID = "_id";
 		public static final String COL_PLAYER_ID = "_id";
 		public static final String COL_DESCRIPTION = "description";
+		public static final String COL_LAST_PLAYED = "last_played";
 		public static final String COL_ACTIVE = "active";
 		public static final String COL_COLOR = "color";
 

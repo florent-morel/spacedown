@@ -13,4 +13,17 @@
         <item>60</item>
     </string-array>
 
+    <string-array name="allowed_time_val_labels">
+        <item>12 hours</item>
+        <item>24 hours</item>
+        <item>48 hours</item>
+        <item>72 hours</item>
+    </string-array>
+    <string-array name="allowed_time_val_values">
+        <item>43200</item>
+        <item>86400</item>
+        <item>172800</item>
+        <item>259200</item>
+    </string-array>
+    
 </resources>
